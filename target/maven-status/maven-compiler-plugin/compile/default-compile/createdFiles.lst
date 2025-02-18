@@ -1,0 +1,17 @@
+com\mycompany\demo1\dao\IProductDao.class
+com\mycompany\demo1\JakartaRestConfiguration.class
+com\mycompany\demo1\controller\CategoryServlet.class
+com\mycompany\demo1\dao\ImageDao.class
+com\mycompany\demo1\dao\ICategoryDao.class
+com\mycompany\demo1\dao\ProductDao.class
+com\mycompany\demo1\controller\ProductServlet.class
+com\mycompany\demo1\utils\DBConnection.class
+com\mycompany\demo1\dao\CategoryDao.class
+com\mycompany\demo1\model\Category.class
+com\mycompany\demo1\dao\IUserDao.class
+com\mycompany\demo1\dao\UserDao.class
+com\mycompany\demo1\dao\IImageProduct.class
+com\mycompany\demo1\model\Product.class
+com\mycompany\demo1\model\User.class
+com\mycompany\demo1\model\Image.class
+com\mycompany\demo1\resources\JakartaEE10Resource.class
