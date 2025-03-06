@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+  <!-- Define Persistence Unit -->
+  <persistence-unit name="jpa-demo-pu" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <class>model.Reviews</class>
+    <class>model.Categories</class>
+    <class>model.PaymentStatus</class>
+    <class>model.Products</class>
+    <class>model.Users</class>
+    <class>model.PaymentMethods</class>
+    <class>model.Role</class>
+    <class>model.Cities</class>
+    <class>model.ActivityLogs</class>
+    <class>model.Orders</class>
+    <class>model.OrderDetails</class>
+    <class>model.Payments</class>
+    <class>model.Discounts</class>
+    <class>model.ProductViews</class>
+    <class>model.ProductImages</class>
+    <class>model.OrderStatus</class>
+    <class>com.mycompany.demo1_1.model.Payments</class>
+    <class>com.mycompany.demo1_1.model.OrderStatus</class>
+    <class>com.mycompany.demo1_1.model.Orders</class>
+    <class>com.mycompany.demo1_1.model.Cities</class>
+    <class>com.mycompany.demo1_1.model.Categories</class>
+    <class>com.mycompany.demo1_1.model.ProductViews</class>
+    <class>com.mycompany.demo1_1.model.Reviews</class>
+    <class>com.mycompany.demo1_1.model.Users</class>
+    <class>com.mycompany.demo1_1.model.Products</class>
+    <class>com.mycompany.demo1_1.model.PaymentMethods</class>
+    <class>com.mycompany.demo1_1.model.Role</class>
+    <class>com.mycompany.demo1_1.model.Discounts</class>
+    <class>com.mycompany.demo1_1.model.PaymentStatus</class>
+    <class>com.mycompany.demo1_1.model.ActivityLogs</class>
+    <class>com.mycompany.demo1_1.model.ProductImages</class>
+    <class>com.mycompany.demo1_1.model.OrderDetails</class>
+    <class>com.mycompany.demo1_1.model.Discount</class>
+    <class>com.mycompany.demo1_1.model.Review</class>
+    <class>com.mycompany.demo1_1.model.Category</class>
+    <class>com.mycompany.demo1_1.model.Payment</class>
+    <class>com.mycompany.demo1_1.model.OrderDetail</class>
+    <class>com.mycompany.demo1_1.model.ProductImage</class>
+    <class>com.mycompany.demo1_1.model.Order1</class>
+    <class>com.mycompany.demo1_1.model.ActivityLog</class>
+    <class>com.mycompany.demo1_1.model.ProductView</class>
+    <class>com.mycompany.demo1_1.model.Product</class>
+    <class>com.mycompany.demo1_1.model.User</class>
+    <class>com.mycompany.demo1_1.model.City</class>
+    <class>com.mycompany.demo1_1.model.PaymentMethod</class>
+    <properties>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://DESKTOP-2SFHIR2:1433;databaseName=Sp25_DemoPRJ;encrypt=true;trustServerCertificate=true;characterEncoding=UTF-8;useUnicode=true"/>
+      <property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+      <property name="jakarta.persistence.jdbc.user" value="sa"/>
+      <property name="jakarta.persistence.jdbc.password" value="123456789"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
+    </properties>
+  </persistence-unit>
+</persistence>
