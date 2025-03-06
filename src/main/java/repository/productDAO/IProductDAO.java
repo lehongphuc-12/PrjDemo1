@@ -2,18 +2,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package repository;
+package repository.productDAO;
+
 
 import java.util.List;
-import model.User;
+import model.Product;
 
 /**
  *
  * @author ASUS
  */
-public interface IUserRepository {
-     public User create(User user);
-    public User findById(int id);
-    public List<User> findAll();
-    public User update(User user);
+public interface IProductDAO {
+    public Product create(Product user);
+    public Product findById(int id);
+    public List<Product> findAll();
+    public Product update(Product user);
 }

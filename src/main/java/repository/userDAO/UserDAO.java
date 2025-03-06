@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package repository;
+package repository.userDAO;
 
+import repository.productDAO.*;
 import java.util.List;
 import model.Product;
 
@@ -11,7 +12,7 @@ import model.Product;
  *
  * @author ASUS
  */
-public class ProductRepository implements IProductRepository{
+public class UserDAO implements IUserDAO{
 
     @Override
     public Product create(Product user) {
