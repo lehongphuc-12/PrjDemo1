@@ -48,6 +48,19 @@
     <class>com.mycompany.demo1_1.model.User</class>
     <class>com.mycompany.demo1_1.model.City</class>
     <class>com.mycompany.demo1_1.model.PaymentMethod</class>
+    <class>model.PaymentMethod</class>
+    <class>model.Order1</class>
+    <class>model.Product</class>
+    <class>model.OrderDetail</class>
+    <class>model.Payment</class>
+    <class>model.City</class>
+    <class>model.ActivityLog</class>
+    <class>model.User</class>
+    <class>model.ProductView</class>
+    <class>model.Discount</class>
+    <class>model.ProductImage</class>
+    <class>model.Review</class>
+    <class>model.Category</class>
     <properties>
       <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://DESKTOP-2SFHIR2:1433;databaseName=Sp25_DemoPRJ;encrypt=true;trustServerCertificate=true;characterEncoding=UTF-8;useUnicode=true"/>
       <property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
