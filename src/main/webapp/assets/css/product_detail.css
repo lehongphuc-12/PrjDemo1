@@ -1,0 +1,204 @@
+
+/* =====================PRODUCT DETAIL================ */
+
+.product_detail{
+    margin-top: 20px;
+    border-radius: var(--border-radius);
+    background: var(--white-color);
+    padding: 20px;
+}
+
+.product_detail .product_detail_left .mySwiper2 .swiper-wrapper {
+    height: 600px;
+}
+.product_detail .product_detail_left .mySwiper{
+    margin-top: 20px;
+}
+.product_detail_info{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.product_detail_name {
+    display: flex;
+    align-items: center;
+}
+.product_detail_name .text-name .tag{
+    display: inline-block;
+    position: relative;
+    transform: translateY(-20%);  
+}
+.product_detail_review{
+    display: flex;
+    gap: 20px;
+}
+.product_detail_review .star_rating{
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+}
+
+.product_detail_price{
+    display: flex;
+    gap: 10px;
+    padding: 16px;
+    border-radius: var(--border-radius);
+    background: var(--background-color);
+    font-size: 1.8rem;
+}
+.product_quantity{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.product_quantity .quantity_input{
+    display: flex;
+    gap: 16px;
+}
+.product_buying{
+    display: flex;
+    gap: 20px;
+}
+.product_buying  button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.product_buying .add_to_cart button{
+    background: var(--white-color);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+
+.detail_body{
+    width: 50%;
+}
+/*  */
+
+
+/* ===================================================================================================== */
+.store_container{
+    margin-top: 20px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+.store{
+    height: 150px;
+    background: var(--white-color);
+    padding: 25px;
+    
+}
+.store .box_store{
+    height: 100%;
+    display: flex;
+    gap: 20px;
+    padding-right: 25px;
+    border-right: 1px solid var(--color-primary-dark);
+    
+}
+.store .box_store .logo_store{
+    position: relative;
+}
+.store .box_store .logo_store a{
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    border: 2px solid var(--color-primary);
+    padding: 12px;
+}
+.store .box_store .logo_store img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.store .box_store .logo_store .tag{
+    position: absolute;
+    left: 50%;
+    bottom: 12%;
+    transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
+}
+
+.store .box_store .info_store{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    & *{
+        color: var(--color-primary-dark) !important;
+    }
+    
+}
+.store .box_store .info_store .btn_info_store a{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    background: var(--background-color);
+    color: var(--color-primary-dark);
+    border: 1px solid var(--color-primary-dark);
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+}
+
+/* ===================================================================================================== */
+
+.store .store_reviews{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.store .store_reviews .reviews {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    padding-left: 25px;
+    gap: 20px;
+}
+.store .store_reviews .reviews .review {
+    display: flex;
+    gap: 10px;
+}
+
+/* STORE REVIEWS */
+
+.detail_content_container,
+.review_content_container{
+    margin-top: 25px;
+}
+
+.product_details_content,
+.product_reviews_content{
+    background: var(--white-color);
+    border-radius: var(--border-radius);
+    padding: 25px;
+}
+
+/* REVIEWS */
+.product_of_store_container{
+    margin-top: 25px;
+}
+
+.product_of_store{
+    background: var(--white-color);
+    border-radius: var(--border-radius);
+    padding: 25px;
+}
+
+/* PRODUCT OF STORE */
+
+.title_recommendation_container{
+    margin-top: 25px;
+}
+.recommendation_products{
+    border-radius: var(--border-radius);
+    padding: 25px;
+}
+

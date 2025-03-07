@@ -1,0 +1,121 @@
+.seller_container{
+    margin-top: 25px;
+}
+.seller_info{
+    border: 2px solid var(--color-primary);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    display: flex;
+}
+
+.seller_info > .row{
+    display: flex;
+}
+
+.seller_info_right .bottom{
+    display: flex;
+    margin-top: 16px;
+    gap: 20px;
+}
+
+
+  .tabs {
+    display: flex;
+    position: relative;
+    background: var(--white-color);
+    border-radius: var(--border-radius);
+  }
+  .tabs .line {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 6px;
+    border-radius: 15px;
+    background-color: var(--color-primary);
+    transition: all 0.2s ease;
+  }
+  .tab-item {
+    min-width: 80px;
+    padding: 16px 20px 11px 20px;
+    font-size: 20px;
+    text-align: center;
+    color: var(--color-primary-dark);
+    background-color: #fff;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom: 5px solid transparent;
+    opacity: 0.6;
+    cursor: pointer;
+    transition: all 0.5s ease;
+  }
+  .tab-icon {
+    font-size: 24px;
+    width: 32px;
+    position: relative;
+    top: 2px;
+  }
+  .tab-item:hover {
+    opacity: 1;
+    background-color: rgba(194, 53, 100, 0.05);
+    border-color: var(--color-primary);
+  }
+  .tab-item.active {
+    opacity: 1;
+  }
+  .tab-content {
+    padding: 28px 0;
+  }
+  .tab-pane {
+    color: #333;
+    display: none;
+  }
+  .tab-pane.active {
+    display: block;
+  }
+  .tab-pane h2 {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  
+  .all_products{
+    margin-top: 35px;
+  }
+
+  .newest_products .product.newest_product{
+    display: flex;
+    height: 100px;
+    align-items: center;
+    padding: 8px;
+  }
+
+.tab-content .newest_products .list_products{
+    display: flex;
+    flex-basis: 100%;
+    height: 100px;
+}
+.tab-content .newest_products .list_products .product .product_info{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+  height: 100%;
+  overflow: hidden;
+  padding: 12px;
+
+  & .product_price .price, 
+  & .product_price,
+  & .product_name{
+    margin: 0;
+  }
+}  
+
+.newest_products .list_products .product_image{
+  height: 100%;
+  width: fit-content;
+}
+.newest_products .list_products .product_image img{
+  height: 100%;
+  width: auto;
+}
