@@ -1,8 +1,7 @@
 
-package repository.userDAO;
+package userDAO;
 
 
-import repository.productDAO.*;
 import java.util.List;
 import model.Product;
 
