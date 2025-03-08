@@ -1,4 +1,7 @@
-
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package model;
 
 import jakarta.persistence.Basic;
@@ -25,7 +28,10 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 
-
+/**
+ *
+ * @author ASUS
+ */
 @Entity
 @Table(name = "Product")
 @XmlRootElement
@@ -36,8 +42,7 @@ import java.util.Date;
     @NamedQuery(name = "Product.findByDescription", query = "SELECT p FROM Product p WHERE p.description = :description"),
     @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
     @NamedQuery(name = "Product.findByQuantity", query = "SELECT p FROM Product p WHERE p.quantity = :quantity"),
-    @NamedQuery(name = "Product.findByCreatedDate", query = "SELECT p FROM Product p WHERE p.createdDate = :createdDate"),
-    @NamedQuery(name = "Product.findByStatus", query = "SELECT p FROM Product p WHERE p.status = :status")})
+    @NamedQuery(name = "Product.findByCreatedDate", query = "SELECT p FROM Product p WHERE p.createdDate = :createdDate")})
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -66,8 +71,6 @@ public class Product implements Serializable {
     @Column(name = "CreatedDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
-    @Column(name = "status")
-    private Boolean status;
     @OneToMany(mappedBy = "productID")
     private Collection<Discount> discountCollection;
     @OneToMany(mappedBy = "productID")
@@ -148,14 +151,6 @@ public class Product implements Serializable {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
     }
 
     @XmlTransient

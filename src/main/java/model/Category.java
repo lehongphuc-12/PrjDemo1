@@ -34,8 +34,7 @@ import java.util.Collection;
 @NamedQueries({
     @NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c"),
     @NamedQuery(name = "Category.findByCategoryID", query = "SELECT c FROM Category c WHERE c.categoryID = :categoryID"),
-    @NamedQuery(name = "Category.findByCategoryName", query = "SELECT c FROM Category c WHERE c.categoryName = :categoryName"),
-    @NamedQuery(name = "Category.findByUrlImage", query = "SELECT c FROM Category c WHERE c.urlImage = :urlImage")})
+    @NamedQuery(name = "Category.findByCategoryName", query = "SELECT c FROM Category c WHERE c.categoryName = :categoryName")})
 public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,14 +48,9 @@ public class Category implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "CategoryName")
     private String categoryName;
-    @Size(max = 2147483647)
-    @Column(name = "urlImage")
-    private String urlImage;
-    @OneToMany(mappedBy = "parentCategoryID")
-    private Collection<Category> categoryCollection;
-    @JoinColumn(name = "ParentCategoryID", referencedColumnName = "CategoryID")
-    @ManyToOne
-    private Category parentCategoryID;
+    @JoinColumn(name = "GroupID", referencedColumnName = "GroupID")
+    @ManyToOne(optional = false)
+    private CategoryGroup groupID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryID")
     private Collection<Product> productCollection;
 
@@ -88,29 +82,12 @@ public class Category implements Serializable {
         this.categoryName = categoryName;
     }
 
-    public String getUrlImage() {
-        return urlImage;
+    public CategoryGroup getGroupID() {
+        return groupID;
     }
 
-    public void setUrlImage(String urlImage) {
-        this.urlImage = urlImage;
-    }
-
-    @XmlTransient
-    public Collection<Category> getCategoryCollection() {
-        return categoryCollection;
-    }
-
-    public void setCategoryCollection(Collection<Category> categoryCollection) {
-        this.categoryCollection = categoryCollection;
-    }
-
-    public Category getParentCategoryID() {
-        return parentCategoryID;
-    }
-
-    public void setParentCategoryID(Category parentCategoryID) {
-        this.parentCategoryID = parentCategoryID;
+    public void setGroupID(CategoryGroup groupID) {
+        this.groupID = groupID;
     }
 
     @XmlTransient
