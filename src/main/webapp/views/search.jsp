@@ -17,61 +17,35 @@
         <div class="container">
             <div class="row search g-5">
                 <div class="search_type col-3">
-                    <div class="categories">
-                        <h4 class="title">Danh mục</h4>
-                        <ul>
-                            <li><a href="#"><p>Tất cả sản phẩm</p></a></li>
-                            <li><a href="#"><p>Thực phẩm và đặc sản</p></a></li>
-                            <li><a href="#"><p>Thực phẩm bổ dưỡng</p></a></li>
-                            <li>
-                                <a href="#"><p>Đồ uống</p></a>
-                                <ul class="original_ul">
-                                    <li><a href="#">Sữa</a></li>
-                                    <li><a href="#">Nước ép</a></li>
-                                    <li><a href="#">Nước ngọt</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#"><p>Sức khoẻ và làm đẹp</p></a></li>
-                        
-                        </ul>
-                    </div>
-
-                    <div class="selling_location">
-                        <h4 class="title">Nơi bán</h4>
-                        <ul>
-                            <li>
-                                <input name="#" type="checkbox"> <label for="#">Hà Nội</label>
-                            </li>
-                            <li>
-                                <input name="#" type="checkbox"> <label for="#">Hà Nội</label>
-                            </li>
-                            <li>
-                                <input name="#" type="checkbox"> <label for="#">Hà Nội</label>
-                            </li>
-                            <li>
-                                <input name="#" type="checkbox"> <label for="#">Hà Nội</label>
-                            </li>
-                            <li>
-                                <input name="#" type="checkbox"> <label for="#">Hà Nội</label>
-                            </li>
-                        </ul> 
-                    </div>
-
-                    <div class="search_price_range">
-                        <form action="#">
-                            <h4 class="title">Chọn khoảng giá</h4>
-                            <div class="price_range">
-                                <input id="from" type="number">
-                                <span> - </span>
-                                <input id="to" type="number">
+                    <div class="category-container">
+                        <div class="category">
+                            <div class="category-header" onclick="toggleDropdown(this)">
+                                <span>THỊT, CÁ, TRỨNG, HẢI SẢN</span>
+                                <span class="arrow">&#9662;</span>
                             </div>
-                            <div><button class="btn btn-primary" style="background: var(--white-color);
-                                                                        color: var(--color-primary);
-                                                                        border: 1px solid var(--color-primary);"
-                                >Áp dụng</button></div>
-                            <div><button class="btn btn-primary" type="reset">Đặt lại</button></div>
+                            <ul class="category-list">
+                                <li><a href="#">Thịt heo</a></li>
+                                <li><a href="#">Thịt bò</a></li>
+                                <li><a href="#">Thịt gà, vịt, chim</a></li>
+                                <li><a href="#">Thịt sơ chế</a></li>
+                                <li><a href="#">Cá, hải sản</a></li>
+                                <li><a href="#">Trứng gà, vịt, cút</a></li>
+                                <li><a href="#">Món ngon mỗi ngày</a></li>
+                            </ul>
+                        </div>
 
-                        </form>
+                        <div class="category">
+                            <div class="category-header" onclick="toggleDropdown(this)">
+                                <span>RAU, CỦ, NẤM, TRÁI CÂY</span>
+                                <span class="arrow">&#9662;</span>
+                            </div>
+                            <ul class="category-list">
+                                <li><a href="#">Rau xanh</a></li>
+                                <li><a href="#">Củ quả</a></li>
+                                <li><a href="#">Nấm</a></li>
+                                <li><a href="#">Trái cây</a></li>
+                            </ul>
+                        </div>
                     </div>
 
                 </div>
@@ -424,5 +398,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../assets/js/swiper.js"></script>
+    <script src="../assets/js/main.js"></script>
 </body>
 </html>

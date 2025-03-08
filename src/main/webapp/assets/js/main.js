@@ -54,3 +54,18 @@ to_register.addEventListener("click", (event) => {
     login_form.classList.remove("active");
     register_form.classList.add("active");
 });
+
+
+//DROP DOWN CATEGORy
+function toggleDropdown(element) {
+
+            const categoryList = document.querySelectorAll(".category");
+            categoryList.forEach(category => {
+                if (category !== element.parentElement) {
+                    category.classList.remove('active');
+                }
+            })
+
+            let category = element.parentElement;
+            category.classList.toggle('active');
+        }

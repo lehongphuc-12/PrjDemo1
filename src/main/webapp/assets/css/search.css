@@ -85,3 +85,61 @@
 .search .search_results .ranking_criteria .criterias a:hover{
     color: var(--color-primary);
 }
+
+
+/*NEW EDIT CATEGORY DROPDOWN*/
+
+/*  */
+
+        .category-container {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .category {
+            border-bottom: 1px solid #ddd;
+        }
+        .category-header {
+            background: #f8f8f8;
+            padding: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+        .category-header:hover {
+            background: #e0e0e0;
+        }
+        .category-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: none;
+        }
+        .category-list li {
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            background: #fff;
+        }
+        .category-list li:hover {
+            background: #f0f0f0;
+        }
+        .category-list li a {
+            text-decoration: none;
+            color: #000;
+            display: block;
+        }
+        .category-list li a:hover {
+            color: var(--color-primary);
+        }
+        .arrow {
+            transition: transform 0.3s ease;
+        }
+        .active .arrow {
+            transform: rotate(180deg);
+        }
+        .active .category-list {
+            display: block;
+        }
