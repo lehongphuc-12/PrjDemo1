@@ -19,10 +19,7 @@ import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
-/**
- *
- * @author ASUS
- */
+
 @Entity
 @Table(name = "ProductImage")
 @XmlRootElement
