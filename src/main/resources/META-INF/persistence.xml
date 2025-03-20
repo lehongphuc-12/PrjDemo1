@@ -3,28 +3,28 @@
   <!-- Define Persistence Unit -->
   <persistence-unit name="jpa-demo-pu" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-    <class>model.OrderStatus</class>
-    <class>model.ProductView</class>
-    <class>model.PaymentStatus</class>
     <class>model.ActivityLog</class>
-    <class>model.PaymentMethod</class>
+    <class>model.Order1</class>
+    <class>model.Discount</class>
+    <class>model.ProductImage</class>
     <class>model.Review</class>
     <class>model.Payment</class>
-    <class>model.Product</class>
-    <class>model.User</class>
-    <class>model.OrderDetail</class>
-    <class>model.ProductImage</class>
     <class>model.Role</class>
-    <class>model.Discount</class>
-    <class>model.City</class>
-    <class>model.CategoryGroup</class>
+    <class>model.OrderDetail</class>
+    <class>model.ProductView</class>
     <class>model.Category</class>
-    <class>model.Order1</class>
+    <class>model.Product</class>
+    <class>model.City</class>
+    <class>model.OrderStatus</class>
+    <class>model.PaymentMethod</class>
+    <class>model.CategoryGroup</class>
+    <class>model.PaymentStatus</class>
+    <class>model.User</class>
     <properties>
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=demo2PRJ;encrypt=true;trustServerCertificate=true;characterEncoding=UTF-8;useUnicode=true "/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=AGRICULTURE_SHOPPING;encrypt=true;trustServerCertificate=true;characterEncoding=UTF-8;useUnicode=true "/>
       <property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
       <property name="jakarta.persistence.jdbc.user" value="sa"/>
-      <property name="jakarta.persistence.jdbc.password" value="123456789"/>
+      <property name="jakarta.persistence.jdbc.password" value="SA123456789"/>
       <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
       <property name="hibernate.hbm2ddl.auto" value="update"/>
     </properties>

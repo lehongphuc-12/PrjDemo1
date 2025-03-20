@@ -26,7 +26,7 @@ import java.util.Collection;
 
 /**
  *
- * @author ASUS
+ * @author nguyenanh
  */
 @Entity
 @Table(name = "Category")
@@ -34,7 +34,8 @@ import java.util.Collection;
 @NamedQueries({
     @NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c"),
     @NamedQuery(name = "Category.findByCategoryID", query = "SELECT c FROM Category c WHERE c.categoryID = :categoryID"),
-    @NamedQuery(name = "Category.findByCategoryName", query = "SELECT c FROM Category c WHERE c.categoryName = :categoryName")})
+    @NamedQuery(name = "Category.findByCategoryName", query = "SELECT c FROM Category c WHERE c.categoryName = :categoryName"),
+    @NamedQuery(name = "Category.findByCategoryDescription", query = "SELECT c FROM Category c WHERE c.categoryDescription = :categoryDescription")})
 public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,6 +49,9 @@ public class Category implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "CategoryName")
     private String categoryName;
+    @Size(max = 50)
+    @Column(name = "CategoryDescription")
+    private String categoryDescription;
     @JoinColumn(name = "GroupID", referencedColumnName = "GroupID")
     @ManyToOne(optional = false)
     private CategoryGroup groupID;
@@ -80,6 +84,14 @@ public class Category implements Serializable {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public String getCategoryDescription() {
+        return categoryDescription;
+    }
+
+    public void setCategoryDescription(String categoryDescription) {
+        this.categoryDescription = categoryDescription;
     }
 
     public CategoryGroup getGroupID() {

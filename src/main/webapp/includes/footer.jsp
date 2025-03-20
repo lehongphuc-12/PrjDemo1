@@ -6,7 +6,7 @@
                 <div class="left">
                     <div class="left_left">
                         <div class="logo__footer">
-                                <a href="#"><img src="../assets/images/logo.png" alt=""></a>
+                                <a href="#"><img src="${pageContext.request.contextPath}/assets/images/logo.png" alt=""></a>
                                 <div class="title__footer">
                                     <span ><h4 class="text-banner">Hội chợ</h4></span>
                                     <span ><h4 class="text-banner">Nông sản</h4></span>

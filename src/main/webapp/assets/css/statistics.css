@@ -1,0 +1,226 @@
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e6f0ea, #d4e6d9); /* Gradient xanh lục nhạt */
+            color: #2c3e50;
+            line-height: 1.6;
+            
+        }
+
+        .stats-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 40px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-top: 30px;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #34495e;
+            margin-bottom: 40px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            width: 60px;
+            height: 4px;
+            background: #27ae60; /* Xanh lục */
+            display: block;
+            margin: 10px auto;
+            border-radius: 2px;
+        }
+
+        .stats-box-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stats-box {
+            background: linear-gradient(135deg, #2ecc71, #27ae60); /* Gradient xanh lục */
+            color: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-box:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .stats-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(30deg);
+            transition: all 0.5s ease;
+        }
+
+        .stats-box:hover::before {
+            top: -20%;
+            left: -20%;
+        }
+
+        .stats-box h3 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-box p {
+            font-size: 2rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .chart-container {
+            width: 90%;
+            margin: 0 auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #34495e;
+            margin-bottom: 20px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .chart-title::after {
+            content: '';
+            width: 40px;
+            height: 3px;
+            background: #27ae60; /* Xanh lục */
+            display: block;
+            margin: 8px auto;
+            border-radius: 2px;
+        }
+
+        .filter-form {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            background: #f9fbfd;
+            padding: 10px 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            width: fit-content;
+        }
+
+        .filter-form form {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            flex-wrap: nowrap;
+            gap: 10px;
+        }
+
+        .filter-form label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #34495e;
+            margin-right: 8px;
+            white-space: nowrap; /* Ngăn label xuống dòng */
+        }
+
+        .filter-form select {
+            padding: 6px 10px;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            border: 2px solid #dcdcdc;
+            background: #fff;
+            color: #2c3e50;
+            margin-right: 15px;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .filter-form select:focus {
+            outline: none;
+            border-color: #27ae60; /* Xanh lục */
+        }
+
+        .filter-form button {
+            padding: 6px 15px;
+            font-size: 0.9rem;
+            background: linear-gradient(135deg, #2ecc71, #27ae60); /* Gradient xanh lục */
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .filter-form button:hover {
+            background: #219653; /* Xanh lục đậm hơn */
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .stats-container {
+                padding: 20px;
+            }
+            .stats-box {
+                padding: 20px;
+            }
+            .stats-box h3 {
+                font-size: 1.1rem;
+            }
+            .stats-box p {
+                font-size: 1.8rem;
+            }
+            .filter-form {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: nowrap; /* Ngăn xuống dòng trên màn hình nhỏ */
+                gap: 10px;
+            }
+            .filter-form select, .filter-form button {
+                margin-right: 10px;
+            }
+            .chart-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .filter-form {
+                flex-wrap: wrap; /* Cho phép xuống dòng nếu quá nhỏ */
+                justify-content: flex-start;
+            }
+        }

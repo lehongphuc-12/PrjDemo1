@@ -1,0 +1,175 @@
+/* Reset cơ bản */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* Style cho tiêu đề nội dung */
+    .content-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .content-header h1 {
+        color: #2c3e50;
+        font-size: 24px;
+    }
+
+    /* Style cho tìm kiếm */
+    .search-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .search-bar {
+        padding: 8px 15px;
+        border: 1px solid #ced4da;
+        border-radius: 20px;
+        width: 250px;
+        outline: none;
+        transition: border-color 0.3s;
+    }
+
+    .search-bar:focus {
+        border-color: #28a745; /* Xanh lá chuối */
+    }
+
+    .search-icon {
+        color: #fff; /* Xanh lá chuối */
+    }
+
+    /* Style cho phần lọc */
+    .filter-section {
+        display: flex;
+        gap: 15px;
+    }
+
+    /* Style chung cho các nút hành động */
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        padding: 6px 12px;
+        margin-right: 5px;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+
+    .edit-btn {
+        color: #28a745; /* Xanh lá */
+    }
+
+    .delete-btn {
+        background-color: #dc3545; /* Đỏ */
+        color: white;
+    }
+
+    .delete-btn:hover {
+        background-color: #c82333; /* Đậm hơn khi hover */
+    }
+
+    .restore-btn {
+        background-color: #28a745; /* Xanh lá */
+        color: white;
+    }
+
+    .restore-btn:hover {
+        background-color: #218838; /* Đậm hơn khi hover */
+    }
+
+    .profile-btn {
+        color: #007bff; /* Xanh dương */
+    }
+
+    .action-btn i {
+        font-size: 16px;
+    }
+
+    /* Style cho bảng */
+    .product-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .product-table th {
+        background-color: #28a745; /* Xanh lá chuối */
+        color: white;
+        padding: 12px 15px;
+        text-align: left;
+    }
+
+    .product-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .product-table tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+
+    .product-table tr:hover {
+        background-color: #f1f3f5;
+    }
+
+    /* Style cho dòng không hoạt động */
+    .inactive-row {
+        background-color: #d3d3d3; /* Màu xám nhạt để làm sẫm */
+    }
+
+    .name-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .inactive-name {
+        color: red;
+        font-size: 0.9em; /* Kích thước nhỏ hơn một chút */
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .pagination a {
+        margin: 0 5px;
+        padding: 8px 16px;
+        text-decoration: none;
+        color: #28a745;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .pagination a.active {
+        background-color: #28a745;
+        color: white;
+    }
+
+    /* Style cho thông báo */
+    .message {
+        text-align: center;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+
+    .message.success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .message.error {
+        background-color: #f8d7da;
+        color: #721c24;
+    }

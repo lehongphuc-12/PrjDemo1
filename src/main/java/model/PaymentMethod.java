@@ -24,7 +24,7 @@ import java.util.Collection;
 
 /**
  *
- * @author ASUS
+ * @author nguyenanh
  */
 @Entity
 @Table(name = "PaymentMethod")

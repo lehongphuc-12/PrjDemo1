@@ -11,10 +11,20 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="../assets/css/product_detail.css">
-    <link rel="stylesheet" href="../assets/css/search.css">
-    <link rel="stylesheet" href="../assets/css/store_page.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/product_detail.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/search.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/store_page.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/chatbot.css">
+
+    <!--JS-->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            console.log("JQUERY is loaded!");
+        });
+    </script>
+
     
     <!-- Link Swiper's CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />

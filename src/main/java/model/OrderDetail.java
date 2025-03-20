@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 
 /**
  *
- * @author ASUS
+ * @author nguyenanh
  */
 @Entity
 @Table(name = "OrderDetail")

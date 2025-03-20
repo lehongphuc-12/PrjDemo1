@@ -21,7 +21,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author ASUS
+ * @author nguyenanh
  */
 @Entity
 @Table(name = "ProductImage")
@@ -29,9 +29,7 @@ import java.io.Serializable;
 @NamedQueries({
     @NamedQuery(name = "ProductImage.findAll", query = "SELECT p FROM ProductImage p"),
     @NamedQuery(name = "ProductImage.findByImageID", query = "SELECT p FROM ProductImage p WHERE p.imageID = :imageID"),
-    @NamedQuery(name = "ProductImage.findByImageURL", query = "SELECT p FROM ProductImage p WHERE p.imageURL = :imageURL"),
-    @NamedQuery(name = "ProductImage.findByImageType", query = "SELECT p FROM ProductImage p WHERE p.imageType = :imageType"),
-    @NamedQuery(name = "ProductImage.findByImageOrder", query = "SELECT p FROM ProductImage p WHERE p.imageOrder = :imageOrder")})
+    @NamedQuery(name = "ProductImage.findByImageURL", query = "SELECT p FROM ProductImage p WHERE p.imageURL = :imageURL")})
 public class ProductImage implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,10 +41,6 @@ public class ProductImage implements Serializable {
     @Size(max = 255)
     @Column(name = "ImageURL")
     private String imageURL;
-    @Column(name = "ImageType")
-    private Integer imageType;
-    @Column(name = "ImageOrder")
-    private Integer imageOrder;
     @JoinColumn(name = "ProductID", referencedColumnName = "ProductID")
     @ManyToOne
     private Product productID;
@@ -72,22 +66,6 @@ public class ProductImage implements Serializable {
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
-    }
-
-    public Integer getImageType() {
-        return imageType;
-    }
-
-    public void setImageType(Integer imageType) {
-        this.imageType = imageType;
-    }
-
-    public Integer getImageOrder() {
-        return imageOrder;
-    }
-
-    public void setImageOrder(Integer imageOrder) {
-        this.imageOrder = imageOrder;
     }
 
     public Product getProductID() {

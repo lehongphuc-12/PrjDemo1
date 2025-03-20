@@ -30,7 +30,7 @@ import java.util.Date;
 
 /**
  *
- * @author ASUS
+ * @author nguyenanh
  */
 @Entity
 @Table(name = "Product")
@@ -42,6 +42,7 @@ import java.util.Date;
     @NamedQuery(name = "Product.findByDescription", query = "SELECT p FROM Product p WHERE p.description = :description"),
     @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
     @NamedQuery(name = "Product.findByQuantity", query = "SELECT p FROM Product p WHERE p.quantity = :quantity"),
+    @NamedQuery(name = "Product.findByUnit", query = "SELECT p FROM Product p WHERE p.unit = :unit"),
     @NamedQuery(name = "Product.findByCreatedDate", query = "SELECT p FROM Product p WHERE p.createdDate = :createdDate")})
 public class Product implements Serializable {
 
@@ -68,6 +69,9 @@ public class Product implements Serializable {
     @NotNull
     @Column(name = "Quantity")
     private BigDecimal quantity;
+    @Size(max = 50)
+    @Column(name = "Unit")
+    private String unit;
     @Column(name = "CreatedDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
@@ -143,6 +147,14 @@ public class Product implements Serializable {
 
     public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     public Date getCreatedDate() {

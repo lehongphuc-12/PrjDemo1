@@ -90,8 +90,7 @@
 /*NEW EDIT CATEGORY DROPDOWN*/
 
 /*  */
-
-        .category-container {
+.category-container {
             width: 100%;
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -116,7 +115,9 @@
             list-style: none;
             padding: 0;
             margin: 0;
-            display: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
         }
         .category-list li {
             padding: 10px;
@@ -132,7 +133,7 @@
             display: block;
         }
         .category-list li a:hover {
-            color: var(--color-primary);
+            color:var(--color-primary);
         }
         .arrow {
             transition: transform 0.3s ease;
@@ -141,5 +142,6 @@
             transform: rotate(180deg);
         }
         .active .category-list {
-            display: block;
+            max-height: 500px;
+            transition: max-height 0.3s ease-in;
         }

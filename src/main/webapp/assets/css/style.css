@@ -167,7 +167,7 @@ header .top__header .top_header_content span:hover a{
 .header_page{
     height: 120px;
     display: flex;
-    /* justify-content: space-between; */
+     justify-content: space-between; 
     gap: 100px;
     align-items: center;
     padding: 20px 0;
@@ -204,6 +204,7 @@ header .top__header .top_header_content span:hover a{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    max-width: fit-content;
 }
 .header_page .search__header form{
     width: 100%;
@@ -213,6 +214,8 @@ header .top__header .top_header_content span:hover a{
     align-items: center;
     gap: 20px;
     padding-left: 16px;
+    max-width: 700px;
+
 }
 .header_page .search__header form .btn{
     border-top-left-radius: 0;
@@ -377,6 +380,7 @@ header .top__header .top_header_content span:hover a{
     padding: 2px;
 }
 
+.product_price,
 .product_price .discount,
 .product_price .discount div{
     margin: 0;
@@ -415,14 +419,55 @@ main .sec_slide_home__main .swiper-pagination .swiper-pagination-bullet{
     cursor: pointer;
 }
 
+/*.sec_category .content_category .list_category .category .swiper-wrapper .swiper-slide img {
+    height:160px;
+    transition: transform 0.3s ease;  Hiệu ứng mượt khi phóng to 
+    display: block;  Đảm bảo ảnh không bị ảnh hưởng bởi khoảng trắng 
+}*/
+
+/* CSS cho hình ảnh */
 .sec_category .content_category .list_category .category .swiper-wrapper .swiper-slide img {
+    height: 160px;
     transition: transform 0.3s ease; /* Hiệu ứng mượt khi phóng to */
     display: block; /* Đảm bảo ảnh không bị ảnh hưởng bởi khoảng trắng */
+}
+
+/* Tạo lớp màng đen nhẹ bằng pseudo-element :before */
+.sec_category .content_category .list_category .category .swiper-wrapper .swiper-slide:before {
+    content: ""; /* Tạo một pseudo-element */
+    position: absolute; /* Đặt vị trí tuyệt đối để phủ lên hình ảnh */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3); /* Màu đen với độ trong suốt 0.3 */
+    z-index: 1; /* Đảm bảo lớp phủ nằm trên hình ảnh */
+}
+
+/* Đảm bảo hình ảnh nằm dưới lớp phủ */
+.sec_category .content_category .list_category .category .swiper-wrapper .swiper-slide img {
+    position: relative;
+    z-index: 0; /* Hình ảnh nằm dưới lớp phủ */
+}
+
+
+
+/* Khi hover, bỏ hiệu ứng mờ và màng đen */
+.sec_category .content_category .list_category .category .swiper-wrapper .swiper-slide:hover img {
+    filter: blur(0); /* Bỏ hiệu ứng mờ */
+}
+
+.sec_category .content_category .list_category .category .swiper-wrapper .swiper-slide:hover:before {
+    background-color: rgba(0, 0, 0, 0); /* Làm lớp phủ trong suốt */
 }
 
 .sec_category .content_category .list_category .category .swiper-wrapper .swiper-slide:hover img {
     transform: scale(1.2); /* Phóng to ảnh khi hover */
 }
+.sec_category .content_category .list_category .category .swiper-wrapper .swiper-slide:hover  a{
+    color:black;
+}
+
 .sec_category .content_category .list_category .category .swiper-wrapper{
     position: relative;
 }
@@ -431,6 +476,9 @@ main .sec_slide_home__main .swiper-pagination .swiper-pagination-bullet{
     bottom: 10px;
     left: 10px;
     width: 50%;
+    z-index: 2;
+    font-weight: 600;
+    font-size: 0.9rem;
 }
 
 /* Category */
@@ -450,12 +498,40 @@ section{
     margin-top: 20px;
 }
 
-.product {
+@media screen and (max-width: 900px) {
+    .list_products {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/*.product {
     background: var(--white-color);
     border-radius: var(--border-radius) ;
     overflow: hidden;
     cursor: pointer;
     position: relative;
+}*/
+
+.product {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex:1;
+    max-width: 300px; 
+    background: white;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+}
+
+.product img {
+    width: 100%;
+    height: 200px; /* Giữ ảnh cùng chiều cao */
+    object-fit: cover; /* Cắt ảnh để vừa khung mà không méo */
+    border-radius: 8px;
 }
 .product .product_info{
     width: 100%;
@@ -470,12 +546,18 @@ section{
     overflow: hidden;              /* Ẩn phần nội dung tràn */
     text-overflow: ellipsis;
 }
+
+.product .product_info .product_name{
+    min-height: 50px;
+    margin-top: 8px;
+}
 .product .product_info .product_name:hover p{
     text-decoration: underline;
 }
 
 .product .product_image{
     overflow: hidden;
+    width: 100%;
 }
 .product .product_image img{
     transition: all 0.3s ease-in-out;
@@ -493,7 +575,7 @@ section{
     padding: 0 16px 40px 16px;
 }
 .product .product_info div{
-    margin-top: 16px;
+    /*margin-top: 16px;*/
 }
 .product .product_info .product_rate{
     display: flex;
@@ -518,10 +600,11 @@ section{
 
 
     & span{
-        background: var(--white-color);
+        background: var(--background-color);
         border-radius: 50%;
         padding: 10px;
         font-size: 1rem;
+        color: black;
     }
     & span:hover{
         background: var(--color-primary);
@@ -530,14 +613,14 @@ section{
 }
 
 .product:hover .product_actions{
-    right: 0;
+    right: 8px;
 }
 
 
 .view_more{
     margin: 16px;
     overflow: hidden;
-    padding: 10px 20px;
+    padding: 10px 0px;
     display: flex;
     justify-content: center;
 }
@@ -548,9 +631,9 @@ section{
 
 .view_more a{
     background: var(--white-color);
-    padding: 10px 40px;
+    padding: 10px 0px;
     border-radius: var(--border-radius);
-    flex-basis: 36%;
+    flex-basis: 28%;
     text-align: center;
     transition: all 0.3s ease-in-out;
 }
@@ -673,17 +756,28 @@ footer .left .logo__footer .title__footer{
 }
 .page_numbers span{
     display: inline-block;
-    padding: 8px;
     border: 1px solid var(--color-primary);
-    width: 40px;
-    height: 40px;
     border-radius: var(--border-radius);
-    display: flex;
-    justify-content: center;
-    align-items: center;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 .page_numbers span:hover{
     font-size: 1.2rem;
+}
+
+.page_numbers span a{
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    padding:8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page_numbers .active{
+    background: var(--color-primary);
+    & a{
+        color:white;
+    }
 }

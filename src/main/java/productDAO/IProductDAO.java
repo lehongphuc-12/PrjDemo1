@@ -11,4 +11,6 @@ public interface IProductDAO {
     public Product findById(int id);
     public List<Product> findAll();
     public Product update(Product user);
+    public List<Product> findBySellerIdDAO(int sellerId, int page, int pageSize);
+    public void updateProductNameDAO(int productId, String newName);
 }

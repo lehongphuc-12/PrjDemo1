@@ -1,3 +1,5 @@
+console.log("SWIPER")
+
 var swiper = new Swiper(".mySwiper.banner", {
   spaceBetween: 30,
   centeredSlides: true,

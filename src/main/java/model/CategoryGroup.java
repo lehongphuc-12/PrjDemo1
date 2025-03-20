@@ -24,7 +24,7 @@ import java.util.Collection;
 
 /**
  *
- * @author ASUS
+ * @author nguyenanh
  */
 @Entity
 @Table(name = "CategoryGroup")
@@ -32,7 +32,8 @@ import java.util.Collection;
 @NamedQueries({
     @NamedQuery(name = "CategoryGroup.findAll", query = "SELECT c FROM CategoryGroup c"),
     @NamedQuery(name = "CategoryGroup.findByGroupID", query = "SELECT c FROM CategoryGroup c WHERE c.groupID = :groupID"),
-    @NamedQuery(name = "CategoryGroup.findByGroupName", query = "SELECT c FROM CategoryGroup c WHERE c.groupName = :groupName")})
+    @NamedQuery(name = "CategoryGroup.findByGroupName", query = "SELECT c FROM CategoryGroup c WHERE c.groupName = :groupName"),
+    @NamedQuery(name = "CategoryGroup.findByGroupDescription", query = "SELECT c FROM CategoryGroup c WHERE c.groupDescription = :groupDescription")})
 public class CategoryGroup implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,6 +47,9 @@ public class CategoryGroup implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "GroupName")
     private String groupName;
+    @Size(max = 50)
+    @Column(name = "GroupDescription")
+    private String groupDescription;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupID")
     private Collection<Category> categoryCollection;
 
@@ -75,6 +79,14 @@ public class CategoryGroup implements Serializable {
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    public String getGroupDescription() {
+        return groupDescription;
+    }
+
+    public void setGroupDescription(String groupDescription) {
+        this.groupDescription = groupDescription;
     }
 
     @XmlTransient

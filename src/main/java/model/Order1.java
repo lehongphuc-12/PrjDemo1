@@ -30,10 +30,10 @@ import java.util.Date;
 
 /**
  *
- * @author ASUS
+ * @author nguyenanh
  */
 @Entity
-@Table(name = "Order")
+@Table(name = "[Order]")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Order1.findAll", query = "SELECT o FROM Order1 o"),

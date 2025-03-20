@@ -23,7 +23,7 @@ import java.util.Date;
 
 /**
  *
- * @author ASUS
+ * @author nguyenanh
  */
 @Entity
 @Table(name = "ProductView")

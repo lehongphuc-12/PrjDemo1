@@ -29,10 +29,10 @@ import java.util.Date;
 
 /**
  *
- * @author ASUS
+ * @author nguyenanh
  */
 @Entity
-@Table(name = "User")
+@Table(name = "[User]")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
@@ -62,12 +62,12 @@ public class User implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "Email")
     private String email;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     @Column(name = "Password")
     private String password;
-    @Size(max = 15)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 15)
     @Column(name = "PhoneNumber")
     private String phoneNumber;
     @Size(max = 255)
@@ -97,11 +97,11 @@ public class User implements Serializable {
         this.userID = userID;
     }
 
-    public User(Integer userID, String fullName, String email, String password) {
+    public User(Integer userID, String fullName, String email, String phoneNumber) {
         this.userID = userID;
         this.fullName = fullName;
         this.email = email;
-        this.password = password;
+        this.phoneNumber = phoneNumber;
     }
 
     public Integer getUserID() {

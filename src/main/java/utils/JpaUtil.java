@@ -21,4 +21,8 @@ public class JpaUtil {
             emf.close();
         }
     }
+    
+    public static void main(String[] args) {
+//        System.out.println("asd"+JpaUtil.getEntityManager());
+    }
 }
