@@ -74,7 +74,7 @@
                 </ul>
             </li>
         </ul>
-        <a href="${pageContext.request.contextPath}/" class="back-btn" style="display: inline-block;"><i class="fas fa-arrow-left" style="font-size: 15px;"></i> Đăng xuất</a>
+        <a href="${pageContext.request.contextPath}/logout" class="back-btn" style="display: inline-block;"><i class="fas fa-arrow-left" style="font-size: 15px;"></i> Đăng xuất</a>
     </div>
 
     <div class="main-content">

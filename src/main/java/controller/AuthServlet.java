@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Date;
-import model.GoogleUser;
 import model.Role;
 import model.User;
 import service.AuthService;
@@ -69,7 +68,7 @@ public class AuthServlet extends HttpServlet {
             User user = authservice.findByEmailAndPassword(email, password);
             if (user != null) {
                 HttpSession session = request.getSession();
-                session.setAttribute("user", user);
+                session.setAttribute("googleUser", user);
                 setLoginCookies(response, email, password, "on".equals(remember));
                 String redirectUrl = getRedirectUrlByRole(user.getRoleID().getRoleID());
                 response.sendRedirect(request.getContextPath() + redirectUrl);
@@ -90,7 +89,7 @@ public class AuthServlet extends HttpServlet {
     private void handleRegister(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        GoogleUser googleUser = (GoogleUser) session.getAttribute("googleUser");
+        User googleUser = (User) session.getAttribute("googleUser");
 
         String fullName = request.getParameter("full-name-register");
         String email = request.getParameter("email-register");

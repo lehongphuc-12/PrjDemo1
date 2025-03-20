@@ -131,3 +131,18 @@ html{
     color:activecaption;
     cursor: pointer;
 }
+
+.google-login{
+    /*background: red;*/
+    border:1px solid;
+    padding: 8px;
+    border-radius: 8px;
+    width: 90%;
+    position: relative;
+    left:50%;
+    transform: translateX(-50%); 
+}
+
+.google-login:hover #google-button{
+    transform: scale(1.2);
+}

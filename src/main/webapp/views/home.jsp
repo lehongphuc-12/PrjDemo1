@@ -13,6 +13,7 @@
 
     <jsp:include page="/includes/header.jsp"></jsp:include>
     
+    <c:set var="userRole" value="${sessionScope.user != null && sessionScope.user.roleID != null ? sessionScope.user.roleID.roleID : 0}" />
 
     <main>
         <section class="sec_slide_home__main">

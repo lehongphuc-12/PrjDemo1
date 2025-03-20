@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hồ Sơ Quản Trị Viên ${session.user.fullName}</title>
+    <title>Hồ Sơ Quản Trị Viên ${sessionScope.user.fullName}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin_profile.css">
 
 </head>
@@ -22,11 +22,11 @@
             </tr>
             <tr>
                 <td>Tên</td>
-                <td>${session.user.fullName}</td>
+                <td>${sessionScope.user.fullName}</td>
             </tr>
             <tr>
                 <td>Email</td>
-                <td>${session.user.email}</td>
+                <td>${sessionScope.user.email}</td>
             </tr>
             <tr>
                 <td>Mật Khẩu</td>
@@ -34,19 +34,19 @@
             </tr>
             <tr>
                 <td>Số Điện Thoại</td>
-                <td>${session.user.phoneNumber}</td>
+                <td>${sessionScope.user.phoneNumber}</td>
             </tr>
             <tr>
                 <td>Vai Trò</td>
-                <td>${session.user.roleID.roleName}</td> <!-- Giả sử Role có getRoleName() -->
+                <td>${sessionScope.user.roleID.roleName}</td> <!-- Giả sử Role có getRoleName() -->
             </tr>
             <tr>
                 <td>Địa Chỉ</td>
-                <td>${session.user.address}</td>
+                <td>${sessionScope.user.address}</td>
             </tr>
             <tr>
                 <td>Ngày Tạo</td>
-                <td>${session.user.address}</td>
+                <td>${sessionScope.user.address}</td>
             </tr>
         </table>
         <div class="btn-container">

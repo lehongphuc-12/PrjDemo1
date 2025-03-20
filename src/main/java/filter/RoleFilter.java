@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpSession;
 import model.User;
 
 @WebFilter(filterName = "RoleFilter", urlPatterns = {"/*"})
-public class RoleFiller implements Filter {
+public class RoleFilter implements Filter {
 
     private static final boolean debug = true;
     private FilterConfig filterConfig = null;
@@ -30,7 +30,7 @@ public class RoleFiller implements Filter {
     private List<String> adminPages;
     private List<String> staticResources;
 
-    public RoleFiller() {
+    public RoleFilter() {
     }
 
     @Override
@@ -43,12 +43,14 @@ public class RoleFiller implements Filter {
         // Khởi tạo danh sách các trang
         commonPages = Collections.unmodifiableList(Arrays.asList(
             "/logins",
+            "/views/login.jsp",
             "/logout",    
             "/register",
             "/products",
             "/cates",
             "/filters",
-            "/chatbot"
+            "/chatbot",
+            "/LoginGoogleHandler"
         ));
 
         guestPages = Collections.unmodifiableList(Arrays.asList(

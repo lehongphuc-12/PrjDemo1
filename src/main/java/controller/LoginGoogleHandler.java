@@ -1,11 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 
 package controller;
 
-import model.GoogleUser;
 import LoginGoogle.GoogleUtils;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -20,7 +15,7 @@ import userDAO.UserDAO;
 
 @WebServlet(name="LoginGoogleHandler", urlPatterns={"/LoginGoogleHandler"})
 public class LoginGoogleHandler extends HttpServlet {
-       private UserDAO userDao = new UserDAO();
+       private final UserDAO userDao = new UserDAO();
     
 
     @Override
@@ -34,7 +29,7 @@ public class LoginGoogleHandler extends HttpServlet {
 
         // Lấy access token từ Google
         String accessToken = GoogleUtils.getToken(code);
-        GoogleUser googleUser = GoogleUtils.getUserInfo(accessToken);
+        User googleUser = GoogleUtils.getUserInfo(accessToken);
 
         if (googleUser == null) {
             response.sendRedirect("views/login.jsp");
@@ -48,11 +43,11 @@ public class LoginGoogleHandler extends HttpServlet {
         if (user != null) {
             // Đăng nhập ngay nếu user đã có trong database
             session.setAttribute("user", user);
-            response.sendRedirect("views/home.jsp");
+            response.sendRedirect(request.getContextPath()+"/products");
         } else {
             // Lưu thông tin Google vào session và chuyển sang trang đăng ký
             session.setAttribute("googleUser", googleUser);
-              response.sendRedirect(request.getContextPath() + "/views/login.jsp?register=true");
+             response.sendRedirect(request.getContextPath() + "/views/login.jsp?register=true");
         }
     }
 

@@ -1,11 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package LoginGoogle;
 
 
-import model.GoogleUser;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -15,6 +11,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
+import model.User;
 
 
 /**
@@ -45,12 +42,12 @@ public class GoogleUtils {
     return jsonObject.get("access_token").getAsString();
     }
 
-    public static GoogleUser getUserInfo(String accessToken) throws IOException {
+    public static User getUserInfo(String accessToken) throws IOException {
         URL url = new URL(ConstansGoogle.GOOGLE_LINK_GET_USER_INFO + accessToken);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
 
         String response = new Scanner(conn.getInputStream()).useDelimiter("\\A").next();
-        return new Gson().fromJson(response, GoogleUser.class);
+        return new Gson().fromJson(response, User.class);
     }
 }

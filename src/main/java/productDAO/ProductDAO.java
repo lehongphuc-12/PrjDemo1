@@ -395,6 +395,11 @@ public class ProductDAO implements IProductDAO{
     
     public List<Product> searchProductsByNameDAO(String productName, int pageSize, int pageNumber,String orderProducts){
         try (EntityManager em = JpaUtil.getEntityManager()) {
+            
+            if(productName.trim().isEmpty() || productName.trim().isBlank()){
+                return null;
+            }
+            
             int offset = (pageNumber - 1) * pageSize; // Tính vị trí bắt đầu            
 
             String jpql = "SELECT p FROM Product p WHERE p.productName LIKE :productName "+
