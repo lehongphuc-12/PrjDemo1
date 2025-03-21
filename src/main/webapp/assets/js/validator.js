@@ -104,7 +104,7 @@ function Validator(options) {
         }
 
         var inputElements = formElement.querySelectorAll(rule.selector);
-        console.log('selector:', rule.selector, 'inputElements:', inputElements);
+//        console.log('selector:', rule.selector, 'inputElements:', inputElements);
 
         Array.from(inputElements).forEach(function(inputElement) {
             inputElement.onblur = function() {

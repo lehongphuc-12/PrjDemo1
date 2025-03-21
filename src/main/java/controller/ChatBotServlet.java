@@ -47,9 +47,15 @@ public class ChatBotServlet extends HttpServlet {
     }
 
     private String processUserMessageWithDeepSeek(String message, int userId) {
-        String deepSeekResponse = callDeepSeek(message);
         String messageLower = message.toLowerCase(); // Chuyển tin nhắn người dùng về chữ thường
+
         
+        if (messageLower.contains("hello") || messageLower.contains("hi") || messageLower.contains("xin chào")) {
+            return "<p>Xin chào! Tôi là chatbot hỗ trợ mua sắm. Bạn có thể hỏi tôi về sản phẩm, giảm giá, hoặc gợi ý mua hàng.</p>";
+        }
+
+        String deepSeekResponse = callDeepSeek(message);
+
         // Nhận diện ý định "mua" và danh mục sản phẩm
         if (messageLower.contains("mua")) {
             if (messageLower.contains("rau xanh")) {
@@ -93,7 +99,6 @@ public class ChatBotServlet extends HttpServlet {
                 return "<p>Xin lỗi, tôi chưa hiểu bạn muốn mua gì. Bạn có thể nói rõ hơn không? Ví dụ: 'mua gạo', 'mua rau xanh', 'mua trái cây nội địa', v.v.</p>";
             }
         } 
-        
         else if (deepSeekResponse.contains("giảm giá") || deepSeekResponse.contains("giam gia")) {
             return suggestDiscountedProducts();
         } else if (deepSeekResponse.contains("bán chạy") || deepSeekResponse.contains("ban chay")) {

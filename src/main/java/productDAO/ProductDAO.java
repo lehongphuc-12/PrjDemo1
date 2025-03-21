@@ -499,7 +499,7 @@ public class ProductDAO implements IProductDAO{
         System.out.println("Thời gian chạy: " + duration / 1_000_000.0 + " ms"); 
         //C2 : 1376-1500
         //C1:  1450-1540  
-        System.out.println(dao.countProductsBySearchDAO("cá"));
+        System.out.println(dao.findByCategoryDAO("Cà phê",10,1));
 //        System.out.println("COUNT: "+ dao.countProductsByCategoryGroupId(2));
     }
     

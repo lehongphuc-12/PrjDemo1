@@ -11,10 +11,16 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/login.css">
 </head>
 <body>
-    
+    <div class="background_login"></div>
     <div class="main">
+       
         <c:set var="gooleUser" value="sessionScope.googleUser"></c:set>
         <form action="${pageContext.request.contextPath}/logins" method="POST" class="form ${googleUser == null ?"active":""}" id="form-1">
+            
+            <div class="logo_login">
+                 <img src="${pageContext.request.contextPath}/assets/images/logo.png" alt="">
+            </div>
+            
             <h3 class="heading">LOGIN</h3>
             <div class="spacer"></div>
 
@@ -51,6 +57,11 @@
         </form>
 
         <form action="${pageContext.request.contextPath}/register" method="POST" class="form ${googleUser != null ?"active":""}" id="form-2">
+            
+            <div class="logo_login">
+                 <img src="${pageContext.request.contextPath}/assets/images/logo.png" alt="">
+            </div>
+            
             <h3 class="heading">REGISTER</h3>
             <div class="spacer"></div>
             
@@ -104,6 +115,5 @@
     <script src="${pageContext.request.contextPath}/assets/js/validator.js"></script>
     <script src="${pageContext.request.contextPath}/assets/js/main.js"></script>
     <script src="${pageContext.request.contextPath}/assets/js/login.js"></script>
-
 </body>
 </html>

@@ -1,12 +1,14 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <footer>
         <div class="container">
             <div class="content__footer">
                 <div class="left">
                     <div class="left_left">
                         <div class="logo__footer">
-                                <a href="#"><img src="${pageContext.request.contextPath}/assets/images/logo.png" alt=""></a>
+                                <a href="${pageContext.request.contextPath}/products"><img src="${pageContext.request.contextPath}/assets/images/logo.png" alt=""></a>
                                 <div class="title__footer">
                                     <span ><h4 class="text-banner">Hội chợ</h4></span>
                                     <span ><h4 class="text-banner">Nông sản</h4></span>
@@ -31,12 +33,10 @@
                     </div>
                 </div>
                 <div class="right">
-                    <a href="#" class="text-banner">SẢN PHẨM BÁN CHẠY</a>
-                    <a href="#" class="text-banner">THỰC PHẨM ĐỜI SỐNG</a>
-                    <a href="#" class="text-banner">ĐỒ UỐNG</a>
-                    <a href="#" class="text-banner">SỨC KHOẺ LÀM ĐẸP</a>
-                    <a href="#" class="text-banner">THỰC PHẨM ĐẶT SẢN</a>
+                    <c:forEach var="entry" items="${listCategoryGroup}">
+                        <a href="${pageContext.request.getContextPath()}/cates?action=cateGroup&ID=${entry.groupID}" class="text-banner">${entry.groupName}</a>
+                    </c:forEach>
                 </div>
-                        </div>
+                </div>
             </div>
     </footer>

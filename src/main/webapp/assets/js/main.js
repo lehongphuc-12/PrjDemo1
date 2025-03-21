@@ -41,17 +41,15 @@ const register_form = document.querySelector("#form-2");
 const to_login = document.querySelector("#to-login");
 const to_register = document.querySelector("#to-register");
 
-console.log(login_form)
-console.log(register_form)
 
-to_login.addEventListener("click", (event) => {
+to_login?.addEventListener("click", (event) => {
     event.preventDefault(); // Ngăn chặn hành động mặc định của thẻ <a>
     console.log("Switch to login");
     login_form.classList.add("active");
     register_form.classList.remove("active");
 });
 
-to_register.addEventListener("click", (event) => {
+to_register?.addEventListener("click", (event) => {
     event.preventDefault();
     console.log("Switch to register");
     login_form.classList.remove("active");
@@ -140,3 +138,29 @@ document.addEventListener("DOMContentLoaded", function() {
             }
             return "";
         }
+        
+        
+//CHECK LIST_PRODUCT
+
+    
+const listProducts = document.querySelector(".list_products");
+
+function updateGrid() {
+    if (listProducts) {
+        console.log(listProducts)
+        console.log("Width:", listProducts.clientWidth); // Debug
+        if (listProducts.clientWidth < 950) {
+            listProducts.style.gridTemplateColumns = 'repeat(4, 1fr)';
+        } else {
+            listProducts.style.gridTemplateColumns = 'repeat(5, 1fr)';
+        }
+    }
+}
+
+// Gọi ngay khi trang load
+updateGrid();
+
+// Lắng nghe sự kiện resize của window
+window.addEventListener("resize", updateGrid);
+document.addEventListener("DOMContentLoaded",updateGrid);
+    

@@ -118,4 +118,5 @@ public class ProductService {
     public List<Product> getPopularProductsByCategory(String categoryName, int page, int pageSize) {
         return productDAO.findPopularProductsByCategoryDAO(categoryName, page, pageSize);
     }
+    
 }

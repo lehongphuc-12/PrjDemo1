@@ -27,6 +27,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -233,7 +234,18 @@ public class Product implements Serializable {
     public void setProductViewCollection(Collection<ProductView> productViewCollection) {
         this.productViewCollection = productViewCollection;
     }
-
+    
+    public double getAverageRating(){
+        double avg = 0.0;
+        List<Review> reviews = (List<Review>) this.getReviewCollection();
+        if(reviews.isEmpty()){
+            return -1;
+        }    
+        for(Review rv : reviews){
+            avg += rv.getRating()*1.0;
+        }   
+        return avg/reviews.size()*1.0;
+    }
     @Override
     public int hashCode() {
         int hash = 0;

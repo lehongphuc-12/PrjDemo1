@@ -41,16 +41,6 @@
                         <div class="swiper mySwiper category">
                             <div class="swiper-wrapper">
                                 
-<!--                              <div class="swiper-slide"><img src="../assets/images/category.png" alt=""><div class="category_type"><p class="text-category">Sản phẩm bổ trợ</p></div></div>
-                              <div class="swiper-slide"><img src="../assets/images/category.png" alt=""><div class="category_type"><p class="text-category">Sản phẩm</p></div></div>
-                              <div class="swiper-slide"><img src="../assets/images/category.png" alt=""><div class="category_type"><p class="text-category">Sản phẩm</p></div></div>
-                              <div class="swiper-slide"><img src="../assets/images/category.png" alt=""><div class="category_type"><p class="text-category">Sản phẩm</p></div></div>
-                              <div class="swiper-slide"><img src="../assets/images/category.png" alt=""><div class="category_type"><p class="text-category">Sản phẩm</p></div></div>
-                              <div class="swiper-slide"><img src="../assets/images/category.png" alt=""><div class="category_type"><p class="text-category">Sản phẩm</p></div></div>
-                              <div class="swiper-slide"><img src="../assets/images/category.png" alt=""><div class="category_type"><p class="text-category">Sản phẩm</p></div></div>
-                              <div class="swiper-slide"><img src="../assets/images/category.png" alt=""><div class="category_type"><p class="text-category">Sản phẩm</p></div></div>
-                              <div class="swiper-slide"><img src="../assets/images/category.png" alt=""><div class="category_type"><p class="text-category">Sản phẩm</p></div></div>-->
-
                             <c:forEach var="cg" items="${listCategoryGroup}">
                                 <c:forEach var="category" items="${cg.categoryCollection}">
                                     <div class="swiper-slide"><img src="${pageContext.request.getContextPath()}/assets/images/Category${category.categoryID}.jpg" alt=""><div class="category_type"><p class="text-category"><a href="${pageContext.request.getContextPath()}/cates?ID=${category.categoryID}"  style="color: white">${category.categoryName}</a></p></div></div>
@@ -78,7 +68,7 @@
                                 <c:choose>
                                     <c:when test="${not empty product.productImageCollection}">
                                         <c:forEach var="image" items="${product.productImageCollection}" begin="0" end="0">
-                                            <img src="${pageContext.request.getContextPath()}/assets/images/productImages/${image.imageURL}" alt="">
+                                            <img src="${pageContext.request.getContextPath()}/assets/images/productImages/${image.imageURL}" alt="" >
                                         </c:forEach>
                                     </c:when>
                                     <c:otherwise>
@@ -116,10 +106,34 @@
                                             <div class="price text-primary">
                                                 <fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" />đ
                                             </div>
+                                            <div class="sold"></div>
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
+                                
+                                <!--Đánh giá sản phẩm--> 
+                            <c:set var="rating" value="${product.averageRating}" />
+
+                            <div class="product_rate text-warning">
+                                <c:choose>
+                                    <c:when test="${rating == -1}">
+                                        <p class="no-rating">Chưa có đánh giá</p>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:forEach begin="1" end="5" var="i">
+                                            <c:choose>
+                                                <c:when test="${i <= rating}">★</c:when>  <%-- Ngôi sao đầy --%>
+                                                <c:otherwise>☆</c:otherwise>  <%-- Ngôi sao rỗng --%>
+                                            </c:choose>
+                                        </c:forEach>
+                                        <p class="total_rating">(${String.format("%.1f", rating)})</p>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
+
+                                
+                            </div>
+                                
 
                             <c:if test="${userRole != 0}">
                                 <div class="product_actions">
@@ -130,6 +144,10 @@
                                     </a>
                                 </div>
                             </c:if>
+                            
+                            <div class="buy-now ">
+                                <a href="#">Mua ngay</a>
+                            </div>
                         </div>
                     </c:forEach>
                 </div>
@@ -148,7 +166,7 @@
                      <!--Banner Category--> 
                     <div class="banner_product_category">
                         <a href="#">
-                            <img src="${pageContext.request.getContextPath()}/assets/images/CategoryGroup${entry.key.groupID}.png" alt="">
+                            <img src="${pageContext.request.getContextPath()}/assets/images/CategoryGroup${entry.key.groupID}.png" alt="" style="border-radius: 8px">
                         </a>
                         <div class="title_banner_product">
                             <h3 class="text-banner">${entry.key.groupName}</h3>
@@ -205,14 +223,25 @@
                                         </div>
 
                                          <!--Đánh giá sản phẩm--> 
-                                         <div class="product_rate text-warning">
-                                            <span>&#9733;</span>
-                                            <span>&#9733;</span>
-                                            <span>&#9733;</span>
-                                            <span>&#9733;</span>
-                                            <span>&#9734;</span>
-                                            <p class="total_rating text">(4.5)</p>
+                                         <c:set var="rating" value="${product.averageRating}" />
+
+                                        <div class="product_rate text-warning">
+                                            <c:choose>
+                                                <c:when test="${rating == -1}">
+                                                    <p class="no-rating">Chưa có đánh giá</p>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:forEach begin="1" end="5" var="i">
+                                                        <c:choose>
+                                                            <c:when test="${i <= rating}">★</c:when>  <%-- Ngôi sao đầy --%>
+                                                            <c:otherwise>☆</c:otherwise>  <%-- Ngôi sao rỗng --%>
+                                                        </c:choose>
+                                                    </c:forEach>
+                                                    <p class="total_rating">(${String.format("%.1f", rating)})</p>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
+
                                     </div>
                                     
                                         <c:if test="${userRole != 0}">
@@ -224,6 +253,10 @@
                                                 </a>
                                             </div>
                                         </c:if>
+                                         
+                                         <div class="buy-now ">
+                                            <a href="#">Mua ngay</a>
+                                        </div>
                                 </div>
                             </c:forEach>
                         </div>
@@ -257,71 +290,6 @@
     </div>
 
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const chatbotContainer = document.getElementById('chatbot-container');
-            const toggleSizeBtn = document.getElementById('chatbot-toggle-size');
-            const closeBtn = document.getElementById('chatbot-close');
-            const sendBtn = document.getElementById('chatbot-send');
-            const input = document.getElementById('chatbot-input');
-            const messages = document.getElementById('chatbot-messages');
-
-            // Toggle size of chatbot
-            toggleSizeBtn.addEventListener('click', () => {
-                chatbotContainer.classList.toggle('minimized');
-                // Không cần thay đổi nội dung icon nữa vì đã dùng Font Awesome
-            });
-
-            // Close chatbot
-            closeBtn.addEventListener('click', () => {
-                chatbotContainer.style.display = 'none';
-            });
-
-            // Send message
-            sendBtn.addEventListener('click', sendMessage);
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') sendMessage();
-            });
-
-            function sendMessage() {
-                const message = input.value.trim();
-                if (!message) return;
-
-                // Add user message
-                const userMsg = document.createElement('p');
-                userMsg.classList.add('user-message');
-                userMsg.textContent = message;
-                messages.appendChild(userMsg);
-
-                // Send to ChatbotServlet
-                fetch('${pageContext.request.contextPath}/chatbot', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: 'message=' + encodeURIComponent(message)
-                })
-                .then(response => response.text())
-                .then(data => {
-                    // Add bot response
-                    const botMsg = document.createElement('p');
-                    botMsg.classList.add('bot-message');
-                    botMsg.innerHTML = data; // HTML từ servlet
-                    messages.appendChild(botMsg);
-                    messages.scrollTop = messages.scrollHeight; // Auto scroll to bottom
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    const errorMsg = document.createElement('p');
-                    errorMsg.classList.add('bot-message');
-                    errorMsg.textContent = 'Có lỗi xảy ra, vui lòng thử lại.';
-                    messages.appendChild(errorMsg);
-                });
-
-                input.value = '';
-            }
-        });
-    </script>
-
-
     <!--FOOTER-->
     <jsp:include page="/includes/footer.jsp"></jsp:include>
 
@@ -335,6 +303,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="/demo1/assets/js/swiper.js"></script>
+    <script src="/demo1/assets/js/main.js"></script>
+    <script src="/demo1/assets/js/chatbot.js"></script>
 
 </body>
 </html>

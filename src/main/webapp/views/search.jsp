@@ -10,6 +10,7 @@
 </head>
 <body>
 <jsp:include page="/includes/header.jsp"/>
+    <c:set var="userRole" value="${sessionScope.user != null && sessionScope.user.roleID != null ? sessionScope.user.roleID.roleID : 0}" />
 
 <div class="search_container">
     <div class="container">
@@ -111,9 +112,35 @@
                                             </c:otherwise>
                                         </c:choose>
                                     </div>
+                                    
+                                    
+                                    <c:set var="rating" value="${product.averageRating}" />
+
+                                    <div class="product_rate text-warning">
+                                        <c:choose>
+                                            <c:when test="${rating == -1}">
+                                                <p class="no-rating">Chưa có đánh giá</p>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <p class="total_rating">${String.format("%.1f", rating)} ★</p>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+
+
                                 </div>
-                                <div class="product_actions">
-                                    <a href="#"><span class="material-icons-sharp">add_shopping_cart</span></a>
+                               <c:if test="${userRole != 0}">
+                                    <div class="product_actions">
+                                        <a href="#">
+                                            <span class="material-icons-sharp">
+                                                add_shopping_cart
+                                            </span>
+                                        </a>
+                                    </div>
+                                </c:if>
+                                    
+                                <div class="buy-now ">
+                                        <a href="#">Mua ngay</a>
                                 </div>
                             </div>
                         </c:forEach>
@@ -140,34 +167,8 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="/demo1/assets/js/swiper.js"></script>
 <script src="/demo1/assets/js/main.js"></script>
-<script>
+<script src="/demo1/assets/js/filter.js"></script>
 
-    function filter(ID, search, page, action, filter) {
-        console.log("ID:", ID, "Search:", search, "Page:", page, "Action:", action, "Filter:", filter);
-        jQuery.ajax({
-            url: "${pageContext.request.contextPath}/filters",
-            type: "GET",
-            data: {
-                ID: ID,
-                search: search,
-                pageNumber: page,
-                action: action,
-                filter: filter
-            },
-            success: function (data) {
-                if (data && data.trim() !== "") {
-                    jQuery("#search_results").html(data);
-                } else {
-                    jQuery("#search_results").html("<p>Không có dữ liệu trả về.</p>");
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error("Error:", error, "Status:", status);
-                jQuery("#search_results").html("<p>Đã xảy ra lỗi khi tải dữ liệu. Vui lòng thử lại.</p>");
-            }
-        });
-    }
-</script>
 
 </body>
 </html>

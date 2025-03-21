@@ -7,7 +7,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,7 +20,7 @@ import service.CategoryService;
 public class CategoryServlet extends HttpServlet {
     
     private CategoryService categoryService;
-    private final int SIZE_PAGE = 10;
+    private final int SIZE_PAGE = 12;
     private final String ORDER_PRODUCTS =  "ORDER BY (0.7 * COALESCE(SIZE(p.orderDetailCollection), 0) + 0.3 * COALESCE(SIZE(p.productViewCollection), 0)) DESC";
 
 
@@ -118,12 +117,6 @@ public class CategoryServlet extends HttpServlet {
         request.setAttribute("totalProducts", totalProducts);
         request.setAttribute("typeOfProducts", typeOfProducts);
         
-        
-//        PrintWriter out = response.getWriter();
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("UTF-8");
-//        
-//        out.print(totalPage);
 
 
                         

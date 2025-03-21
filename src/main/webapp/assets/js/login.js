@@ -1,4 +1,4 @@
-
+console.log("LOGIN JS")
 
  // Cấu hình Validator cho form-2
         Validator({

@@ -61,6 +61,33 @@ li{
 .btn-primary:hover{
     background: var(--color-primary-dark);
 }
+
+.buy-now{
+    background: linear-gradient(315deg,#3B8F1D,#5EA52B,#98B21C) ;
+    /*background-color: var(--color-primary);*/
+    width: 100%;
+    padding: 12px;
+    border-radius: var(--border-radius);
+    transition: all 300ms ease;
+    & a{
+        width: 100%;
+        height:100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 300ms ease;
+    }
+}
+.buy-now:hover{
+    background-color: var(--color-primary-dark);
+    color: white !important;
+}
+.buy-now:hover a{
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+}
+
 .text{
     color: black;
     font-weight: 600;
@@ -214,7 +241,7 @@ header .top__header .top_header_content span:hover a{
     align-items: center;
     gap: 20px;
     padding-left: 16px;
-    max-width: 700px;
+    max-width: 1000px;
 
 }
 .header_page .search__header form .btn{
@@ -342,11 +369,9 @@ header .top__header .top_header_content span:hover a{
         position: relative;
         top: -20px;
         z-index: 2;
+        animation: fadeIn 1.5s ease-in-out;
     }
 
-    & .title:hover{
-
-    }
 
     & .blur{
         width: 100%;
@@ -360,6 +385,15 @@ header .top__header .top_header_content span:hover a{
     
 }
 
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
 
 
 /* DISCOUNT */
@@ -572,7 +606,7 @@ section{
     /* display: flex;
     flex-direction: column;
     align-items:start; */
-    padding: 0 16px 40px 16px;
+    padding: 0 16px 16px 16px;
 }
 .product .product_info div{
     /*margin-top: 16px;*/
@@ -734,8 +768,8 @@ footer .left .logo__footer .title__footer{
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
-    padding: 20px;
-}
+    margin-left: 100px;
+ }
 .content__footer .right a{
     width: fit-content;
     transition: all 0.3s ease;
