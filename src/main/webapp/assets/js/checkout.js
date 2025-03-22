@@ -99,3 +99,12 @@ function updateTempAddress() {
     modal.hide();
 }
 
+
+window.addEventListener('beforeunload', function() {
+        fetch('${pageContext.request.contextPath}/checkout?action=clearSession', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        });
+    });

@@ -19,6 +19,11 @@
 
     <!-- Main Content -->
     <div class="checkout-container">
+        <div class="text-left mt-2">
+            <button type="button" onclick="window.history.back()" class="back-button">
+               <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
         <h1 class="text-center mb-4">Thanh Toán</h1>
         <!-- Thông báo lỗi -->
         <c:if test="${not empty errorMessage}">
@@ -43,9 +48,15 @@
                         <h2 class="section-title"><i class="fas fa-shipping-fast"></i> Địa Chỉ Giao Hàng</h2>
                         <c:choose>
                             <c:when test="${not empty sessionScope.user and not empty sessionScope.user.address}">
-                                <p><strong>Họ và Tên:</strong> <span id="displayFullName">${sessionScope.user.fullName}</span></p>
-                                <p><strong>Số Điện Thoại:</strong> <span id="displayPhoneNumber">${sessionScope.user.phoneNumber}</span></p>
-                                <p><strong>Địa Chỉ:</strong> <span id="displayAddress">${sessionScope.user.address}</span></p>
+                                <div class="shipping-info-item">
+                                    <p><strong>Họ và Tên:</strong> <span id="displayFullName">${sessionScope.user.fullName}</span></p>
+                                </div>
+                                <div class="shipping-info-item">
+                                    <p><strong>Số Điện Thoại:</strong> <span id="displayPhoneNumber">${sessionScope.user.phoneNumber}</span></p>
+                                </div>
+                                <div class="shipping-info-item">
+                                    <p><strong>Địa Chỉ:</strong> <span id="displayAddress">${sessionScope.user.address}</span></p>
+                                </div>
                                 <a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#editAddressModal">Thay Đổi</a>
                                 <!-- Modal chỉnh sửa địa chỉ -->
                                 <div class="modal fade" id="editAddressModal" tabindex="-1" aria-labelledby="editAddressModalLabel" aria-hidden="true">
@@ -92,6 +103,15 @@
                                 </div>
                             </c:otherwise>
                         </c:choose>
+                        <!-- Thêm ô chọn thời gian giao hàng -->
+                        <div class="mb-3">
+                            <label for="deliveryTime" class="form-label">Thời Gian Giao Hàng</label>
+                            <select class="form-select" id="deliveryTime" name="deliveryTime">
+                                <option value="morning">Buổi Sáng (8:00 - 12:00)</option>
+                                <option value="afternoon">Buổi Chiều (13:00 - 17:00)</option>
+                                <option value="evening">Buổi Tối (18:00 - 21:00)</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Phương thức thanh toán -->

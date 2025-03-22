@@ -12,14 +12,14 @@ import java.util.List;
 import utils.JpaUtil;
 
 public class CartDAO implements ICartDAO {
-    private final EntityManager em;
 
-    public CartDAO() {
-        this.em = JpaUtil.getEntityManager();
+    private EntityManager getEntityManager() {
+        return JpaUtil.getEntityManager();
     }
 
     @Override
     public void addCart(Cart cart) {
+        EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             // Detach related entities to prevent lazy loading
@@ -36,11 +36,14 @@ public class CartDAO implements ICartDAO {
                 em.getTransaction().rollback();
             }
             throw e;
+        } finally {
+            em.close();
         }
     }
 
     @Override
     public void updateCart(Cart cart) {
+        EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             em.merge(cart);
@@ -50,11 +53,14 @@ public class CartDAO implements ICartDAO {
                 em.getTransaction().rollback();
             }
             throw e;
+        } finally {
+            em.close();
         }
     }
 
     @Override
     public void removeCart(int cartId) {
+        EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             Cart cart = em.find(Cart.class, cartId);
@@ -67,16 +73,24 @@ public class CartDAO implements ICartDAO {
                 em.getTransaction().rollback();
             }
             throw e;
+        } finally {
+            em.close();
         }
     }
 
     @Override
     public Cart findCartById(Integer cartId) {
-        return em.find(Cart.class, cartId);
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(Cart.class, cartId);
+        } finally {
+            em.close();
+        }
     }
 
     @Override
     public Cart findCartByUserAndProduct(User user, int productID) {
+        EntityManager em = getEntityManager();
         try {
             TypedQuery<Cart> query = em.createQuery(
                 "SELECT c FROM Cart c WHERE c.userID = :user AND c.productID.productID = :productID", Cart.class);
@@ -85,11 +99,14 @@ public class CartDAO implements ICartDAO {
             return query.getSingleResult();
         } catch (NoResultException e) {
             return null;
+        } finally {
+            em.close();
         }
     }
 
     @Override
     public Discount findDiscountByCode(String discountCode) {
+        EntityManager em = getEntityManager();
         try {
             TypedQuery<Discount> query = em.createQuery(
                 "SELECT d FROM Discount d WHERE d.discountCode = :code AND d.startDate <= :now AND d.endDate >= :now", Discount.class);
@@ -98,38 +115,51 @@ public class CartDAO implements ICartDAO {
             return query.getSingleResult();
         } catch (NoResultException e) {
             return null;
+        } finally {
+            em.close();
         }
     }
 
     @Override
     public List<Cart> findCartByUser(User user) {
-        TypedQuery<Cart> query = em.createQuery(
-            "SELECT c FROM Cart c " +
-            "JOIN FETCH c.productID p " +
-            "LEFT JOIN FETCH p.discountCollection d " +  // Eagerly fetch discounts
-            "JOIN FETCH p.sellerID " +
-            "JOIN FETCH p.categoryID " +
-            "WHERE c.userID = :user", Cart.class);
-        query.setParameter("user", user);
-        List<Cart> result = query.getResultList();
-        System.out.println("Retrieved " + (result != null ? result.size() : 0) + " cart items for user " + (user != null ? user.getUserID() : "null"));
-        return result != null ? result : Collections.emptyList();
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Cart> query = em.createQuery(
+                "SELECT c FROM Cart c " +
+                "JOIN FETCH c.productID p " +
+                "LEFT JOIN FETCH p.discountCollection d " +  // Eagerly fetch discounts
+                "JOIN FETCH p.sellerID " +
+                "JOIN FETCH p.categoryID " +
+                "WHERE c.userID = :user", Cart.class);
+            query.setParameter("user", user);
+            List<Cart> result = query.getResultList();
+            System.out.println("Retrieved " + (result != null ? result.size() : 0) + " cart items for user " + (user != null ? user.getUserID() : "null"));
+            return result != null ? result : Collections.emptyList();
+        } finally {
+            em.close();
+        }
     }
+
     @Override
     public Discount findDiscountByProduct(int productId) {
-    try {
-        TypedQuery<Discount> query = em.createQuery(
-            "SELECT d FROM Discount d WHERE d.productID.productID = :productId " +
-            "AND d.startDate <= :now AND d.endDate >= :now", Discount.class);
-        query.setParameter("productId", productId);
-        query.setParameter("now", java.time.LocalDateTime.now());
-        return query.getSingleResult();
-    } catch (NoResultException e) {
-        return null;
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Discount> query = em.createQuery(
+                "SELECT d FROM Discount d WHERE d.productID.productID = :productId " +
+                "AND d.startDate <= :now AND d.endDate >= :now", Discount.class);
+            query.setParameter("productId", productId);
+            query.setParameter("now", LocalDateTime.now());
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
     }
-}
+
     @Override
     public void deleteByUser(User user) {
+        EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             em.createQuery("DELETE FROM Cart c WHERE c.userID = :user")
@@ -141,10 +171,13 @@ public class CartDAO implements ICartDAO {
                 em.getTransaction().rollback();
             }
             throw new RuntimeException("Failed to delete cart items for user", e);
+        } finally {
+            em.close();
         }
     }
 
-public void deleteCartItemsByUserAndProductIds(User user, List<Integer> productIds) { 
+    public void deleteCartItemsByUserAndProductIds(User user, List<Integer> productIds) { 
+        EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             TypedQuery<Cart> query = em.createQuery(
@@ -165,12 +198,11 @@ public void deleteCartItemsByUserAndProductIds(User user, List<Integer> productI
             em.close();
         }
     }
-    
+
     @Override
     public void close() {
-        if (em != null && em.isOpen()) {
-            em.close();
-        }
+        // Không cần đóng EntityManager ở đây vì mỗi phương thức đã tự quản lý
+        // Chỉ đóng EntityManagerFactory nếu cần
         JpaUtil.close();
     }
 }

@@ -49,7 +49,7 @@ public class Payment implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Column(name = "Amount")
+    @Column(name = "Amount", precision = 18, scale = 2)
     private BigDecimal amount;
     @JoinColumn(name = "OrderID", referencedColumnName = "OrderID")
     @ManyToOne(optional = false)

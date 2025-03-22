@@ -54,7 +54,7 @@ public class Discount implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Column(name = "DiscountPercent")
+    @Column(name = "DiscountPercent", precision = 5, scale = 2)
     private BigDecimal discountPercent;
     @Basic(optional = false)
     @NotNull

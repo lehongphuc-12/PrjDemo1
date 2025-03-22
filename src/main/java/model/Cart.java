@@ -51,7 +51,7 @@ public class Cart implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Column(name = "Price")
+    @Column(name = "Price", precision = 18, scale = 2)
     private BigDecimal price;
     @Column(name = "AddedDate")
     @Temporal(TemporalType.TIMESTAMP)

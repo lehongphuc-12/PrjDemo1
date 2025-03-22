@@ -1,227 +1,284 @@
-        body {
-            background-color: #f8f9fa; /* Nền xám nhạt nhẹ nhàng */
-            font-family: 'Roboto', sans-serif;
-            color: #2c3e50; /* Màu chữ tối hơn cho độ tương phản tốt hơn */
-            line-height: 1.6; /* Tăng khoảng cách dòng cho dễ đọc */
-        }
+body {
+    background-color: #f8f9fa; /* Ná»n xÃ¡m nháº¡t nháº¹ nhÃ ng */
+    font-family: 'Roboto', sans-serif;
+    color: #2c3e50; /* MÃ u chá»¯ tá»‘i hÆ¡n cho Ä‘á»™ tÆ°Æ¡ng pháº£n tá»‘t hÆ¡n */
+    line-height: 1.6; /* TÄƒng khoáº£ng cÃ¡ch dÃ²ng cho dá»… Ä‘á»c */
+}
 
-        .checkout-container {
-            max-width: 1200px;
-            margin: 40px auto; /* Tăng khoảng cách trên/dưới */
-            padding: 30px; /* Tăng padding để thoáng hơn */
-            background-color: #ffffff; /* Nền trắng cho sạch sẽ */
-            border-radius: 10px; /* Bo góc lớn hơn */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Bóng nhẹ tạo chiều sâu */
-        }
+.checkout-container {
+    max-width: 1200px;
+    margin: 40px auto; /* TÄƒng khoáº£ng cÃ¡ch trÃªn/dÆ°á»›i */
+    padding: 30px; /* TÄƒng padding Ä‘á»ƒ thoÃ¡ng hÆ¡n */
+    background-color: #ffffff; /* Ná»n tráº¯ng cho sáº¡ch sáº½ */
+    border-radius: 10px; /* Bo gÃ³c lá»›n hÆ¡n */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* BÃ³ng nháº¹ táº¡o chiá»u sÃ¢u */
+}
 
-        .section-title {
-            font-size: 1.6rem; /* Tăng kích thước tiêu đề */
-            font-weight: 600; /* Đậm hơn một chút */
-            margin-bottom: 20px;
-            color: #2c3e50; /* Màu tối cho độ tương phản */
-            border-bottom: 2px solid #28a745; /* Đường viền xanh lá cây để hài hòa */
-            padding-bottom: 8px;
-            display: flex;
-            align-items: center; /* Căn giữa biểu tượng và chữ */
-            gap: 8px; /* Khoảng cách giữa biểu tượng và chữ */
-        }
+.section-title {
+    font-size: 1.6rem; /* TÄƒng kÃ­ch thÆ°á»›c tiÃªu Ä‘á» */
+    font-weight: 600; /* Äáº­m hÆ¡n má»™t chÃºt */
+    margin-bottom: 20px;
+    color: #2c3e50; /* MÃ u tá»‘i cho Ä‘á»™ tÆ°Æ¡ng pháº£n */
+    border-bottom: 2px solid #28a745; /* ÄÆ°á»ng viá»n xanh lÃ¡ cÃ¢y Ä‘á»ƒ hÃ i hÃ²a */
+    padding-bottom: 8px;
+    display: flex;
+    align-items: center; /* CÄƒn giá»¯a biá»ƒu tÆ°á»£ng vÃ  chá»¯ */
+    gap: 8px; /* Khoáº£ng cÃ¡ch giá»¯a biá»ƒu tÆ°á»£ng vÃ  chá»¯ */
+}
 
-        .section-title i {
-            color: #28a745; /* Màu xanh lá cây cho biểu tượng */
-        }
+.section-title i {
+    color: #28a745; /* MÃ u xanh lÃ¡ cÃ¢y cho biá»ƒu tÆ°á»£ng */
+}
 
-        .section-frame {
-            border: 1px solid #e0e0e0; /* Viền nhạt hơn */
-            padding: 20px; /* Tăng padding */
-            border-radius: 8px;
-            background-color: #fff;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* Bóng nhẹ */
-        }
+.section-frame {
+    border: 1px solid #e0e0e0; /* Viá»n nháº¡t hÆ¡n */
+    padding: 20px; /* TÄƒng padding */
+    border-radius: 8px;
+    background-color: #fff;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* BÃ³ng nháº¹ */
+}
 
-        .order-summary {
-            border: 1px solid #e0e0e0;
-            padding: 25px;
-            border-radius: 8px;
-            background-color: #fff;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        }
+.order-summary {
+    border: 1px solid #e0e0e0;
+    padding: 25px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
 
-        .btn-place-order {
-            width: 100%;
-            padding: 14px; /* Tăng kích thước nút */
-            font-size: 1.2rem;
-            font-weight: 500; /* Chữ hơi đậm */
-            background-color: #28a745;
-            border-color: #28a745;
-            border-radius: 6px;
-            transition: background-color 0.3s ease, transform 0.2s ease; /* Hiệu ứng mượt mà */
-        }
+.btn-place-order {
+    width: 100%;
+    padding: 14px; /* TÄƒng kÃ­ch thÆ°á»›c nÃºt */
+    font-size: 1.2rem;
+    font-weight: 500; /* Chá»¯ hÆ¡i Ä‘áº­m */
+    background-color: #28a745;
+    border-color: #28a745;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Hiá»‡u á»©ng mÆ°á»£t mÃ  */
+}
 
-        .btn-place-order:hover {
-            background-color: #218838;
-            border-color: #218838;
-            transform: translateY(-2px); /* Nút nâng lên khi hover */
-        }
+.btn-place-order:hover {
+    background-color: #218838;
+    border-color: #218838;
+    transform: translateY(-2px); /* NÃºt nÃ¢ng lÃªn khi hover */
+}
 
-        .table th, .table td {
-            vertical-align: middle;
-            font-size: 1rem; /* Chữ trong bảng lớn hơn */
-            padding: 12px; /* Tăng khoảng cách */
-            color: #2c3e50; /* Màu chữ tối hơn */
-        }
+.table th, .table td {
+    vertical-align: middle;
+    font-size: 1rem; /* Chá»¯ trong báº£ng lá»›n hÆ¡n */
+    padding: 12px; /* TÄƒng khoáº£ng cÃ¡ch */
+    color: #2c3e50; /* MÃ u chá»¯ tá»‘i hÆ¡n */
+}
 
-        .table th {
-            background-color: #f1f3f5; /* Nền tiêu đề bảng nhạt hơn */
-            font-weight: 600;
-        }
+.table th {
+    background-color: #f1f3f5; /* Ná»n tiÃªu Ä‘á» báº£ng nháº¡t hÆ¡n */
+    font-weight: 600;
+}
 
-        .table td img {
-            max-width: 60px; /* Hình ảnh lớn hơn một chút */
-            height: auto;
-            border-radius: 4px; /* Bo góc ảnh */
-        }
+.table td img {
+    max-width: 60px; /* HÃ¬nh áº£nh lá»›n hÆ¡n má»™t chÃºt */
+    height: auto;
+    border-radius: 4px; /* Bo gÃ³c áº£nh */
+}
 
-        .order-summary .d-flex {
-            font-size: 1.1rem;
-        }
+.order-summary .d-flex {
+    font-size: 1.1rem;
+}
 
-        .order-summary .d-flex strong {
-            font-size: 1.3rem; /* Tổng tiền nổi bật hơn */
-            color: #28a745; /* Màu xanh lá cây */
-            font-weight: 700; /* Đậm hơn */
-        }
+.order-summary .d-flex strong {
+    font-size: 1.3rem; /* Tá»•ng tiá»n ná»•i báº­t hÆ¡n */
+    color: #28a745; /* MÃ u xanh lÃ¡ cÃ¢y */
+    font-weight: 700; /* Äáº­m hÆ¡n */
+}
 
-        .alert {
-            margin-bottom: 25px;
-            border-radius: 6px;
-            font-size: 1rem; /* Chữ trong cảnh báo dễ đọc */
-            padding: 15px;
-        }
+.alert {
+    margin-bottom: 25px;
+    border-radius: 6px;
+    font-size: 1rem; /* Chá»¯ trong cáº£nh bÃ¡o dá»… Ä‘á»c */
+    padding: 15px;
+}
 
-        .alert-danger {
-            background-color: #f8d7da; /* Màu đỏ nhạt hơn */
-            color: #721c24; /* Chữ đỏ tối hơn */
-            border-color: #f5c6cb;
-        }
+.alert-danger {
+    background-color: #f8d7da; /* MÃ u Ä‘á» nháº¡t hÆ¡n */
+    color: #721c24; /* Chá»¯ Ä‘á» tá»‘i hÆ¡n */
+    border-color: #f5c6cb;
+}
 
-        .empty-cart-message {
-            font-size: 1.2rem;
-            color: #2c3e50;
-            text-align: center;
-            margin: 40px 0;
-        }
+.empty-cart-message {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    text-align: center;
+    margin: 40px 0;
+}
 
-        .continue-shopping-btn {
-            display: inline-block;
-            padding: 12px 25px;
-            background-color: #28a745;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 500;
-            transition: background-color 0.3s ease;
-        }
+.continue-shopping-btn {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
 
-        .continue-shopping-btn:hover {
-            background-color: #218838;
-            color: white;
-        }
+.continue-shopping-btn:hover {
+    background-color: #218838;
+    color: white;
+}
 
-        /* Modal Styling */
-        .modal-content {
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Bóng mạnh hơn */
-        }
+/* Khung cho thÃ´ng tin giao hÃ ng */
+.shipping-info-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 10px;
+    background-color: #f8f9fa; /* Ná»n nháº¡t Ä‘á»ƒ ná»•i báº­t */
+    transition: background-color 0.3s ease;
+}
 
-        .modal-header {
-            background-color: #28a745; /* Đầu modal xanh lá cây */
-            color: white;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
+.shipping-info-item:hover {
+    background-color: #e9ecef; /* Hiá»‡u á»©ng hover nháº¹ */
+}
 
-        .modal-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-        }
+.shipping-info-item strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
 
-        .modal-body {
-            padding: 20px;
-            background-color: #f8f9fa; /* Nền nhạt cho phần thân */
-        }
+.shipping-info-item span {
+    color: #495057;
+}
 
-        .modal-footer {
-            border-top: none;
-            padding: 15px 20px;
-            background-color: #f8f9fa;
-        }
+/* PhÆ°Æ¡ng thá»©c thanh toÃ¡n */
+.list-group-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    padding: 15px;
+    background-color: #fff;
+    position: relative; /* Äá»ƒ Ä‘á»‹nh vá»‹ description */
+    transition: background-color 0.3s ease; /* Hiá»‡u á»©ng khi hover */
+}
 
-        .form-label {
-            font-weight: 500; /* Nhãn đậm hơn */
-            color: #2c3e50;
-        }
+.list-group-item:hover {
+    background-color: #f8f9fa; /* Ná»n nháº¡t khi hover */
+}
 
-        .form-control {
-            border-radius: 6px;
-            border: 1px solid #ced4da;
-            padding: 10px;
-            font-size: 1rem;
-            color: #2c3e50;
-        }
+.form-check-label {
+    font-size: 1rem;
+    color: #2c3e50;
+    font-weight: 500;
+    cursor: pointer; /* Con trá» tay khi hover */
+}
 
-        .form-control:focus {
-            border-color: #28a745; /* Viền xanh khi focus */
-            box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
-        }
+.form-check-input:checked {
+    background-color: #28a745;
+    border-color: #28a745;
+}
 
-        .modal-footer .btn-primary {
-            background-color: #28a745;
-            border-color: #28a745;
-            border-radius: 6px;
-        }
+.text-muted {
+    font-size: 0.9rem;
+    color: #6c757d;
+    display: none; /* áº¨n description máº·c Ä‘á»‹nh */
+    position: absolute;
+    top: 100%; /* Hiá»ƒn thá»‹ bÃªn dÆ°á»›i má»¥c */
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 8px 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    transition: opacity 0.2s ease; /* Hiá»‡u á»©ng mÆ°á»£t mÃ  */
+    opacity: 0;
+}
 
-        .modal-footer .btn-primary:hover {
-            background-color: #218838;
-            border-color: #218838;
-        }
+.list-group-item:hover .text-muted {
+    display: block; /* Hiá»ƒn thá»‹ khi hover */
+    opacity: 1;
+}
+/* Modal Footer Styling */
+.modal-footer {
+    border-top: none;
+    padding: 15px 20px;
+    background-color: #f8f9fa; /* Ná»n nháº¡t Ä‘á»ƒ Ä‘á»“ng bá»™ vá»›i modal-body */
+    display: flex;
+    justify-content: flex-end; /* CÄƒn cÃ¡c nÃºt vá» phÃ­a bÃªn pháº£i */
+    gap: 10px; /* Khoáº£ng cÃ¡ch giá»¯a cÃ¡c nÃºt */
+}
 
-        .modal-footer .btn-secondary {
-            background-color: #6c757d;
-            border-color: #6c757d;
-            border-radius: 6px;
-        }
+/* NÃºt ÄÃ³ng */
+.modal-footer .btn-secondary {
+    background-color: #6c757d; /* MÃ u xÃ¡m máº·c Ä‘á»‹nh */
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Hiá»‡u á»©ng mÆ°á»£t mÃ  */
+}
 
-        /* Phương thức thanh toán */
-        .list-group-item {
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            padding: 15px;
-            background-color: #fff;
-        }
+.modal-footer .btn-secondary:hover {
+    background-color: #5a6268; /* MÃ u xÃ¡m Ä‘áº­m hÆ¡n khi hover */
+    transform: translateY(-2px); /* NÃºt nÃ¢ng lÃªn nháº¹ khi hover */
+}
 
-        .form-check-label {
-            font-size: 1rem;
-            color: #2c3e50;
-            font-weight: 500;
-        }
+/* NÃºt LÆ°u Thay Äá»•i */
+.modal-footer .btn-primary {
+    background-color: #28a745; /* MÃ u xanh lÃ¡ cÃ¢y Ä‘á»“ng bá»™ vá»›i giao diá»‡n */
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Hiá»‡u á»©ng mÆ°á»£t mÃ  */
+}
 
-        .form-check-input:checked {
-            background-color: #28a745;
-            border-color: #28a745;
-        }
+.modal-footer .btn-primary:hover {
+    background-color: #218838; /* MÃ u xanh Ä‘áº­m hÆ¡n khi hover */
+    transform: translateY(-2px); /* NÃºt nÃ¢ng lÃªn nháº¹ khi hover */
+}
 
-        /* Liên kết Thay Đổi */
-        .text-primary {
-            color: #28a745 !important; /* Màu xanh lá cây thay vì xanh dương */
-        }
+.modal-footer .btn-primary:active,
+.modal-footer .btn-secondary:active {
+    transform: translateY(0); /* Tráº£ láº¡i vá»‹ trÃ­ ban Ä‘áº§u khi nháº¥n */
+}
 
-        .text-primary:hover {
-            color: #218838 !important;
-            text-decoration: underline;
-        }
-        
-        .text-muted{
-            font-size: 12px !important;
-        }
+.back-button {
+    /* XÃ³a cÃ¡c thuá»™c tÃ­nh máº·c Ä‘á»‹nh cá»§a button */
+    border: none;
+    background: none;
+    padding: 8px 12px; /* ThÃªm padding Ä‘á»ƒ nÃºt dá»… báº¥m hÆ¡n */
+    font-size: 18px; /* Giáº£m kÃ­ch thÆ°á»›c mÅ©i tÃªn Ä‘á»ƒ trÃ´ng cÃ¢n Ä‘á»‘i hÆ¡n */
+    color: black; /* Giá»¯ mÃ u xanh nhÆ° ban Ä‘áº§u */
+    cursor: pointer; /* Hiá»ƒn thá»‹ con trá» tay khi di chuá»™t qua */
+    transition: all 0.3s ease; /* ThÃªm hiá»‡u á»©ng chuyá»ƒn Ä‘á»•i mÆ°á»£t mÃ  */
+    border-radius: 50%; /* LÃ m nÃºt trÃ²n */
+    display: inline-flex; /* Äáº£m báº£o ná»™i dung cÄƒn giá»¯a */
+    align-items: center;
+    justify-content: center;
+}
+.back-button {
+   font-size: 30px; /* Nhá» hÆ¡n */
+   padding: 6px 10px;
+}
+
+/* Hiá»‡u á»©ng khi hover */
+.back-button:hover {
+    background-color: #e6e6ff; /* MÃ u ná»n nháº¡t khi hover */
+    color: #1a3c9e; /* Äá»•i mÃ u mÅ©i tÃªn Ä‘áº­m hÆ¡n má»™t chÃºt */
+}
+
+/* Hiá»‡u á»©ng khi focus (khi ngÆ°á»i dÃ¹ng tab Ä‘áº¿n nÃºt) */
+.back-button:focus {
+    outline: none; /* XÃ³a viá»n máº·c Ä‘á»‹nh */
+    box-shadow: 0 0 0 3px rgba(38, 77, 228, 0.3); /* ThÃªm viá»n sÃ¡ng khi focus */
+}
+
+/* Äáº£m báº£o div chá»©a nÃºt khÃ´ng bá»‹ lá»‡ch */
+.text-left.mt-2 {
+    margin-top: 1rem; /* Giá»¯ margin-top nhÆ° ban Ä‘áº§u */
+    padding-left: 10px; /* ThÃªm padding Ä‘á»ƒ nÃºt khÃ´ng sÃ¡t lá» */
+}

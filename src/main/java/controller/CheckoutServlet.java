@@ -79,6 +79,12 @@ public class CheckoutServlet extends HttpServlet {
     @Override
 protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
+    String action = request.getParameter("action");
+            if ("clearSession".equals(action)) {
+                clearCheckoutSession(request);
+                response.setStatus(HttpServletResponse.SC_OK);
+                return;
+            }
     HttpSession session = request.getSession(false);
     if (session == null || session.getAttribute("user") == null) {
         LOGGER.warning("User not logged in for checkout.");
@@ -371,10 +377,26 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         return total;
     }
 
+    private void clearCheckoutSession(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.removeAttribute("productIds");
+            session.removeAttribute("orderId");
+            session.removeAttribute("discountAmount");
+            session.removeAttribute("discountCode");
+            session.removeAttribute("selectedItems"); // Nếu có
+            LOGGER.info("Checkout session cleared.");
+        }
+    }
     private void clearSessionDiscount(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.removeAttribute("discountAmount");
+            session.removeAttribute("discountCode");
+            session.removeAttribute("productIds");
+            session.removeAttribute("orderId");
+            session.removeAttribute("selectedItems"); // Nếu có
+            LOGGER.info("All checkout-related session attributes cleared.");
         }
     }
 }
