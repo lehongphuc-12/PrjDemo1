@@ -160,4 +160,26 @@ public class OrderDAO implements IOrderDAO {
             em.close();
         }
     }
+    
+    public boolean hasPurchased(int userID, int productID) {
+        EntityManager em = JpaUtil.getEntityManager();
+        try {
+            String jpql = "SELECT COUNT(od) FROM OrderDetail od " +
+                          "JOIN od.orderID o " +
+                          "WHERE o.userID.userID = :userID " +
+                          "AND od.productID.productID = :productID " +
+                          "AND od.statusID.statusID = 3";  // Sửa lại so sánh statusID đúng cách
+
+            Long count = em.createQuery(jpql, Long.class)
+                           .setParameter("userID", userID)
+                           .setParameter("productID", productID)
+                           .getSingleResult();
+            return count > 0; 
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            em.close();
+        }
+    }
 }

@@ -37,6 +37,7 @@ span{
 html, body{
     font-size: 16px;
     font-family: 'Poppins', sans-serif;
+    /*background: linear-gradient(135deg, #FFFFFF, #E6F7E6);*/
     background-color: var(--background-color);
 }
 a{
@@ -178,6 +179,7 @@ header{
     position: sticky;
     top: 0;
     z-index: 99999;
+    /*box-shadow: 0px 1px 12px 2px black;*/
 }
 
 header .top__header{
@@ -583,7 +585,7 @@ section{
 
 
 /* Khi ngôi dụng dòng 2 bị overflow thì hiện ... */
-.product .product_info .product_name p {
+.product .product_info .product_name p a {
     display: -webkit-box;           /* Sử dụng flexbox với WebKit */
     -webkit-line-clamp: 2;         /* Hiển thị tối đa 2 dòng */
     -webkit-box-orient: vertical;  /* Định hướng nội dung dọc */
@@ -603,11 +605,11 @@ section{
     overflow: hidden;
     width: 100%;
 }
-.product .product_image img{
+.product .product_image a img{
     transition: all 0.3s ease-in-out;
 }
 
-.product:hover .product_image img{
+.product:hover .product_image a img{
     transform: scale(1.2);
 }
 

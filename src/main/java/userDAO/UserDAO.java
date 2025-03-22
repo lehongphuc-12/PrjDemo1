@@ -6,11 +6,14 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import model.Product;
 import model.Role;
 import model.User;
+import org.hibernate.Hibernate;
 import utils.JpaUtil;
 
 public class UserDAO implements IUserDAO{
@@ -95,7 +98,23 @@ if (user == null || user.getEmail() == null || user.getEmail().trim().isEmpty())
             em.close();
         }
     }
+@Transactional
+public User getSellerByProductIdDAO(int productID) {
+    try (EntityManager em = JpaUtil.getEntityManager()) {
+        String jpql = "SELECT u FROM User u JOIN FETCH u.productCollection WHERE u IN (" +
+                      "SELECT p.sellerID FROM Product p WHERE p.productID = :productID)";
+        User seller = em.createQuery(jpql, User.class)
+                       .setParameter("productID", productID)
+                       .getSingleResult();
+        return seller;
+    } catch (NoResultException e) {
+        return null;
+    }
+}
 
+
+    
+    
     // Tìm người dùng theo ID
     @Override
     public User findByIdDAO(int id) {
@@ -246,25 +265,12 @@ if (user == null || user.getEmail() == null || user.getEmail().trim().isEmpty())
     }
     public static void main(String[] args) {
         UserDAO dao = new UserDAO();
-        try {
-            List<User> users = dao.getAllUserDAO(); // Gọi phương thức getAllUser
-            if (users != null && !users.isEmpty()) {
-                System.out.println("Danh sách người dùng trong cơ sở dữ liệu:");
-                for (User user : users) {
-                    System.out.println("ID: " + user.getUserID() + 
-                                     ", Email: " + user.getEmail() + 
-                                     ", FullName: " + user.getFullName() + 
-                                     ", Password: " + user.getPassword() + // Thêm password
-                                     ", RoleID: " + (user.getRoleID() != null ? user.getRoleID().getRoleID() : "N/A") +
-                                     ", CreatedAt: " + user.getCreatedAt());
-                }
-                System.out.println("Tổng số người dùng: " + users.size());
-            } else {
-                System.out.println("Không có người dùng nào trong cơ sở dữ liệu!");
-            }
-        } catch (Exception e) {
-            System.err.println("Lỗi khi truy vấn dữ liệu: " + e.getMessage());
-            e.printStackTrace();
+       
+        
+        
+        System.out.println(dao.getSellerByProductIdDAO(12).getUserID());
+        for(Product p : dao.getSellerByProductIdDAO(12).getProductCollection()){
+            System.out.println(p.getProductName());
         }
     }
 }

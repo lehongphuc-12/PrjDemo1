@@ -6,123 +6,45 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.CategoryGroup;
 import model.Product;
-import model.ProductImage;
 import model.Review;
 import model.User;
+import reviewDAO.ReviewDAO;
+import service.CategoryService;
 import service.ProductService;
+import service.UserService;
 
 @WebServlet(name = "ProductDetailServlet", urlPatterns = {"/detail"})
 public class ProductDetailServlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(ProductDetailServlet.class.getName());
-    private ProductService productService = new ProductService();
+    private final ProductService productService = new ProductService();
 
-    @Override
+   @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String idStr = request.getParameter("productID");
-        int productId = 105; // Giá trị mặc định
-        if (idStr != null && !idStr.isEmpty()) {
-            try {
-                productId = Integer.parseInt(idStr);
-            } catch (NumberFormatException e) {
-                logger.warning("Invalid productID: " + idStr);
-                request.setAttribute("errorMessage", "ID sản phẩm không hợp lệ.");
-                request.getRequestDispatcher("product/error.jsp").forward(request, response);
-                return;
-            }
+
+        String action = request.getParameter("action");
+        if(action == null){
+            action = "";
         }
-
-        Product product = productService.getProductById(productId);
-        if (product == null) {
-            logger.warning("Product not found for ID: " + productId);
-            request.setAttribute("errorMessage", "Sản phẩm không tồn tại!");
-            request.getRequestDispatcher("product/error.jsp").forward(request, response);
-            return;
+        switch(action){
+            case "review":
+                
+                break;
+            default:
+                viewDetailedProduct(request,response);
+                break;
         }
-
-        List<ProductImage> images = productService.getProductImages(productId);
-        if (images == null) {
-            images = Collections.emptyList();
-        }
-
-        // Lấy sellerID từ đối tượng User trong Product
-        int sellerID = product.getSellerID().getUserID();
-
-        // Lấy danh sách sản phẩm của shop
-        List<Product> shopProducts = productService.getProductsBySellerID(sellerID);
-        if (shopProducts == null) {
-            shopProducts = Collections.emptyList();
-        }
-
-        // Tính số lượng sản phẩm của shop
-        int shopProductCount = shopProducts.size();
-        request.setAttribute("shopProductCount", shopProductCount);
-
-        // Tính trung bình đánh giá của shop
-        double totalRating = 0.0;
-        int totalReviews = 0;
-        for (Product p : shopProducts) {
-            List<Review> productReviews = productService.getReviewsByProductId(p.getProductID());
-            if (productReviews != null && !productReviews.isEmpty()) {
-                for (Review review : productReviews) {
-                    totalRating += review.getRating();
-                    totalReviews++;
-                }
-            }
-        }
-        double averageShopRating = (totalReviews > 0) ? totalRating / totalReviews : 0.0;
-        averageShopRating = Math.round(averageShopRating * 10.0) / 10.0; // Làm tròn 1 chữ số thập phân
-        request.setAttribute("averageShopRating", averageShopRating);
-
-        Map<Integer, ProductImage> productImages = productService.getProductImage(sellerID);
-        List<Product> highProducts = productService.getHighStockProducts(10);
-        Map<Integer, ProductImage> highProductImages = productService.getHighStockProductImages(10);
-        Map<Integer, ProductImage> highSimilarImages = productService.getSimilarProductsImage(productId);
-        List<Product> similarProducts = productService.getSimilarProducts(productId);
-        List<Review> reviews = productService.getReviewsByProductId(productId);
-        if (reviews == null) {
-            reviews = Collections.emptyList();
-        }
-
-        // Đặt các thuộc tính vào request
-        request.setAttribute("product", product);
-        request.setAttribute("productImage", images);
-        request.setAttribute("products", shopProducts);
-        request.setAttribute("productImages", productImages);
-        request.setAttribute("highProductImages", highProductImages);
-        request.setAttribute("highProducts", highProducts);
-        request.setAttribute("highSimilarImages", highSimilarImages);
-        request.setAttribute("similarProducts", similarProducts);
-        request.setAttribute("reviews", reviews);
-
-        // Tính toán ngày giao hàng
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MM", new Locale("vi", "VN"));
-        String currentDate = sdf.format(cal.getTime()).replace(" ", " Th");
-        cal.add(Calendar.DAY_OF_YEAR, 3);
-        String futureDate3Day = sdf.format(cal.getTime()).replace(" ", " Th");
-        cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_YEAR, 2);
-        String startDate4Day = sdf.format(cal.getTime()).replace(" ", " Th");
-        cal.add(Calendar.DAY_OF_YEAR, 5);
-        String endDate4Day = sdf.format(cal.getTime()).replace(" ", " Th");
-
-        request.setAttribute("currentShippingDate", currentDate);
-        request.setAttribute("futureShippingDate", futureDate3Day);
-        request.setAttribute("startBulkyShippingDate", startDate4Day);
-        request.setAttribute("endBulkyShippingDate", endDate4Day);
-
-        // Chuyển tiếp đến JSP
-        request.getRequestDispatcher("views/product_detail.jsp").forward(request, response);
     }
 
     @Override
@@ -177,5 +99,99 @@ public class ProductDetailServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Servlet to handle product detail requests";
+    }
+    
+    
+    private void viewDetailedProduct(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+    
+        // Lấy và kiểm tra productID
+        String idStr = request.getParameter("productID");
+        int productId = 105; // Giá trị mặc định
+
+        if (idStr != null && !idStr.isEmpty()) {
+            try {
+                productId = Integer.parseInt(idStr);
+                if (productId <= 0) {
+                    logger.log(Level.WARNING, "Invalid productID: {0}", productId);
+                    request.setAttribute("errorMessage", "ID sản phẩm phải lớn hơn 0.");
+                    request.getRequestDispatcher("views/error.jsp").forward(request, response);
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                logger.log(Level.WARNING, "Invalid productID format: {0}", idStr);
+                request.setAttribute("errorMessage", "ID sản phẩm không hợp lệ.");
+                request.getRequestDispatcher("views/error.jsp").forward(request, response);
+                return;
+            }
+        }
+
+        try {
+            // Lấy thông tin sản phẩm
+            Product product = productService.getProductById(productId);
+            if (product == null) {
+                logger.log(Level.WARNING, "Product not found for ID: {0}", productId);
+                request.setAttribute("errorMessage", "Sản phẩm không tồn tại!");
+                request.getRequestDispatcher("views/error.jsp").forward(request, response);
+                return;
+            }
+
+            // Lấy thông tin người bán
+            User seller = new UserService().getSellerByProductID(productId);
+            if (seller == null) {
+                logger.log(Level.WARNING, "Seller not found for product ID: {0}", productId);
+                request.setAttribute("errorMessage", "Không tìm thấy thông tin người bán.");
+                request.getRequestDispatcher("views/error.jsp").forward(request, response);
+                return;
+            }
+            int sellerID = seller.getUserID();
+
+
+            // Tính điểm trung bình của cửa hàng (di chuyển vào service để tối ưu)
+            double averageShopRating = productService.getAverageRatingBySellerId(sellerID);
+            request.setAttribute("averageShopRating", averageShopRating);
+
+           List<Product> sellerProducts = productService.getProductsBySellerID(sellerID);
+
+            List<Product> similarProducts = productService.getSimilarProducts(productId);
+            if (similarProducts == null) {
+                similarProducts = Collections.emptyList();
+            }
+
+            List<Review> reviews = productService.getReviewsByProductId(productId);
+            if (reviews == null) {
+                reviews = Collections.emptyList();
+            }
+            List<CategoryGroup> listCategoryGroup = new CategoryService().getAllCategoryGroup();
+
+            // Gán các thuộc tính cho request
+            request.setAttribute("product", product);
+            request.setAttribute("sellerProducts", sellerProducts);
+            request.setAttribute("similarProducts", similarProducts);
+            request.setAttribute("reviews", reviews);
+            request.setAttribute("listCategoryGroup", listCategoryGroup);
+
+            // Xử lý ngày giờ với java.time
+            LocalDate today = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd 'Th'MM", new Locale("vi", "VN"));
+
+            String currentDate = today.format(formatter);
+            String futureDate3Day = today.plusDays(3).format(formatter);
+            String startDate4Day = today.plusDays(2).format(formatter);
+            String endDate4Day = today.plusDays(7).format(formatter);
+
+            request.setAttribute("currentShippingDate", currentDate);
+            request.setAttribute("futureShippingDate", futureDate3Day);
+            request.setAttribute("startBulkyShippingDate", startDate4Day);
+            request.setAttribute("endBulkyShippingDate", endDate4Day);
+
+            // Chuyển hướng đến trang chi tiết sản phẩm
+            request.getRequestDispatcher("views/product_detail.jsp").forward(request, response);
+
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, "Unexpected error while loading product data: {0}", e.getMessage());
+            request.setAttribute("errorMessage", "Có lỗi bất ngờ xảy ra.");
+            request.getRequestDispatcher("views/error.jsp").forward(request, response);
+        }
     }
 }

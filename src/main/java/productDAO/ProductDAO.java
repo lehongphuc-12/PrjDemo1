@@ -14,7 +14,6 @@ import org.hibernate.Hibernate;
 import utils.JpaUtil;
 
 public class ProductDAO implements IProductDAO{
-    
     private final String orderProducts =  "ORDER BY (0.7 * COALESCE(SIZE(p.orderDetailCollection), 0) + 0.3 * COALESCE(SIZE(p.productViewCollection), 0)) DESC";
 //    private final String orderProducts = "ORDER BY (CAST(:weightPurchase AS double) * COALESCE((SIZE(od.quantity), 0) + CAST(:weightView AS double) * COALESCE(SIZE(pv.productViewCollection), 0)) DESC";
 
@@ -409,15 +408,30 @@ public class ProductDAO implements IProductDAO{
         } 
     }
     
+    public double getAverageRatingBySellerIdDAO(int sellerId) {
+        try (EntityManager em = JpaUtil.getEntityManager()){
+            // JPQL truy vấn
+            String jpql = "SELECT AVG(r.rating) " +
+                         "FROM Review r " +
+                         "WHERE r.productID IN (" +
+                         "    SELECT p FROM Product p WHERE p.sellerID.userID = :sellerId" +
+                         ")";
+            
+            TypedQuery<Double> query = em.createQuery(jpql, Double.class);
+            query.setParameter("sellerId", sellerId);
+            
+            // Lấy kết quả
+            Double result = query.getSingleResult();
+            return (result != null) ? Math.round(result * 10.0) / 10.0 : 0.0;
+        } 
+    }
+    
     public long countProductsBySearchDAO(String productName) {
-        EntityManager em = JpaUtil.getEntityManager();
-        try {
+        try (EntityManager em = JpaUtil.getEntityManager()) {
             String jpql = "SELECT COUNT(p) FROM Product p WHERE p.productName LIKE :productName ";
             TypedQuery<Long> query = em.createQuery(jpql, Long.class);
             query.setParameter("productName", "%"+productName+" %");
             return query.getSingleResult();
-        } finally {
-            em.close();
         }
     }
 
@@ -495,43 +509,43 @@ public class ProductDAO implements IProductDAO{
 
     @Override
     public Product findById(int id) {
-        EntityManager em = JpaUtil.getEntityManager();
-        try {
-            return em.find(Product.class, id);
-        } finally {
-            em.close();
+        try (EntityManager em = JpaUtil.getEntityManager()) {
+            Product p = null;
+            p = em.find(Product.class, id);
+            
+            if(p != null){
+                Hibernate.initialize(p.getProductImageCollection()); // Load ảnh nếu FetchType.LAZY
+                Hibernate.initialize(p.getDiscountCollection()); // Load ảnh nếu FetchType.LAZY
+                Hibernate.initialize(p.getOrderDetailCollection());
+                Hibernate.initialize(p.getReviewCollection());
+                Hibernate.initialize(p.getProductViewCollection());
+            }
+            return p;
         }
     }
 
     @Override
     public List<Product> findAll() {
-        EntityManager em = JpaUtil.getEntityManager();
-        try {
+        try (EntityManager em = JpaUtil.getEntityManager()) {
             TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p", Product.class);
             return query.getResultList();
-        } finally {
-            em.close();
         }
     }
 
     
     public List<Product> getHighStockProducts(int threshold) {
-        EntityManager em = JpaUtil.getEntityManager();
-        try {
+        try (EntityManager em = JpaUtil.getEntityManager()) {
             TypedQuery<Product> query = em.createQuery(
                 "SELECT p FROM Product p WHERE p.quantity > :threshold ORDER BY p.quantity DESC", Product.class
             );
             query.setParameter("threshold", threshold);
             query.setMaxResults(10); 
             return query.getResultList();
-        } finally {
-            em.close();
         }
     }
     
     public Product findProductWithDetails(int productID) {
-        EntityManager em = JpaUtil.getEntityManager();
-        try {
+        try (EntityManager em = JpaUtil.getEntityManager()) {
             TypedQuery<Product> query = em.createQuery(
                 "SELECT p FROM Product p " +
                 "JOIN FETCH p.cityID " +
@@ -541,22 +555,28 @@ public class ProductDAO implements IProductDAO{
             );
             query.setParameter("productID", productID);
             return query.getSingleResult();
-        } finally {
-            em.close();
         }
     }
 
         public List<Product> getProductsBySellerID(int sellerID) {
-            EntityManager em = JpaUtil.getEntityManager();
-            try {
+            try (EntityManager em = JpaUtil.getEntityManager()) {
                 TypedQuery<Product> query = em.createQuery(
                     "SELECT p FROM Product p WHERE p.sellerID.id = :sellerID ORDER BY p.productID DESC",
                     Product.class
                 );
-                query.setParameter("sellerID", sellerID);       
-                return query.getResultList();
-            } finally {
-                em.close();
+                query.setParameter("sellerID", sellerID);   
+                
+                List<Product> list = query.getResultList();
+                
+                for(Product p :list){
+                    Hibernate.initialize(p.getProductImageCollection()); // Load ảnh nếu FetchType.LAZY
+                Hibernate.initialize(p.getDiscountCollection()); // Load ảnh nếu FetchType.LAZY
+                Hibernate.initialize(p.getOrderDetailCollection());
+                Hibernate.initialize(p.getReviewCollection());
+                Hibernate.initialize(p.getProductViewCollection());
+                }
+                
+                return list;
             }
         }
 
@@ -571,6 +591,15 @@ public class ProductDAO implements IProductDAO{
             // Thực thi và lấy danh sách kết quả
             @SuppressWarnings("unchecked")
             List<Product> resultList = query.getResultList();
+            
+            for(Product p :resultList){
+                    Hibernate.initialize(p.getProductImageCollection()); // Load ảnh nếu FetchType.LAZY
+                Hibernate.initialize(p.getDiscountCollection()); // Load ảnh nếu FetchType.LAZY
+                Hibernate.initialize(p.getOrderDetailCollection());
+                Hibernate.initialize(p.getReviewCollection());
+                Hibernate.initialize(p.getProductViewCollection());
+                }
+            
             return resultList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -609,6 +638,8 @@ public class ProductDAO implements IProductDAO{
         //C1:  1450-1540  
         System.out.println(dao.getSimilarProducts(1));
 //        System.out.println("COUNT: "+ dao.countProductsByCategoryGroupId(2));
+
+        System.out.println(dao.findById(2).getProductImageCollection());
     }
     
 }

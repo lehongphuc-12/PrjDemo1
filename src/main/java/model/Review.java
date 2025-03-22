@@ -68,6 +68,15 @@ public class Review implements Serializable {
         this.reviewID = reviewID;
     }
 
+    public Review(int rating, String comment, Date reviewDate, Product productID, User userID) {
+        this.rating = rating;
+        this.comment = comment;
+        this.reviewDate = reviewDate;
+        this.productID = productID;
+        this.userID = userID;
+    }
+        
+
     public Review(Integer reviewID, int rating) {
         this.reviewID = reviewID;
         this.rating = rating;

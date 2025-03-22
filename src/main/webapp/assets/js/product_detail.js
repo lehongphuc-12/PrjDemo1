@@ -171,9 +171,10 @@ function attachEventBuyHandlers() {
             },
             error: function(xhr) {
                 var errorMsg = xhr.responseText || 'Vui lòng đăng nhập để tiếp tục mua hàng.';
-                $('#cart-message').removeClass('alert-success').addClass('alert-danger')
-                    .text(errorMsg).show();
-                setTimeout(() => $('#cart-message').fadeOut(), 5000);
+//                $('#cart-message').removeClass('alert-success').addClass('alert-danger')
+//                    .text(errorMsg).show();
+                    window.location.href = contextPath + `/views/login.jsp?error-message=${errorMsg}`;
+//                setTimeout(() => $('#cart-message').fadeOut(), 5000);
             }
         });
     });

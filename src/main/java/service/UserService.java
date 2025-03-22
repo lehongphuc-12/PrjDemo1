@@ -91,4 +91,8 @@ public class UserService {
         if (password != null && !password.trim().isEmpty()) user.setPassword(password);
         updateUser(user);
     }
+    
+    public User getSellerByProductID(int productID){
+        return userDAO.getSellerByProductIdDAO(productID);
+    }
 }

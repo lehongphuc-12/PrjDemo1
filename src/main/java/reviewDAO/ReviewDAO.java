@@ -2,8 +2,11 @@ package reviewDAO;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import java.util.Date;
 import java.util.List;
+import model.Product;
 import model.Review;
+import model.User;
 import utils.JpaUtil;
 
 public class ReviewDAO implements IReviewDAO {
@@ -86,5 +89,14 @@ public class ReviewDAO implements IReviewDAO {
         } finally {
             em.close();
         }
+    }
+    
+    
+
+
+    
+    public static void main(String[] args) {
+        ReviewDAO dao = new ReviewDAO();
+        dao.create(new Review(5,"Tuyet",new Date(),new Product(12),new User(15)));
     }
 }

@@ -135,7 +135,7 @@ function debounce(func, wait) {
 window.addEventListener("scroll", debounce(() => {
   document
     .querySelector("header")
-    .classList.toggle("window-scroll", window.scrollY > 0);
+    ?.classList.toggle("window-scroll", window.scrollY > 0);
 }, 100));
 
  

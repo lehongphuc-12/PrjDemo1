@@ -51,7 +51,9 @@ public class RoleFilter implements Filter {
             "/filters",
             "/chatbot",
             "/LoginGoogleHandler",
-            "/detail"
+            "/detail",
+            "/views/product_detail.jsp",
+            "/review"
         ));
 
         guestPages = Collections.unmodifiableList(Arrays.asList(

@@ -16,7 +16,7 @@
             <p class="mb-0">Vui lòng thử lại hoặc liên hệ hỗ trợ nếu vấn đề vẫn tiếp diễn.</p>
         </div>
         <div class="text-center">
-            <a href="${pageContext.request.contextPath}/shop" class="btn btn-primary">Quay lại cửa hàng</a>
+            <a href="${pageContext.request.contextPath}/products" class="btn btn-primary">Quay lại cửa hàng</a>
         </div>
     </div>
 </body>

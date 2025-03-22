@@ -197,10 +197,10 @@ public class FilterServlet extends HttpServlet {
                     </div>
                     <div class="product_info">
                         <div class="product_name text">
-                            <p>%s</p>
+                            <p><a href="%s/detail?productID=%d">%s</a></p>
                         </div>
                         <div class="product_price">
-                """, imageURL, p.getProductName(), StringEscapeUtils.escapeHtml4(p.getProductName())));
+                """, imageURL, p.getProductName(),request.getContextPath(),p.getProductID(), StringEscapeUtils.escapeHtml4(p.getProductName())));
 
             if (discount.compareTo(BigDecimal.ZERO) > 0) {
                 html.append(String.format("""

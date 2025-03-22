@@ -214,4 +214,7 @@ public class ProductService {
         productDAO.update(product);
     }
     
+    public double getAverageRatingBySellerId(int sellerID){
+        return productDAO.getAverageRatingBySellerIdDAO(sellerID);
+    }
 }

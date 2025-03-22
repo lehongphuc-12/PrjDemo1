@@ -43,7 +43,7 @@
                     <div class="dropdown">
                         <select name="searchType" id="searchType">
                             <option value="products">Hàng hoá</option>
-                            <option value="stores">Cửa hàng</option>
+                            <!--<option value="stores">Cửa hàng</option>-->
                         </select>
                     </div>
                     <div class="search_input">

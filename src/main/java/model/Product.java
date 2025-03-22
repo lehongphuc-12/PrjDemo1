@@ -246,6 +246,10 @@ public class Product implements Serializable {
         }   
         return avg/reviews.size()*1.0;
     }
+    
+    public int getTotalSold(){
+        return this.getOrderDetailCollection().size();
+    }
     @Override
     public int hashCode() {
         int hash = 0;
@@ -268,7 +272,9 @@ public class Product implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Product[ productID=" + productID + " ]";
+        return "Product{" + "productID=" + productID + ", productName=" + productName + ", description=" + description + ", price=" + price + ", quantity=" + quantity + ", unit=" + unit + ", createdDate=" + createdDate + '}';
     }
+
+    
     
 }

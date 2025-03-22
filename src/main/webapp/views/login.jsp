@@ -26,13 +26,13 @@
 
             <div class="form-group">
                 <label for="email-login" class="form-label">Email</label>
-                <input type="text" id="email-login" name="email-login" placeholder="VD: email@domain.com" class="form-control">
+                <input type="text" id="email-login" name="email-login" placeholder="VD: email@domain.com" class="form-control" value="${rememberEmail}">
                 <span class="form-message"></span>
             </div>
     
             <div class="form-group">
                 <label for="password-login" class="form-label">Mật khẩu</label>
-                <input type="password" id="password-login" name="password-login" placeholder="Nhập mật khẩu" class="form-control">
+                <input type="password" id="password-login" name="password-login" placeholder="Nhập mật khẩu" class="form-control" value="${rememberPassword}">
                 <span class="form-message"></span>
             </div>
 
@@ -42,9 +42,10 @@
             </div>
 
             <button type="submit" class="form-submit">Đăng nhập</button>
+            <p style="color: red;margin-top: 12px;font-size: 12px">${errorMessage}</p>
             
             <div style="margin-top: 12px; text-align: center;">
-                <span style="display: inline-block; font-size: 12px; color: blue">
+                <span style="display: inline-block; font-size: 16px; color: blue">
                     <a id="to-register" href="#" style="cursor: pointer; text-decoration: none;">Tạo tài khoản mới!</a>
                 </span>
                 <div style="margin-top: 8px; font-size: 12px;" class="google-login">
@@ -54,6 +55,13 @@
                     </a>
                 </div>
             </div>
+            <div style="margin-top: 12px">
+                <p style="color: red;font-size: 12px">
+                    <c:out value="${param['error-message']}" default=""/>
+                    
+                </p><!-- comment -->
+            </div>
+            
         </form>
 
         <form action="${pageContext.request.contextPath}/register" method="POST" class="form ${googleUser != null ?"active":""}" id="form-2">

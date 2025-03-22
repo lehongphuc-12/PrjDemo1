@@ -73,10 +73,12 @@ public class AuthServlet extends HttpServlet {
                 String redirectUrl = getRedirectUrlByRole(user.getRoleID().getRoleID());
                 response.sendRedirect(request.getContextPath() + redirectUrl);
             } else {
-                request.setAttribute("error", "Sai email hoặc mật khẩu!");
+                String errorMessage = "Sai email hoặc mật khẩu!";
+                request.setAttribute("errorMessage", errorMessage);
                 request.setAttribute("rememberEmail", email);
                 request.setAttribute("rememberPassword", password);
                 request.getRequestDispatcher("/views/login.jsp").forward(request, response);
+
             }
         } catch (Exception e) {
             request.setAttribute("error", "Đã xảy ra lỗi, vui lòng thử lại!");

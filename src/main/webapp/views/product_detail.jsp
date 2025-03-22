@@ -7,8 +7,9 @@
 <head>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/product_detail.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/store_page.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/cart.css">
+    <!--<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/cart.css">-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!--head-->
     <jsp:include page="/includes/head.jsp"></jsp:include>
 </head>
 
@@ -16,6 +17,7 @@
 <body>
     <!--HEADER-->
     <jsp:include page="/includes/header.jsp"></jsp:include>
+    <c:set var="userRole" value="${sessionScope.user != null && sessionScope.user.roleID != null ? sessionScope.user.roleID.roleID : 0}" />
 
     <!-- ==================== CHI TIẾT SẢN PHẨM ================== -->
     <div class="details_container">
@@ -25,28 +27,28 @@
                 <div class="product_detail_left col-sm-6 col-12">
                     <div class="swiper mySwiper2 product_detail_slide">
                         <div class="swiper-wrapper">
-                            <c:forEach var="image" items="${productImage}">
+                            <c:forEach var="image" items="${product.productImageCollection}">
                                 <div class="swiper-slide">
                                     <img src="${pageContext.request.getContextPath()}/assets/images/productImages/${image.imageURL}" alt="Hình ảnh sản phẩm">
                                 </div>
                             </c:forEach>
-                            <c:if test="${empty productImage}">
+                            <c:if test="${empty product.productImageCollection}">
                                 <div class="swiper-slide">
-                                    <img src="${pageContext.request.getContextPath()}/assets/images/productImages/default_image.jpg" alt="Không có hình ảnh">
+                                    <img src="${pageContext.request.getContextPath()}/assets/images/productImages/default_product_image.jpg" alt="Không có hình ảnh">
                                 </div>
                             </c:if>
                         </div>
                     </div>
                     <div thumbsSlider="" class="swiper mySwiper product_detail_slide">
                         <div class="swiper-wrapper">
-                            <c:forEach var="image" items="${productImage}">
+                            <c:forEach var="image" items="${product.productImageCollection}">
                                 <div class="swiper-slide">
                                     <img src="${pageContext.request.getContextPath()}/assets/images/productImages/${image.imageURL}" alt="Hình ảnh sản phẩm">
                                 </div>
                             </c:forEach>
-                            <c:if test="${empty productImage}">
+                            <c:if test="${empty product.productImageCollection}">
                                 <div class="swiper-slide">
-                                    <img src="${pageContext.request.getContextPath()}/assets/images/productImages/default_image.jpg" alt="Không có hình ảnh">
+                                    <img src="${pageContext.request.getContextPath()}/assets/images/productImages/defaultproduct_image.jpg" alt="Không có hình ảnh">
                                 </div>
                             </c:if>
                         </div>
@@ -60,37 +62,67 @@
                 <div class="product_detail_right col-sm-6 col-12">
                     <form class="product_detail_info">
                         <div class="product_detail_name">
-                            <p class="text-name"><span class="tag">Yêu thích</span> OCOP - ${product.productName}</p>
+                            <p class="text-name"><span class="tag">Yêu thích</span>  ${product.productName}</p>
                         </div>
                         <div class="product_detail_review">
-                            <div class="star_rating text-warning">
-                                <p class="total_rating text">(4.5)</p>
-                                <span>★</span>
-                                <span>★</span>
-                                <span>★</span>
-                                <span>★</span>
-                                <span>☆</span>
+                            
+                            <c:set var="rating" value="${product.averageRating}" />
+                            <div class="product_rate text-warning">
+                                <c:choose>
+                                    <c:when test="${rating == -1}">
+                                        <p class="no-rating">Chưa có đánh giá</p>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:forEach begin="1" end="5" var="i">
+                                            <c:choose>
+                                                <c:when test="${i <= rating}">★</c:when>  <%-- Ngôi sao đầy --%>
+                                                <c:otherwise>☆</c:otherwise>  <%-- Ngôi sao rỗng --%>
+                                            </c:choose>
+                                        </c:forEach>
+                                        <p class="total_rating">(${String.format("%.1f", rating)})</p>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                             <div class="sold">
-                                <p class="text-deleted">Đã bán: 1000</p>
+                                <p class="text-deleted">Đã bán: ${product.getTotalSold()}</p>
                             </div>
                         </div>
 
                         <hr>
 
-                        <div class="product_detail_price">
-                            <div class="price text-primary">
-                                <fmt:formatNumber value="${not empty product.price ? product.price * 0.89 : 0}" type="number" maxFractionDigits="0" />₫
-                            </div>
-                            <div class="discount">
-                                <div class="discount_price text-deleted">
-                                    <del style="font-size: 1.4rem;">
-                                        <fmt:formatNumber value="${not empty product.price ? product.price : 0}" type="number" maxFractionDigits="0" />₫
-                                    </del>
-                                </div>
-                                <div class="discount_tag"><small>GIẢM 11%</small></div>
-                            </div>
-                        </div>                              
+           
+                        
+                        <!-- Hiển thị giá sản phẩm và giảm giá nếu có -->
+                        <div class="product_price">
+                            <c:choose>
+                                <c:when test="${not empty product.discountCollection}">
+                                    <!--//set giá trị discount-->
+                                    <c:set var="discount" value="${product.discountCollection.iterator().next()}" />
+                                    <div class="price text-primary">
+                                        <fmt:formatNumber value="${product.price * (1 - discount.discountPercent / 100)}"
+                                                          type="number" groupingUsed="true" />đ
+                                    </div>
+                                    <div class="discount">
+                                        <div class="discount_price text-deleted">
+                                            <del>
+                                                <fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" />đ
+                                            </del>
+                                        </div>
+                                        <div class="discount_tag">
+                                            <small>GIẢM <fmt:formatNumber value="${discount.discountPercent}" type="number" maxFractionDigits="0" />%</small>
+                                        </div>
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="price text-primary">
+                                        <fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" />đ
+                                    </div>
+                                    <div class="sold"></div>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                        
+                        
                         <hr>
                         <p class="discount_tags">Mã giảm giá của Shop: Giảm giá 11%</p>
                         <table class="detail_body">
@@ -170,7 +202,7 @@
                                                 <div class="shipping_status">Không hỗ trợ</div>
                                             </div>
                                         </div>
-                                        <!--<button class="btn btn-primary understand_btn">Đã hiểu</button>-->
+                                        <button class="btn btn-primary understand_btn">Đã hiểu</button>
                                     </div>
                                 </div>
                             </div>
@@ -220,7 +252,7 @@
                         </div>
 
                         <!-- Thông báo thành công/lỗi -->
-                        <div id="cart-message" class="mt-2" style="display: none;"></div>
+                        <div id="cart-message" class="mt-2" style="display: none;color: red;font-weight: 500"></div>
                     </form>
                 </div>
                 <!-- KẾT THÚC BÊN PHẢI CHI TIẾT -->
@@ -234,11 +266,20 @@
             <div class="row store">
                 <div class="box_store col-sm-5">
                     <div class="logo_store">
-                        <a href="#"><img src="${pageContext.request.getContextPath()}/assets/images/store_logo.png" title="Logo cửa hàng" alt="Logo"></a>
+                        <a href="#"><img src="${pageContext.request.contextPath}/assets/images/store_logo.png" title="Logo cửa hàng" alt="Logo"></a>
                         <span class="tag">Yêu thích</span>
                     </div>
                     <div class="info_store">
-                        <h4 class="text-primary">${product.sellerID.fullName}</h4>
+                        <h4 class="text-primary">
+                            <c:choose>
+                                <c:when test="${not empty product.sellerID.fullName}">
+                                    ${product.sellerID.fullName}
+                                </c:when>
+                                <c:otherwise>
+                                    ${product.sellerID.fullName} <!-- Hoặc "Không có thông tin" -->
+                                </c:otherwise>
+                            </c:choose>
+                        </h4>
                         <div class="btn_info_store">
                             <a href="#"><span class="material-icons-sharp">home</span> <p>Xem cửa hàng</p></a>
                         </div>
@@ -262,7 +303,7 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </c:forEach>
-                                            <span class="rating-value text-warning">(${averageShopRating})</span>
+                                            <span class="rating-value">(${averageShopRating})</span>
                                         </span>
                                     </c:when>
                                     <c:otherwise>
@@ -270,7 +311,7 @@
                                             <c:forEach begin="1" end="5" var="i">
                                                 <span class="fa fa-star-o text-warning"></span>
                                             </c:forEach>
-                                            <span class="rating-value text-warning">Chưa có đánh giá</span>
+                                            <span class="rating-value">Chưa có đánh giá</span>
                                         </span>
                                     </c:otherwise>
                                 </c:choose>
@@ -278,7 +319,7 @@
                         </div>
                         <div class="review">
                             <div class="review-value">
-                                <span class="text-primary">Sản phẩm: ${shopProductCount}</span>
+                                <span class="text-primary">Sản phẩm: ${sellerProducts.size()}</span>
                             </div>
                         </div>
                     </div>
@@ -308,8 +349,8 @@
                 <div class="product_reviews_content col-12">
                     <h3 class="title">ĐÁNH GIÁ SẢN PHẨM</h3>
                     <!-- Form gửi đánh giá -->
-                    <form action="/detail" method="post" class="review-form">
-                        <input type="hidden" name="productID" value="${product.productID}">
+                    <form action="detail?action=review" method="post" class="review-form">
+                        <input type="hidden" name="productID" id="productID" value="${product.productID}">
                         <div class="form-group rating-group">
                             <label for="rating">Đánh giá của bạn:</label>
                             <div class="star-rating" id="star-rating">
@@ -326,43 +367,46 @@
                             <textarea id="comment" name="comment" rows="3" maxlength="255" placeholder="Nhập nhận xét của bạn (tối đa 255 ký tự)..." required></textarea>
                         </div>
                         <div class="form-group submit-group">
-                            <button type="submit" class="btn btn-submit">Gửi nhận xét</button>
+                            <button type="button"  class="btn btn-submit-review">Gửi nhận xét</button>
                         </div>
                     </form>
                     <!-- Hiển thị danh sách đánh giá -->
-                    <c:choose>
-                        <c:when test="${not empty reviews}">
-                            <c:forEach var="review" items="${reviews}">
-                                <div class="review">
-                                    <p><strong>Người dùng:</strong> 
-                                        <c:choose>
-                                            <c:when test="${not empty review.userID}">${review.userID.fullName}</c:when>
-                                            <c:otherwise>Ẩn danh</c:otherwise>
-                                        </c:choose>
-                                    </p>
-                                    <p><strong>Đánh giá:</strong> 
-                                        <span class="rating-stars">
-                                            <c:forEach begin="1" end="5" var="i">
-                                                <c:choose>
-                                                    <c:when test="${i <= review.rating}">
-                                                        <span class="fa fa-star"></span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="fa fa-star-o"></span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </c:forEach>
-                                        </span>
-                                    </p>
-                                    <p><strong>Nhận xét:</strong> ${review.comment != null ? review.comment : "Không có nhận xét"}</p>
-                                    <p><strong>Ngày:</strong> ${review.reviewDate}</p>
-                                </div>
-                            </c:forEach>
-                        </c:when>
-                        <c:otherwise>
-                            <p>Chưa có đánh giá nào cho sản phẩm này.</p>
-                        </c:otherwise>
-                    </c:choose>
+                    <div class="list-reviews">
+                        <c:choose>
+                            <c:when test="${not empty reviews}">
+                                <c:forEach var="review" items="${reviews}">
+                                    <div class="review">
+                                        <p><strong>Người dùng:</strong> 
+                                            <c:choose>
+                                                <c:when test="${not empty review.userID}">${review.userID.fullName}</c:when>
+                                                <c:otherwise>Ẩn danh</c:otherwise>
+                                            </c:choose>
+                                        </p>
+                                        <p><strong>Đánh giá:</strong> 
+                                            <span class="rating-stars">
+                                                <c:forEach begin="1" end="5" var="i">
+                                                    <c:choose>
+                                                        <c:when test="${i <= review.rating}">
+                                                            <span class="fa fa-star"></span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="fa fa-star-o"></span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:forEach>
+                                            </span>
+                                        </p>
+                                        <p><strong>Nhận xét:</strong> ${review.comment != null ? review.comment : "Không có nhận xét"}</p>
+                                        <p><strong>Ngày:</strong> ${review.reviewDate}</p>
+                                    </div>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -376,40 +420,51 @@
                     <div class="list_products_store">
                         <div class="swiper mySwiper store_product">
                             <div class="swiper-wrapper">
-                                <c:forEach var="product" items="${products}">
+                                <c:forEach var="product" items="${sellerProducts}">
                                     <div class="swiper-slide">
                                         <div class="product best_seller_product">
                                             <div class="product_image">
                                                 <c:choose>
-                                                    <c:when test="${not empty productImages[product.productID]}">
-                                                        <a href="detail?productID=${product.productID}" class="no-style">
-                                                            <img class="img-fluid" src="${pageContext.request.getContextPath()}/assets/images/productImages/${productImages[product.productID].imageURL}" alt="Hình ảnh sản phẩm" />
-                                                        </a>
+                                                    <c:when test="${not empty product.productImageCollection}">
+                                                        <c:forEach var="image" items="${product.productImageCollection}" begin="0" end="0">
+                                                            <a href="${pageContext.request.contextPath}/detail?productID=${product.productID}"><img src="${pageContext.request.getContextPath()}/assets/images/productImages/${image.imageURL}" alt="" ></a>
+                                                        </c:forEach>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <a href="detail?productID=${product.productID}" class="no-style">
-                                                            <img class="img-fluid" src="${pageContext.request.contextPath}/assets/images/default_product_image.jpg" alt="Không có hình ảnh" />
-                                                        </a>
+                                                        <img src="${pageContext.request.contextPath}/assets/images/default-image.jpg" alt="No image available" style="height: 200px">
                                                     </c:otherwise>
                                                 </c:choose>
                                             </div>
                                             <div class="product_info">
                                                 <div class="product_name text"><p><a href="detail?productID=${product.productID}" class="text-dark">${product.productName}</a></p></div>
                                                 <div class="product_price">
-                                                    <div class="discount">
-                                                        <div class="discount_price text-deleted">
-                                                            <del style="font-size: 1.4rem;">
-                                                                <fmt:formatNumber value="${not empty product.price ? product.price : 0}" type="number" maxFractionDigits="0" />₫
-                                                            </del>
-                                                        </div>
-                                                        <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                                    </div>
-                                                    <div class="price text-primary" style="text-align: center; font-size: 1.5rem;">
-                                                        <fmt:formatNumber value="${not empty product.price ? product.price * 0.89 : 0}" type="number" maxFractionDigits="0" />₫
-                                                    </div>
+                                                    <c:choose>
+                                                        <c:when test="${not empty product.discountCollection}">
+                                                            <!--//set giá trị discount-->
+                                                            <c:set var="discount" value="${product.discountCollection.iterator().next()}" />
+                                                            <div class="price text-primary">
+                                                                <fmt:formatNumber value="${product.price * (1 - discount.discountPercent / 100)}"
+                                                                                  type="number" groupingUsed="true" />đ
+                                                            </div>
+                                                            <div class="discount">
+                                                                <div class="discount_price text-deleted">
+                                                                    <del>
+                                                                        <fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" />đ
+                                                                    </del>
+                                                                </div>
+                                                                <div class="discount_tag">
+                                                                    <small>GIẢM <fmt:formatNumber value="${discount.discountPercent}" type="number" maxFractionDigits="0" />%</small>
+                                                                </div>
+                                                            </div>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <div class="price text-primary">
+                                                                <fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" />đ
+                                                            </div>
+                                                            <div class="sold"></div>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </div>
-
-                                                
                                                 <c:set var="rating" value="${product.averageRating}" />
 
                                                 <div class="product_rate text-warning">
@@ -418,20 +473,26 @@
                                                             <p class="no-rating">Chưa có đánh giá</p>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <p class="total_rating">${String.format("%.1f", rating)} ★</p>
+                                                            <c:forEach begin="1" end="5" var="i">
+                                                                <c:choose>
+                                                                    <c:when test="${i <= rating}">★</c:when>  <%-- Ngôi sao đầy --%>
+                                                                    <c:otherwise>☆</c:otherwise>  <%-- Ngôi sao rỗng --%>
+                                                                </c:choose>
+                                                            </c:forEach>
+                                                            <p class="total_rating">(${String.format("%.1f", rating)})</p>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </div>
-                                                
-                                                
                                             </div>
-                                            <div class="product_actions">
-                                                <a href="#">
-                                                    <span class="material-icons-sharp">
-                                                        add_shopping_cart
-                                                    </span>
-                                                </a>
-                                            </div>
+                                            <c:if test="${userRole != 0}">
+                                                <div class="product_actions">
+                                                    <a href="#">
+                                                        <span class="material-icons-sharp">
+                                                            add_shopping_cart
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </c:if>
                                         </div>
                                     </div>
                                 </c:forEach>
@@ -457,49 +518,79 @@
                             <div class="product best_seller_product">
                                 <div class="product_image">
                                     <c:choose>
-                                        <c:when test="${not empty highSimilarImages[product.productID]}">
-                                            <a href="detail?productID=${product.productID}" class="no-style">
-                                                <img class="img-fluid" src="${pageContext.request.getContextPath()}/assets/images/productImages/${highSimilarImages[product.productID].imageURL}" alt="Hình ảnh sản phẩm" />
-                                            </a>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <a href="detail?productID=${product.productID}" class="no-style">
-                                                <img class="img-fluid" src="${pageContext.request.getContextPath()}/assets/images/default_image.jpg" alt="Không có hình ảnh" />
-                                            </a>
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <c:when test="${not empty product.productImageCollection}">
+                                        <c:forEach var="image" items="${product.productImageCollection}" begin="0" end="0">
+                                            <a href="${pageContext.request.contextPath}/detail?productID=${product.productID}"><img src="${pageContext.request.getContextPath()}/assets/images/productImages/${image.imageURL}" alt="" ></a>
+                                        </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                    <img src="${pageContext.request.contextPath}/assets/images/default-image.jpg" alt="No image available" style="height: 200px">
+                                    </c:otherwise>
+                                </c:choose>
                                 </div>
                                 <div class="product_info">
                                     <div class="product_name text"><p><a href="detail?productID=${product.productID}" class="text-dark">${product.productName}</a></p></div>
                                     <div class="product_price">
-                                        <div class="discount">
-                                            <div class="discount_price text-deleted">
-                                                <del style="font-size: 1.4rem;">
-                                                    <fmt:formatNumber value="${not empty product.price ? product.price : 0}" type="number" maxFractionDigits="0" />₫
-                                                </del>
-                                            </div>
-                                            <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                        </div>
-                                        <div class="price text-primary" style="text-align: center; font-size: 1.5rem;">
-                                            <fmt:formatNumber value="${not empty product.price ? product.price * 0.89 : 0}" type="number" maxFractionDigits="0" />₫
-                                        </div>
+                                        <c:choose>
+                                            <c:when test="${not empty product.discountCollection}">
+                                                <!--//set giá trị discount-->
+                                                <c:set var="discount" value="${product.discountCollection.iterator().next()}" />
+                                                <div class="price text-primary">
+                                                    <fmt:formatNumber value="${product.price * (1 - discount.discountPercent / 100)}"
+                                                                      type="number" groupingUsed="true" />đ
+                                                </div>
+                                                <div class="discount">
+                                                    <div class="discount_price text-deleted">
+                                                        <del>
+                                                            <fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" />đ
+                                                        </del>
+                                                    </div>
+                                                    <div class="discount_tag">
+                                                        <small>GIẢM <fmt:formatNumber value="${discount.discountPercent}" type="number" maxFractionDigits="0" />%</small>
+                                                    </div>
+                                                </div>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="price text-primary">
+                                                    <fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" />đ
+                                                </div>
+                                                <div class="sold"></div>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </div>
+                                    
+                                    
+                                    <c:set var="rating" value="${product.averageRating}" />
+
                                     <div class="product_rate text-warning">
-                                        <span>★</span>
-                                        <span>★</span>
-                                        <span>★</span>
-                                        <span>★</span>
-                                        <span>☆</span>
-                                        <p class="total_rating text">(4.5)</p>
+                                        <c:choose>
+                                            <c:when test="${rating == -1}">
+                                                <p class="no-rating">Chưa có đánh giá</p>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:forEach begin="1" end="5" var="i">
+                                                    <c:choose>
+                                                        <c:when test="${i <= rating}">★</c:when>  <%-- Ngôi sao đầy --%>
+                                                        <c:otherwise>☆</c:otherwise>  <%-- Ngôi sao rỗng --%>
+                                                    </c:choose>
+                                                </c:forEach>
+                                                <p class="total_rating">(${String.format("%.1f", rating)})</p>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </div>
+                                    
+                                    
+                                    
                                 </div>
-                                <div class="product_actions">
-                                    <a href="#">
-                                        <span class="material-icons-sharp">
-                                            add_shopping_cart
-                                        </span>
-                                    </a>
-                                </div>
+                                <c:if test="${userRole != 0}">
+                                    <div class="product_actions">
+                                        <a href="#">
+                                            <span class="material-icons-sharp">
+                                                add_shopping_cart
+                                            </span>
+                                        </a>
+                                    </div>
+                                </c:if>
                             </div>
                         </c:forEach>
                     </div>
@@ -525,5 +616,48 @@
         var contextPath = "${pageContext.request.contextPath}";
     </script>
     <script src="${pageContext.request.contextPath}/assets/js/product_detail.js"></script>
+<script>
+    $(document).ready(function () {
+    $(document).on('click', '.btn-submit-review', function () {
+        console.log("SUBMIT REVIEW");
+
+        let productID = $('#productID').val();
+        let rating = $('.fa-star.checked').length; // Lấy số sao đã chọn
+        let comment = $('#comment').val();
+
+        if (rating === 0) {
+            alert("Vui lòng chọn số sao!");
+            return;
+        }
+
+        console.log("ID:", productID, "Rating:", rating, "Comment:", comment);
+
+        $.ajax({
+            url: contextPath + '/review',
+            type: 'POST',
+            data: {
+                action: 'createReview',
+                productID: productID,
+                rating: rating,
+                comment: comment
+            },
+            success: function(response) {
+                console.log("Response từ Servlet:", response);
+                $('.list-reviews').html(response); // Cập nhật danh sách đánh giá
+                $('#comment').val(""); // Đặt lại nội dung ô nhập nhận xét
+                $('.fa-star').removeClass('checked'); // Bỏ chọn sao sau khi gửi đánh giá
+               
+            },
+            error: function(xhr) {
+                console.error("Lỗi:", xhr.responseText);
+                alert("Có lỗi xảy ra!");
+            }
+        });
+    });
+});
+
+</script>
+
+    
 </body>
 </html>
