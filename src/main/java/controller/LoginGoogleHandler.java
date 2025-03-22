@@ -46,8 +46,8 @@ public class LoginGoogleHandler extends HttpServlet {
             response.sendRedirect(request.getContextPath()+"/products");
         } else {
             // Lưu thông tin Google vào session và chuyển sang trang đăng ký
-            session.setAttribute("googleUser", googleUser);
-             response.sendRedirect(request.getContextPath() + "/views/login.jsp?register=true");
+            session.setAttribute("user", user);
+            response.sendRedirect(request.getContextPath() + "/views/login.jsp?register=true");
         }
     }
 

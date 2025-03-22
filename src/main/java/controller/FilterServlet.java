@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.User;
 
 @WebServlet(name = "FilterServlet", urlPatterns = {"/filters"})
 public class FilterServlet extends HttpServlet {
@@ -161,7 +162,6 @@ public class FilterServlet extends HttpServlet {
 
     private String renderProducts(List<Product> products, HttpServletRequest request) {
         StringBuilder html = new StringBuilder();
-        HttpSession session = request.getSession(false);
 
         for (Product p : products) {
             String imageURL = p.getProductImageCollection().isEmpty() 
@@ -177,9 +177,18 @@ public class FilterServlet extends HttpServlet {
 
             double avgRating = p.getReviewCollection().isEmpty() ? -1 : p.getAverageRating();
 
-            int userRole = (session != null && session.getAttribute("userRole") != null) 
-                   ? (int) session.getAttribute("userRole") 
-                   : 0;
+            
+            HttpSession session = request.getSession(false);
+            if (session == null) {
+                return "<p>Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại.</p>";
+            }
+
+            User user = (User) session.getAttribute("user");
+            int userRole = 3;
+            if (user == null) {
+                userRole = 0;
+            }
+
             
             html.append(String.format("""
                 <div class="product">
@@ -243,14 +252,15 @@ public class FilterServlet extends HttpServlet {
             }
 
             // Nút "Mua ngay"
-            html.append("""
-                    <div class="buy-now">
-                        <a href="#">Mua ngay</a>
-                    </div>
-                </div>
-            """);
+            html.append(String.format("""
+                                        <div class="buy">
+                                            <button class="btn btn-primary buy-now-btn" data-product-id="%d" type="button">
+                                                <p>Mua ngay</p>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    """, p.getProductID()));
         }
-
         return html.toString();
 }
 

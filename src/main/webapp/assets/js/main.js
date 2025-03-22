@@ -1,17 +1,14 @@
 console.log("MAIN.JS");
 
 
-const $ = document.querySelector.bind(document);
-const $$ = document.querySelectorAll.bind(document);
 
 
-const a = document.querySelector;
 
-const tabs = $$('.tab-item');
-const panes = $$('.tab-pane');
+const tabs = document.querySelectorAll.bind(document)('.tab-item');
+const panes = document.querySelectorAll.bind(document)('.tab-pane');
 
-const tabActive = $(".tab-item.active");
-const line = $(".tabs .line");
+const tabActive = document.querySelector.bind(document)(".tab-item.active");
+const line = document.querySelector.bind(document)(".tabs .line");
 //
 if (line) {
     line.style.left = `${tabActive.offsetLeft}px`;
@@ -22,11 +19,11 @@ if (line) {
 tabs.forEach((tab, index) => {
     tab.onclick = function() {
         const pane = panes[index];
-        $(".tab-pane.active").classList.remove("active");
+        document.querySelector(".tab-pane.active").classList.remove("active");
         pane.classList.add("active");
 
 
-        $(".tab-item.active").classList.remove("active");
+        document.querySelector(".tab-item.active").classList.remove("active");
         this.classList.add("active");
 
         line.style.left = `${tab.offsetLeft}px`;

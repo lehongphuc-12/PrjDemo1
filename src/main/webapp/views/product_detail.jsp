@@ -1,65 +1,75 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
-<html lang="en">
-    
-    <!--head-->
-     <jsp:include page="../includes/head.jsp"></jsp:include>
-     
+<html lang="vi">
+<head>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/product_detail.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/store_page.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/cart.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <jsp:include page="/includes/head.jsp"></jsp:include>
+</head>
+
+
 <body>
     <!--HEADER-->
-     <jsp:include page="../includes/header.jsp"></jsp:include>
+    <jsp:include page="/includes/header.jsp"></jsp:include>
 
-    <!-- ==================== PRODUCT DETAILS ================== -->
-
+    <!-- ==================== CHI TIẾT SẢN PHẨM ================== -->
     <div class="details_container">
         <div class="container">
-            <div class=" row  product_detail">
-                <!-- DETAIL LEFT -->
-                <div class="product_detail_left col-sm-5 col-12">
-                    <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper mySwiper2 product_detail_slide">
+            <div class="row product_detail">
+                <!-- BÊN TRÁI CHI TIẾT -->
+                <div class="product_detail_left col-sm-6 col-12">
+                    <div class="swiper mySwiper2 product_detail_slide">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide"><img src="../assets/images/detail1.png" alt="Hình ảnh sản phẩm chi tiết 1"></div>
-                            <div class="swiper-slide"><img src="../assets/images/detail2.png" alt="Hình ảnh sản phẩm chi tiết 2"></div>
-                            <div class="swiper-slide"><img src="../assets/images/detail3.png" alt="Hình ảnh sản phẩm chi tiết 3"></div>
-                            <div class="swiper-slide"><img src="../assets/images/detail4.png" alt="Hình ảnh sản phẩm chi tiết 4"></div>
-                            <div class="swiper-slide"><img src="../assets/images/detail4.png" alt="Hình ảnh sản phẩm chi tiết 4"></div>
-                            <div class="swiper-slide"><img src="../assets/images/detail4.png" alt="Hình ảnh sản phẩm chi tiết 4"></div>
+                            <c:forEach var="image" items="${productImage}">
+                                <div class="swiper-slide">
+                                    <img src="${pageContext.request.getContextPath()}/assets/images/productImages/${image.imageURL}" alt="Hình ảnh sản phẩm">
+                                </div>
+                            </c:forEach>
+                            <c:if test="${empty productImage}">
+                                <div class="swiper-slide">
+                                    <img src="${pageContext.request.getContextPath()}/assets/images/productImages/default_image.jpg" alt="Không có hình ảnh">
+                                </div>
+                            </c:if>
                         </div>
-                        <!-- <div class="swiper-button-next"></div>
-                        <div class="swiper-button-prev"></div> -->
                     </div>
                     <div thumbsSlider="" class="swiper mySwiper product_detail_slide">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide"><img src="../assets/images/detail1.png" alt="Thumbnail sản phẩm chi tiết 1"></div>
-                            <div class="swiper-slide"><img src="../assets/images/detail2.png" alt="Thumbnail sản phẩm chi tiết 2"></div>
-                            <div class="swiper-slide"><img src="../assets/images/detail3.png" alt="Thumbnail sản phẩm chi tiết 3"></div>
-                            <div class="swiper-slide"><img src="../assets/images/detail4.png" alt="Thumbnail sản phẩm chi tiết 4"></div>
-                            <div class="swiper-slide"><img src="../assets/images/detail4.png" alt="Thumbnail sản phẩm chi tiết 4"></div>
-                            <div class="swiper-slide"><img src="../assets/images/detail4.png" alt="Thumbnail sản phẩm chi tiết 4"></div>
+                            <c:forEach var="image" items="${productImage}">
+                                <div class="swiper-slide">
+                                    <img src="${pageContext.request.getContextPath()}/assets/images/productImages/${image.imageURL}" alt="Hình ảnh sản phẩm">
+                                </div>
+                            </c:forEach>
+                            <c:if test="${empty productImage}">
+                                <div class="swiper-slide">
+                                    <img src="${pageContext.request.getContextPath()}/assets/images/productImages/default_image.jpg" alt="Không có hình ảnh">
+                                </div>
+                            </c:if>
                         </div>
                         <div class="swiper-button-next"></div>
                         <div class="swiper-button-prev"></div>
                     </div>
                 </div>
-                <!-- END DETAIL LEFT -->
+                <!-- KẾT THÚC BÊN TRÁI CHI TIẾT -->
 
-                <!-- DETAIL RIGHT -->
-                <div class="product_detail_right col-sm-7 col-12">
+                <!-- BÊN PHẢI CHI TIẾT -->
+                <div class="product_detail_right col-sm-6 col-12">
                     <form class="product_detail_info">
                         <div class="product_detail_name">
-                            
-                            <p class="text-name"><span class="tag">Yêu thích</span> OCOP - Hạt Điều Rang Củi Hải Bình - Gói 500gr</p>
+                            <p class="text-name"><span class="tag">Yêu thích</span> OCOP - ${product.productName}</p>
                         </div>
                         <div class="product_detail_review">
                             <div class="star_rating text-warning">
                                 <p class="total_rating text">(4.5)</p>
-                                <span>&#9733;</span>
-                                <span>&#9733;</span>
-                                <span>&#9733;</span>
-                                <span>&#9733;</span>
-                                <span>&#9734;</span>
+                                <span>★</span>
+                                <span>★</span>
+                                <span>★</span>
+                                <span>★</span>
+                                <span>☆</span>
                             </div>
                             <div class="sold">
                                 <p class="text-deleted">Đã bán: 1000</p>
@@ -69,680 +79,451 @@
                         <hr>
 
                         <div class="product_detail_price">
-
-                            <div class="price text-primary">450.000&#8363;</div>
+                            <div class="price text-primary">
+                                <fmt:formatNumber value="${not empty product.price ? product.price * 0.89 : 0}" type="number" maxFractionDigits="0" />₫
+                            </div>
                             <div class="discount">
-                                
                                 <div class="discount_price text-deleted">
-                                    <del style="font-size: 1.4rem;">99.000&#8363;</del>
+                                    <del style="font-size: 1.4rem;">
+                                        <fmt:formatNumber value="${not empty product.price ? product.price : 0}" type="number" maxFractionDigits="0" />₫
+                                    </del>
                                 </div>
                                 <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                
                             </div>
-                            
-                        </div>
-
+                        </div>                              
                         <hr>
-
+                        <p class="discount_tags">Mã giảm giá của Shop: Giảm giá 11%</p>
                         <table class="detail_body">
                             <tr class="product_location">
                                 <td>Gửi từ: </td>
-                                <td class="text">Hải Bình</td>
+                                <td class="text">
+                                    <c:choose>
+                                        <c:when test="${not empty product.cityID}">
+                                            ${product.cityID.cityName}
+                                        </c:when>
+                                        <c:otherwise>
+                                            Không có thông tin
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
                             </tr>
                             <tr class="seller">
                                 <td>Được bán bởi: </td>
-                                <td class="text"><a href="#">Củi Hải Bình</a></td>
+                                <td class="text">
+                                    <a href="#">
+                                        <c:choose>
+                                            <c:when test="${not empty product.sellerID}">
+                                                ${product.sellerID.fullName}
+                                            </c:when>
+                                            <c:otherwise>
+                                                Không có thông tin
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </a>
+                                </td>
                             </tr>
                         </table>
                         
-
-                        <div class="product_quantity">
-                            <div class="quantity_input">
-                                <label for="quantity">Số lượng:  </label>
-                                <input id="quantity" type="number" value="1" min="1" max="50">
-                            </div>
-                            <div class="available">
-                                <p class="text-deleted">1000 sản phẩm có sẵn</p>
-    
+                        <!-- PHẦN VẬN CHUYỂN VÀ LIÊN HỆ -->
+                        <div class="shipping_contact">
+                            <div class="shipping_info">
+                                <p class="shipping_trigger" tabindex="0">
+                                    <i class="fas fa-truck"></i> <strong>Miễn phí vận chuyển</strong><br>
+                                    Nhận hàng từ ${requestScope.currentShippingDate} đến ${requestScope.futureShippingDate}, phí giao hàng 0₫
+                                    <span class="dropdown_arrow">▼</span>
+                                </p>
+                                <div class="shipping_dropdown">
+                                    <div class="shipping_options">
+                                        <h4>Thông tin vận chuyển</h4>
+                                        <p>Giao đến: Huyện Ba Vì <span>▼</span></p>
+                                        <div class="shipping_option">
+                                            <div class="shipping_detail">
+                                                <h5>Nhanh</h5>
+                                                <p>
+                                                    🕒 Nhận hàng từ ${requestScope.currentShippingDate} đến ${requestScope.futureShippingDate}<br>
+                                                    Tặng Voucher 15.000₫ nếu giao hàng sớm hơn thời gian trên.<br>
+                                                    Miễn phí vận chuyển nếu đáp ứng điều kiện.
+                                                </p>
+                                                <p class="shipping_fee"><del>37.300₫</del> <span>Miễn phí vận chuyển</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="shipping_option">
+                                            <div class="shipping_detail">
+                                                <h5>Hàng Cồng Kềnh</h5>
+                                                <p>
+                                                    🕒 Nhận hàng từ ${requestScope.startBulkyShippingDate} đến ${requestScope.endBulkyShippingDate}<br>
+                                                    Tặng Voucher 15.000₫ nếu giao hàng sớm hơn thời gian trên.<br>
+                                                    Miễn phí vận chuyển nếu đáp ứng điều kiện.
+                                                </p>
+                                                <p class="shipping_fee"><del>47.300₫</del> <span>Miễn phí vận chuyển</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="shipping_option">
+                                            <div class="shipping_row">
+                                                <div class="shipping_detail">Hỏa Tốc</div>
+                                                <div class="shipping_status">Không hỗ trợ</div>
+                                            </div>
+                                        </div>
+                                        <div class="shipping_option">
+                                            <div class="shipping_row">
+                                                <div class="shipping_detail">Tiết kiệm</div>
+                                                <div class="shipping_status">Không hỗ trợ</div>
+                                            </div>
+                                        </div>
+                                        <!--<button class="btn btn-primary understand_btn">Đã hiểu</button>-->
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
+                        <div class="return_policy">
+                            <div class="return_policy_trigger" tabindex="0">
+                                <span class="badge">✔</span> Miễn phí đổi trả trong 15 ngày
+                                <span class="dropdown_arrow">▼</span>
+                            </div>
+                            <div class="return_policy_dropdown">
+                                <p class="return_policy_description">
+                                    Yên tâm mua sắm<br>
+                                    <span class="return_policy_icon">ⓘ</span> Chính sách đổi trả miễn phí trong 15 ngày: Được miễn phí đổi trả trong vòng 15 ngày nếu sản phẩm có lỗi bảo hành và có thể kiểm tra tại nhà. Sản phẩm áp dụng chính sách này phải được mua tại cửa hàng của chúng tôi.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="product_quantity">
+                            <div class="quantity_input">
+                                <label for="quantity">Số lượng: </label>
+                                <div class="quantity-control">
+                                    <button type="button" class="btn btn-outline-secondary" onclick="decreaseQuantity()">-</button>
+                                    <input id="quantity" type="text" value="<fmt:formatNumber value='1' type='number' maxFractionDigits='0' />" min="1" max="${not empty product.quantity ? product.quantity : 1}" oninput="validateQuantity(this)">
+                                    <button type="button" class="btn btn-outline-secondary" onclick="increaseQuantity()">+</button>
+                                </div>
+                            </div>
+                            <div class="available">
+                                <c:set var="quantityValue" value="${not empty product.quantity ? product.quantity.toString() : '0'}" />
+                                <c:set var="quantityNumber" value="${not empty quantityValue ? quantityValue : 0}" />
+                                <fmt:formatNumber value="${quantityNumber}" type="number" maxFractionDigits="0" /> sản phẩm có sẵn
+                            </div>
+                        </div>
+                 
                         <div class="product_buying">
                             <div class="add_to_cart">
-                                <button class="btn btn-primary">
+                                <button class="btn btn-primary add-to-cart-btn" data-product-id="${product.productID}" type="button">
                                     <span class="material-icons-sharp">add_shopping_cart</span>
                                     <p>Thêm vào giỏ hàng</p>
                                 </button>
                             </div>
                             <div class="buy">
-                                <button class="btn btn-primary"><p>Mua ngay</p></button>
+                                <button class="btn btn-primary buy-now-btn" data-product-id="${product.productID}" type="button">
+                                    <p>Mua ngay</p>
+                                </button>
                             </div>
                         </div>
-                
+
+                        <!-- Thông báo thành công/lỗi -->
+                        <div id="cart-message" class="mt-2" style="display: none;"></div>
                     </form>
                 </div>
-                <!-- END DETAIL RIGHT -->
+                <!-- KẾT THÚC BÊN PHẢI CHI TIẾT -->
             </div>
         </div>
     </div>
-    <!--  END DETAIL PRODUCT -->
-
+    <!-- KẾT THÚC CHI TIẾT SẢN PHẨM -->
 
     <div class="store_container">
         <div class="container">
             <div class="row store">
-
-                    <div class="box_store col-sm-5">
-                        <div class="logo_store">
-                            <a href="#"><img src="../assets/images/store_logo.png" title="logo" alt=""></a>
-                            <span class="tag">Yêu thích</span>
+                <div class="box_store col-sm-5">
+                    <div class="logo_store">
+                        <a href="#"><img src="${pageContext.request.getContextPath()}/assets/images/store_logo.png" title="Logo cửa hàng" alt="Logo"></a>
+                        <span class="tag">Yêu thích</span>
+                    </div>
+                    <div class="info_store">
+                        <h4 class="text-primary">${product.sellerID.fullName}</h4>
+                        <div class="btn_info_store">
+                            <a href="#"><span class="material-icons-sharp">home</span> <p>Xem cửa hàng</p></a>
                         </div>
-                        <div class="info_store">
-                            <h4 class="text-primary">VICO SHOP - Shop dừa Trà Vinh</h4>
-                            <div class="btn_info_store">
-                                <a href="#"><span class="material-icons-sharp">home</span> <p>Xem cửa hàng</p></a>
+                    </div>
+                </div>
+                <div class="store_reviews col-sm-7">
+                    <div class="reviews">
+                        <div class="review">
+                            <p class="review-label text-primary">Đánh giá:</p>
+                            <div class="review-value">
+                                <c:choose>
+                                    <c:when test="${averageShopRating > 0}">
+                                        <span class="rating-stars">
+                                            <c:forEach begin="1" end="5" var="i">
+                                                <c:choose>
+                                                    <c:when test="${i <= averageShopRating}">
+                                                        <span class="fa fa-star text-warning"></span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="fa fa-star-o text-warning"></span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:forEach>
+                                            <span class="rating-value text-warning">(${averageShopRating})</span>
+                                        </span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span class="rating-stars">
+                                            <c:forEach begin="1" end="5" var="i">
+                                                <span class="fa fa-star-o text-warning"></span>
+                                            </c:forEach>
+                                            <span class="rating-value text-warning">Chưa có đánh giá</span>
+                                        </span>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </div>
+                        <div class="review">
+                            <div class="review-value">
+                                <span class="text-primary">Sản phẩm: ${shopProductCount}</span>
                             </div>
                         </div>
                     </div>
-                    <div class="store_reviews col-sm-7">
-                        <div class="reviews">
-                            <div class="review">
-                                <p>Đánh giá: </p> <span class="text-primary">123</span>
-                            </div>
-                            <div class="review">
-                                <p>Đánh giá: </p> <span class="text-primary">123</span>
-                            </div>
-                            <div class="review">
-                                <p>Đánh giá: </p> <span class="text-primary">123</span>
-                            </div>
-                            <div class="review">
-                                <p>Đánh giá: </p> <span class="text-primary">123</span>
-                            </div>
-                        </div>
-                    </div>
-
+                </div>
+            </div>
         </div>
     </div>
-    </div>
-    <!--  END STORE -->
-
-
+    <!-- KẾT THÚC THÔNG TIN CỬA HÀNG -->
+    
     <div class="detail_content_container">
         <div class="container">
-            <div class=" row">
-                <div class="product_detail_content col-12">
+            <div class="row">
+                <div class="product_detail_content product_reviews_content col-12">
                     <h3 class="title">CHI TIẾT SẢN PHẨM</h3>
                     <div class="content">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptas facere corporis magnam laudantium, porro amet delectus debitis tenetur temporibus ipsa repudiandae culpa vitae error sed aperiam nulla tempora optio officiis.
-                        Culpa corporis accusamus libero quae rem nemo accusantium! Dolores unde atque voluptas cumque nulla inventore consectetur aspernatur iusto, accusantium fuga quas, placeat aliquid odit distinctio, enim vero laboriosam et. Neque.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="review_content_container">
-        <div class="container">
-            <div class=" row ">
-                <div class="product_reviews_content col-12">
-                    <h3 class="title">ĐÁNH GIÁ SẢN PHẨM</h3>
-                    <!-- Vẫn đang suy nghĩ cách giải quyết -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="product_of_store_container">
-        <div class="container">
-            <div class="row">
-                <div class="product_of_store col-sm-12 col-12">
-                    <h2 class="title">CÁC SẢN PHẨM KHÁC CỦA SHOP</h2>
-                    <div class="list_products_store">
-                        <div class="swiper mySwiper store_product">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <div class="product best_seller_product">
-                                        <div class="product_image"><img src="../assets/images/best_seller_product.png" alt=""></div>
-                                        <div class="product_info">
-                                            <div class="product_name text"><p>Bánh dừa nướng Quý Thu - Gói 150gr ádasdas ádadasdas ádasdasd</p></div>
-                                            <div class="product_price">
-                                                <div class="discount">
-                                                    <div class="discount_price text-deleted"><del>99.000đ</del></div>
-                                                    <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                                </div>
-                                                <div class="price text-primary">450.000đ</div>
-                                            </div>
-                                            <div class="product_rate text-warning">
-                                                <span>&#9733;</span>
-                                                <span>&#9733;</span>
-                                                <span>&#9733;</span>
-                                                <span>&#9733;</span>
-                                                <span>&#9734;</span>
-                                                <p class="total_rating text">(4.5)</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="product_actions">
-                                            <a href="#">
-                                                <span class="material-icons-sharp">
-                                                    add_shopping_cart
-                                                </span>
-                                            </a>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="product best_seller_product">
-                                        <div class="product_image"><img src="../assets/images/best_seller_product.png" alt=""></div>
-                                        <div class="product_info">
-                                            <div class="product_name text"><p>Bánh dừa nướng Quý Thu - Gói 150gr ádasdas ádadasdas ádasdasd</p></div>
-                                            <div class="product_price">
-                                                <div class="discount">
-                                                    <div class="discount_price text-deleted"><del>99.000đ</del></div>
-                                                    <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                                </div>
-                                                <div class="price text-primary">450.000đ</div>
-                                            </div>
-                                            <div class="product_rate text-warning">
-                                                <span>&#9733;</span>
-                                                <span>&#9733;</span>
-                                                <span>&#9733;</span>
-                                                <span>&#9733;</span>
-                                                <span>&#9734;</span>
-                                                <p class="total_rating text">(4.5)</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="product_actions">
-                            <a href="#">
-                                <span class="material-icons-sharp">
-                                    add_shopping_cart
-                                </span>
-                            </a>
-                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="product best_seller_product">
-                                        <div class="product_image"><img src="../assets/images/best_seller_product.png" alt=""></div>
-                                        <div class="product_info">
-                                            <div class="product_name text"><p>Bánh dừa nướng Quý Thu - Gói 150gr ádasdas ádadasdas ádasdasd</p></div>
-                                            <div class="product_price">
-                                                <div class="discount">
-                                                    <div class="discount_price text-deleted"><del>99.000đ</del></div>
-                                                    <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                                </div>
-                                                <div class="price text-primary">450.000đ</div>
-                                            </div>
-                                            <div class="product_rate text-warning">
-                                                <span>&#9733;</span>
-                                                <span>&#9733;</span>
-                                                <span>&#9733;</span>
-                                                <span>&#9733;</span>
-                                                <span>&#9734;</span>
-                                                <p class="total_rating text">(4.5)</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="product_actions">
-                            <a href="#">
-                                <span class="material-icons-sharp">
-                                    add_shopping_cart
-                                </span>
-                            </a>
-                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="product best_seller_product">
-                                        <div class="product_image"><img src="../assets/images/best_seller_product.png" alt=""></div>
-                                        <div class="product_info">
-                                            <div class="product_name text"><p>Bánh dừa nướng Quý Thu - Gói 150gr ádasdas ádadasdas ádasdasd</p></div>
-                                            <div class="product_price">
-                                                <div class="discount">
-                                                    <div class="discount_price text-deleted"><del>99.000đ</del></div>
-                                                    <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                                </div>
-                                                <div class="price text-primary">450.000đ</div>
-                                            </div>
-                                            <div class="product_rate text-warning">
-                                                <span>&#9733;</span>
-                                                <span>&#9733;</span>
-                                                <span>&#9733;</span>
-                                                <span>&#9733;</span>
-                                                <span>&#9734;</span>
-                                                <p class="total_rating text">(4.5)</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="product_actions">
-                            <a href="#">
-                                <span class="material-icons-sharp">
-                                    add_shopping_cart
-                                </span>
-                            </a>
-                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="product best_seller_product">
-                                        <div class="product_image"><img src="../assets/images/best_seller_product.png" alt=""></div>
-                                        <div class="product_info">
-                                            <div class="product_name text"><p>Bánh dừa nướng Quý Thu - Gói 150gr ádasdas ádadasdas ádasdasd</p></div>
-                                            <div class="product_price">
-                                                <div class="discount">
-                                                    <div class="discount_price text-deleted"><del>99.000đ</del></div>
-                                                    <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                                </div>
-                                                <div class="price text-primary">450.000đ</div>
-                                            </div>
-                                            <div class="product_rate text-warning">
-                                                <span>&#9733;</span>
-                                                <span>&#9733;</span>
-                                                <span>&#9733;</span>
-                                                <span>&#9733;</span>
-                                                <span>&#9734;</span>
-                                                <p class="total_rating text">(4.5)</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="product_actions">
-                            <a href="#">
-                                <span class="material-icons-sharp">
-                                    add_shopping_cart
-                                </span>
-                            </a>
-                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="product best_seller_product">
-                                        <div class="product_image"><img src="../assets/images/best_seller_product.png" alt=""></div>
-                                        <div class="product_info">
-                                            <div class="product_name text"><p>Bánh dừa nướng Quý Thu - Gói 150gr ádasdas ádadasdas ádasdasd</p></div>
-                                            <div class="product_price">
-                                                <div class="discount">
-                                                    <div class="discount_price text-deleted"><del>99.000đ</del></div>
-                                                    <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                                </div>
-                                                <div class="price text-primary">450.000đ</div>
-                                            </div>
-                                            <div class="product_rate text-warning">
-                                                <span>&#9733;</span>
-                                                <span>&#9733;</span>
-                                                <span>&#9733;</span>
-                                                <span>&#9733;</span>
-                                                <span>&#9734;</span>
-                                                <p class="total_rating text">(4.5)</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="product_actions">
-                            <a href="#">
-                                <span class="material-icons-sharp">
-                                    add_shopping_cart
-                                </span>
-                            </a>
-                        </div>
-
-                                    </div>
-                                </div>
-                
-                
-                            </div>
-                            <div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>
-                          </div>
+                        ${product.description}
                     </div>
                 </div>
             </div>
         </div>
     </div>
     
+    <!-- PHẦN ĐÁNH GIÁ SẢN PHẨM -->
+    <div class="review_content_container">
+        <div class="container">
+            <div class="row">
+                <div class="product_reviews_content col-12">
+                    <h3 class="title">ĐÁNH GIÁ SẢN PHẨM</h3>
+                    <!-- Form gửi đánh giá -->
+                    <form action="/detail" method="post" class="review-form">
+                        <input type="hidden" name="productID" value="${product.productID}">
+                        <div class="form-group rating-group">
+                            <label for="rating">Đánh giá của bạn:</label>
+                            <div class="star-rating" id="star-rating">
+                                <span class="fa fa-star" data-value="1"></span>
+                                <span class="fa fa-star" data-value="2"></span>
+                                <span class="fa fa-star" data-value="3"></span>
+                                <span class="fa fa-star" data-value="4"></span>
+                                <span class="fa fa-star" data-value="5"></span>
+                            </div>
+                            <input type="hidden" id="rating" name="rating" value="0" required>
+                        </div>
+                        <div class="form-group comment-group">
+                            <label for="comment">Nhận xét của bạn:</label>
+                            <textarea id="comment" name="comment" rows="3" maxlength="255" placeholder="Nhập nhận xét của bạn (tối đa 255 ký tự)..." required></textarea>
+                        </div>
+                        <div class="form-group submit-group">
+                            <button type="submit" class="btn btn-submit">Gửi nhận xét</button>
+                        </div>
+                    </form>
+                    <!-- Hiển thị danh sách đánh giá -->
+                    <c:choose>
+                        <c:when test="${not empty reviews}">
+                            <c:forEach var="review" items="${reviews}">
+                                <div class="review">
+                                    <p><strong>Người dùng:</strong> 
+                                        <c:choose>
+                                            <c:when test="${not empty review.userID}">${review.userID.fullName}</c:when>
+                                            <c:otherwise>Ẩn danh</c:otherwise>
+                                        </c:choose>
+                                    </p>
+                                    <p><strong>Đánh giá:</strong> 
+                                        <span class="rating-stars">
+                                            <c:forEach begin="1" end="5" var="i">
+                                                <c:choose>
+                                                    <c:when test="${i <= review.rating}">
+                                                        <span class="fa fa-star"></span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="fa fa-star-o"></span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:forEach>
+                                        </span>
+                                    </p>
+                                    <p><strong>Nhận xét:</strong> ${review.comment != null ? review.comment : "Không có nhận xét"}</p>
+                                    <p><strong>Ngày:</strong> ${review.reviewDate}</p>
+                                </div>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+            </div>
+        </div>
+    </div>
+                        
+    <div class="product_of_store_container">
+        <div class="container">
+            <div class="row">
+                <div class="product_of_store col-sm-12 col-12">
+                    <h2 class="title">CÁC SẢN PHẨM KHÁC CỦA CỬA HÀNG</h2>
+                    <div class="list_products_store">
+                        <div class="swiper mySwiper store_product">
+                            <div class="swiper-wrapper">
+                                <c:forEach var="product" items="${products}">
+                                    <div class="swiper-slide">
+                                        <div class="product best_seller_product">
+                                            <div class="product_image">
+                                                <c:choose>
+                                                    <c:when test="${not empty productImages[product.productID]}">
+                                                        <a href="detail?productID=${product.productID}" class="no-style">
+                                                            <img class="img-fluid" src="${pageContext.request.getContextPath()}/assets/images/productImages/${productImages[product.productID].imageURL}" alt="Hình ảnh sản phẩm" />
+                                                        </a>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <a href="detail?productID=${product.productID}" class="no-style">
+                                                            <img class="img-fluid" src="${pageContext.request.contextPath}/assets/images/default_product_image.jpg" alt="Không có hình ảnh" />
+                                                        </a>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </div>
+                                            <div class="product_info">
+                                                <div class="product_name text"><p><a href="detail?productID=${product.productID}" class="text-dark">${product.productName}</a></p></div>
+                                                <div class="product_price">
+                                                    <div class="discount">
+                                                        <div class="discount_price text-deleted">
+                                                            <del style="font-size: 1.4rem;">
+                                                                <fmt:formatNumber value="${not empty product.price ? product.price : 0}" type="number" maxFractionDigits="0" />₫
+                                                            </del>
+                                                        </div>
+                                                        <div class="discount_tag"><small>GIẢM 11%</small></div>
+                                                    </div>
+                                                    <div class="price text-primary" style="text-align: center; font-size: 1.5rem;">
+                                                        <fmt:formatNumber value="${not empty product.price ? product.price * 0.89 : 0}" type="number" maxFractionDigits="0" />₫
+                                                    </div>
+                                                </div>
+
+                                                
+                                                <c:set var="rating" value="${product.averageRating}" />
+
+                                                <div class="product_rate text-warning">
+                                                    <c:choose>
+                                                        <c:when test="${rating == -1}">
+                                                            <p class="no-rating">Chưa có đánh giá</p>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <p class="total_rating">${String.format("%.1f", rating)} ★</p>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </div>
+                                                
+                                                
+                                            </div>
+                                            <div class="product_actions">
+                                                <a href="#">
+                                                    <span class="material-icons-sharp">
+                                                        add_shopping_cart
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="recommendation_container">
         <div class="container">
             <div class="row">
                 <div class="col-sm-12 recommendation_products">
                     <div class="title_recommendation_products">
-                        <h2 class="title">CÓ THỂ BẠN CŨNG THÍCH</h2>
+                        <h2 class="title">CÓ THỂ BẠN SẼ THÍCH</h2>
                     </div>
-
                     <div class="list_products">
-                        
-                        <div class="product best_seller_product">
-                            <div class="product_image"><img src="../assets/images/best_seller_product.png" alt=""></div>
-                            <div class="product_info">
-                                <div class="product_name text"><p>Bánh dừa nướng Quý Thu - Gói 150gr ádasdas ádadasdas ádasdasd</p></div>
-                                <div class="product_price">
-                                    <div class="discount">
-                                        <div class="discount_price text-deleted"><del>99.000đ</del></div>
-                                        <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                    </div>
-                                    <div class="price text-primary">450.000đ</div>
+                        <c:forEach var="product" items="${similarProducts}">
+                            <div class="product best_seller_product">
+                                <div class="product_image">
+                                    <c:choose>
+                                        <c:when test="${not empty highSimilarImages[product.productID]}">
+                                            <a href="detail?productID=${product.productID}" class="no-style">
+                                                <img class="img-fluid" src="${pageContext.request.getContextPath()}/assets/images/productImages/${highSimilarImages[product.productID].imageURL}" alt="Hình ảnh sản phẩm" />
+                                            </a>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <a href="detail?productID=${product.productID}" class="no-style">
+                                                <img class="img-fluid" src="${pageContext.request.getContextPath()}/assets/images/default_image.jpg" alt="Không có hình ảnh" />
+                                            </a>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
-                                <div class="product_rate text-warning">
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9734;</span>
-                                    <p class="total_rating text">(4.5)</p>
+                                <div class="product_info">
+                                    <div class="product_name text"><p><a href="detail?productID=${product.productID}" class="text-dark">${product.productName}</a></p></div>
+                                    <div class="product_price">
+                                        <div class="discount">
+                                            <div class="discount_price text-deleted">
+                                                <del style="font-size: 1.4rem;">
+                                                    <fmt:formatNumber value="${not empty product.price ? product.price : 0}" type="number" maxFractionDigits="0" />₫
+                                                </del>
+                                            </div>
+                                            <div class="discount_tag"><small>GIẢM 11%</small></div>
+                                        </div>
+                                        <div class="price text-primary" style="text-align: center; font-size: 1.5rem;">
+                                            <fmt:formatNumber value="${not empty product.price ? product.price * 0.89 : 0}" type="number" maxFractionDigits="0" />₫
+                                        </div>
+                                    </div>
+                                    <div class="product_rate text-warning">
+                                        <span>★</span>
+                                        <span>★</span>
+                                        <span>★</span>
+                                        <span>★</span>
+                                        <span>☆</span>
+                                        <p class="total_rating text">(4.5)</p>
+                                    </div>
+                                </div>
+                                <div class="product_actions">
+                                    <a href="#">
+                                        <span class="material-icons-sharp">
+                                            add_shopping_cart
+                                        </span>
+                                    </a>
                                 </div>
                             </div>
-
-                            <div class="product_actions">
-                            <a href="#">
-                                <span class="material-icons-sharp">
-                                    add_shopping_cart
-                                </span>
-                            </a>
-                        </div>
-
-                        </div>
-
-                        <div class="product best_seller_product">
-                            <div class="product_image"><img src="../assets/images/best_seller_product.png" alt=""></div>
-                            <div class="product_info">
-                                <div class="product_name text"><p>Bánh dừa nướng Quý Thu - Gói 150gr ádasdas ádadasdas ádasdasd</p></div>
-                                <div class="product_price">
-                                    <div class="discount">
-                                        <div class="discount_price text-deleted"><del>99.000đ</del></div>
-                                        <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                    </div>
-                                    <div class="price text-primary">450.000đ</div>
-                                </div>
-                                <div class="product_rate text-warning">
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9734;</span>
-                                    <p class="total_rating text">(4.5)</p>
-                                </div>
-                            </div>
-
-                            <div class="product_actions">
-                            <a href="#">
-                                <span class="material-icons-sharp">
-                                    add_shopping_cart
-                                </span>
-                            </a>
-                        </div>
-
-                        </div>
-    
-                        <div class="product best_seller_product">
-                            <div class="product_image"><img src="../assets/images/best_seller_product.png" alt=""></div>
-                            <div class="product_info">
-                                <div class="product_name text"><p>Bánh dừa nướng Quý Thu - Gói 150gr</p></div>
-                                <div class="product_price">
-                                    <div class="discount">
-                                        <div class="discount_price text-deleted"><del>99.000đ</del></div>
-                                        <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                    </div>
-                                    <div class="price text-primary">450.000đ</div>
-                                </div>
-                                <div class="product_rate text-warning">
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9734;</span>
-                                    <p class="total_rating text">(4.5)</p>
-                                </div>
-                            </div>
-
-                            <div class="product_actions">
-                            <a href="#">
-                                <span class="material-icons-sharp">
-                                    add_shopping_cart
-                                </span>
-                            </a>
-                        </div>
-
-                        </div>
-    
-                        <div class="product best_seller_product">
-                            <div class="product_image"><img src="../assets/images/best_seller_product.png" alt=""></div>
-                            <div class="product_info">
-                                <div class="product_name text"><p>Bánh dừa nướng Quý Thu - Gói 150gr</p></div>
-                                <div class="product_price">
-                                    <div class="discount">
-                                        <div class="discount_price text-deleted"><del>99.000đ</del></div>
-                                        <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                    </div>
-                                    <div class="price text-primary">450.000đ</div>
-                                </div>
-                                <div class="product_rate text-warning">
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9734;</span>
-                                    <p class="total_rating text">(4.5)</p>
-                                </div>
-                            </div>
-
-                            <div class="product_actions">
-                            <a href="#">
-                                <span class="material-icons-sharp">
-                                    add_shopping_cart
-                                </span>
-                            </a>
-                        </div>
-
-                        </div>
-    
-                        <div class="product best_seller_product">
-                            <div class="product_image"><img src="../assets/images/best_seller_product.png" alt=""></div>
-                            <div class="product_info">
-                                <div class="product_name text"><p>Bánh dừa nướng Quý Thu - Gói 150gr</p></div>
-                                <div class="product_price">
-                                    <div class="discount">
-                                        <div class="discount_price text-deleted"><del>99.000đ</del></div>
-                                        <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                    </div>
-                                    <div class="price text-primary">450.000đ</div>
-                                </div>
-                                <div class="product_rate text-warning">
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9734;</span>
-                                    <p class="total_rating text">(4.5)</p>
-                                </div>
-                            </div>
-
-                            <div class="product_actions">
-                            <a href="#">
-                                <span class="material-icons-sharp">
-                                    add_shopping_cart
-                                </span>
-                            </a>
-                        </div>
-
-                        </div>
-    
-                        <div class="product best_seller_product">
-                            <div class="product_image"><img src="../assets/images/best_seller_product.png" alt=""></div>
-                            <div class="product_info">
-                                <div class="product_name text"><p>Bánh dừa nướng Quý Thu - Gói 150gr</p></div>
-                                <div class="product_price">
-                                    <div class="discount">
-                                        <div class="discount_price text-deleted"><del>99.000đ</del></div>
-                                        <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                    </div>
-                                    <div class="price text-primary">450.000đ</div>
-                                </div>
-                                <div class="product_rate text-warning">
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9734;</span>
-                                    <p class="total_rating text">(4.5)</p>
-                                </div>
-                            </div>
-
-                            <div class="product_actions">
-                            <a href="#">
-                                <span class="material-icons-sharp">
-                                    add_shopping_cart
-                                </span>
-                            </a>
-                        </div>
-
-                        </div>
-    
-                        <div class="product best_seller_product">
-                            <div class="product_image"><img src="../assets/images/best_seller_product.png" alt=""></div>
-                            <div class="product_info">
-                                <div class="product_name text"><p>Bánh dừa nướng Quý Thu - Gói 150gr</p></div>
-                                <div class="product_price">
-                                    <div class="discount">
-                                        <div class="discount_price text-deleted"><del>99.000đ</del></div>
-                                        <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                    </div>
-                                    <div class="price text-primary">450.000đ</div>
-                                </div>
-                                <div class="product_rate text-warning">
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9734;</span>
-                                    <p class="total_rating text">(4.5)</p>
-                                </div>
-                            </div>
-
-                            <div class="product_actions">
-                            <a href="#">
-                                <span class="material-icons-sharp">
-                                    add_shopping_cart
-                                </span>
-                            </a>
-                        </div>
-
-                        </div>
-    
-                        <div class="product best_seller_product">
-                            <div class="product_image"><img src="../assets/images/best_seller_product.png" alt=""></div>
-                            <div class="product_info">
-                                <div class="product_name text"><p>Bánh dừa nướng Quý Thu - Gói 150gr</p></div>
-                                <div class="product_price">
-                                    <div class="discount">
-                                        <div class="discount_price text-deleted"><del>99.000đ</del></div>
-                                        <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                    </div>
-                                    <div class="price text-primary">450.000đ</div>
-                                </div>
-                                <div class="product_rate text-warning">
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9734;</span>
-                                    <p class="total_rating text">(4.5)</p>
-                                </div>
-                            </div>
-
-                            <div class="product_actions">
-                            <a href="#">
-                                <span class="material-icons-sharp">
-                                    add_shopping_cart
-                                </span>
-                            </a>
-                        </div>
-
-                        </div>
-    
-                        <div class="product best_seller_product">
-                            <div class="product_image"><img src="../assets/images/best_seller_product.png" alt=""></div>
-                            <div class="product_info">
-                                <div class="product_name text"><p>Bánh dừa nướng Quý Thu - Gói 150gr</p></div>
-                                <div class="product_price">
-                                    <div class="discount">
-                                        <div class="discount_price text-deleted"><del>99.000đ</del></div>
-                                        <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                    </div>
-                                    <div class="price text-primary">450.000đ</div>
-                                </div>
-                                <div class="product_rate text-warning">
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9734;</span>
-                                    <p class="total_rating text">(4.5)</p>
-                                </div>
-                            </div>
-
-                            <div class="product_actions">
-                            <a href="#">
-                                <span class="material-icons-sharp">
-                                    add_shopping_cart
-                                </span>
-                            </a>
-                        </div>
-
-                        </div>
-    
-                        <div class="product best_seller_product">
-                            <div class="product_image"><img src="../assets/images/best_seller_product.png" alt=""></div>
-                            <div class="product_info">
-                                <div class="product_name text"><p>Bánh dừa nướng Quý Thu - Gói 150gr</p></div>
-                                <div class="product_price">
-                                    <div class="discount">
-                                        <div class="discount_price text-deleted"><del>99.000đ</del></div>
-                                        <div class="discount_tag"><small>GIẢM 11%</small></div>
-                                    </div>
-                                    <div class="price text-primary">450.000đ</div>
-                                </div>
-                                <div class="product_rate text-warning">
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9733;</span>
-                                    <span>&#9734;</span>
-                                    <p class="total_rating text">(4.5)</p>
-                                </div>
-                            </div>
-
-                            <div class="product_actions">
-                            <a href="#">
-                                <span class="material-icons-sharp">
-                                    add_shopping_cart
-                                </span>
-                            </a>
-                        </div>
-
-                        </div>
-    
-                       
+                        </c:forEach>
                     </div>
-    
                     <div href="#" class="view_more"><a href="#">Xem thêm sản phẩm</a></div>
-        
+                </div>
             </div>
         </div>
     </div>
 
-
-   <!--FOOTER-->
-    <jsp:include page="../includes/footer.jsp"></jsp:include>
+    <a href="#" class="btn btn-primary back-to-top" title="Quay lại đầu trang">
+        <i class="fa fa-angle-double-up"></i>
+    </a>
+    <!--FOOTER-->
+    <jsp:include page="/includes/footer.jsp"></jsp:include>
 
     <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="../assets/js/swiper.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/js/swiper.js"></script>
+    <script>
+        var contextPath = "${pageContext.request.contextPath}";
+    </script>
+    <script src="${pageContext.request.contextPath}/assets/js/product_detail.js"></script>
 </body>
 </html>
-

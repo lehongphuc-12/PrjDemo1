@@ -25,7 +25,7 @@ import java.util.Date;
 
 /**
  *
- * @author nguyenanh
+ * @author Pc
  */
 @Entity
 @Table(name = "Payment")

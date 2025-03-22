@@ -4,13 +4,10 @@
   <persistence-unit name="jpa-demo-pu" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     <class>model.ActivityLog</class>
-    <class>model.Order1</class>
     <class>model.Discount</class>
     <class>model.ProductImage</class>
     <class>model.Review</class>
-    <class>model.Payment</class>
     <class>model.Role</class>
-    <class>model.OrderDetail</class>
     <class>model.ProductView</class>
     <class>model.Category</class>
     <class>model.Product</class>

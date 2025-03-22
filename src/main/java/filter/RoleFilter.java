@@ -50,7 +50,8 @@ public class RoleFilter implements Filter {
             "/cates",
             "/filters",
             "/chatbot",
-            "/LoginGoogleHandler"
+            "/LoginGoogleHandler",
+            "/detail"
         ));
 
         guestPages = Collections.unmodifiableList(Arrays.asList(
@@ -60,13 +61,19 @@ public class RoleFilter implements Filter {
         customerPages = Collections.unmodifiableList(Arrays.asList(
             "/products",       // Xem sản phẩm
             "/cart",          // Giỏ hàng
-            "/orders"         // Lịch sử đơn hàng
+            "/orders",         // Lịch sử đơn hàng
+            "/checkout",
+            "/vnpay-return",
+            "/order-confirmation"
         ));
 
         sellerPages = Collections.unmodifiableList(Arrays.asList(
             "/products",      // Xem sản phẩm
             "/seller",        // Quản lý sản phẩm
-            "/seller/orders"  // Quản lý đơn hàng của seller
+            "/cart",
+            "/checkout",
+            "/vnpay-return",
+            "/order-confirmation"
         ));
 
         adminPages = Collections.unmodifiableList(Arrays.asList(
@@ -102,6 +109,10 @@ public class RoleFilter implements Filter {
         User user = (session != null) ? (User) session.getAttribute("user") : null;
         int roleID = (user != null) ? user.getRoleID().getRoleID() : 0; // 0 là Guest
 
+        if(relativeURI.contains("paymentv2")){
+            chain.doFilter(request, response);
+        }
+        
         // Kiểm tra quyền truy cập
         List<String> allowedPages = getAllowedPages(roleID);
         if (commonPages.contains(relativeURI) || allowedPages.contains(relativeURI)) {

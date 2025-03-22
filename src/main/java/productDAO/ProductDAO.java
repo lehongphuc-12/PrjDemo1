@@ -4,6 +4,7 @@ package productDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.StoredProcedureQuery;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
 import model.Category;
@@ -256,25 +257,7 @@ public class ProductDAO implements IProductDAO{
         }
     }
 
-    @Override
-    public Product create(Product user) {
-        throw new UnsupportedOperationException("Not supported yet."); 
-    }
 
-    @Override
-    public Product findById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public List<Product> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public Product update(Product user) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
     
 //    
     //List danh sách các sản phẩm dựa trên category của nó và sắp xếp theo sô lượng sản phẩm được mua, 
@@ -485,6 +468,131 @@ public class ProductDAO implements IProductDAO{
                         .getResultList();
             }
         }
+        
+        
+        
+        
+        
+//    LINH
+        
+        
+        @Override
+    public Product create(Product product) {
+        EntityManager em = JpaUtil.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(product);
+            em.getTransaction().commit();
+            return product;
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            e.printStackTrace();
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public Product findById(int id) {
+        EntityManager em = JpaUtil.getEntityManager();
+        try {
+            return em.find(Product.class, id);
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public List<Product> findAll() {
+        EntityManager em = JpaUtil.getEntityManager();
+        try {
+            TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p", Product.class);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    
+    public List<Product> getHighStockProducts(int threshold) {
+        EntityManager em = JpaUtil.getEntityManager();
+        try {
+            TypedQuery<Product> query = em.createQuery(
+                "SELECT p FROM Product p WHERE p.quantity > :threshold ORDER BY p.quantity DESC", Product.class
+            );
+            query.setParameter("threshold", threshold);
+            query.setMaxResults(10); 
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+    
+    public Product findProductWithDetails(int productID) {
+        EntityManager em = JpaUtil.getEntityManager();
+        try {
+            TypedQuery<Product> query = em.createQuery(
+                "SELECT p FROM Product p " +
+                "JOIN FETCH p.cityID " +
+                "JOIN FETCH p.sellerID " +
+                "WHERE p.productID = :productID", 
+                Product.class
+            );
+            query.setParameter("productID", productID);
+            return query.getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
+        public List<Product> getProductsBySellerID(int sellerID) {
+            EntityManager em = JpaUtil.getEntityManager();
+            try {
+                TypedQuery<Product> query = em.createQuery(
+                    "SELECT p FROM Product p WHERE p.sellerID.id = :sellerID ORDER BY p.productID DESC",
+                    Product.class
+                );
+                query.setParameter("sellerID", sellerID);       
+                return query.getResultList();
+            } finally {
+                em.close();
+            }
+        }
+
+    public List<Product> getSimilarProducts(int productID) {
+        EntityManager em = JpaUtil.getEntityManager();
+        try {
+            StoredProcedureQuery query = em.createStoredProcedureQuery("GetSimilarProducts6", Product.class);
+            query.registerStoredProcedureParameter("ProductID", Integer.class, jakarta.persistence.ParameterMode.IN);
+            query.setParameter("ProductID", productID);
+            query.setMaxResults(10);
+            
+            // Thực thi và lấy danh sách kết quả
+            @SuppressWarnings("unchecked")
+            List<Product> resultList = query.getResultList();
+            return resultList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+    @Override
+    public void update(Product product) {
+        EntityManager em = JpaUtil.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(product);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw new RuntimeException("Failed to update product: " + e.getMessage(), e);
+        } finally {
+            em.close();
+        }
+    }
     
     
     public static void main(String[] args) {
@@ -499,7 +607,7 @@ public class ProductDAO implements IProductDAO{
         System.out.println("Thời gian chạy: " + duration / 1_000_000.0 + " ms"); 
         //C2 : 1376-1500
         //C1:  1450-1540  
-        System.out.println(dao.findByCategoryDAO("Cà phê",10,1));
+        System.out.println(dao.getSimilarProducts(1));
 //        System.out.println("COUNT: "+ dao.countProductsByCategoryGroupId(2));
     }
     

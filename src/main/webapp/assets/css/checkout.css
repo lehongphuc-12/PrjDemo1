@@ -1,0 +1,227 @@
+        body {
+            background-color: #f8f9fa; /* Nền xám nhạt nhẹ nhàng */
+            font-family: 'Roboto', sans-serif;
+            color: #2c3e50; /* Màu chữ tối hơn cho độ tương phản tốt hơn */
+            line-height: 1.6; /* Tăng khoảng cách dòng cho dễ đọc */
+        }
+
+        .checkout-container {
+            max-width: 1200px;
+            margin: 40px auto; /* Tăng khoảng cách trên/dưới */
+            padding: 30px; /* Tăng padding để thoáng hơn */
+            background-color: #ffffff; /* Nền trắng cho sạch sẽ */
+            border-radius: 10px; /* Bo góc lớn hơn */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Bóng nhẹ tạo chiều sâu */
+        }
+
+        .section-title {
+            font-size: 1.6rem; /* Tăng kích thước tiêu đề */
+            font-weight: 600; /* Đậm hơn một chút */
+            margin-bottom: 20px;
+            color: #2c3e50; /* Màu tối cho độ tương phản */
+            border-bottom: 2px solid #28a745; /* Đường viền xanh lá cây để hài hòa */
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center; /* Căn giữa biểu tượng và chữ */
+            gap: 8px; /* Khoảng cách giữa biểu tượng và chữ */
+        }
+
+        .section-title i {
+            color: #28a745; /* Màu xanh lá cây cho biểu tượng */
+        }
+
+        .section-frame {
+            border: 1px solid #e0e0e0; /* Viền nhạt hơn */
+            padding: 20px; /* Tăng padding */
+            border-radius: 8px;
+            background-color: #fff;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* Bóng nhẹ */
+        }
+
+        .order-summary {
+            border: 1px solid #e0e0e0;
+            padding: 25px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-place-order {
+            width: 100%;
+            padding: 14px; /* Tăng kích thước nút */
+            font-size: 1.2rem;
+            font-weight: 500; /* Chữ hơi đậm */
+            background-color: #28a745;
+            border-color: #28a745;
+            border-radius: 6px;
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Hiệu ứng mượt mà */
+        }
+
+        .btn-place-order:hover {
+            background-color: #218838;
+            border-color: #218838;
+            transform: translateY(-2px); /* Nút nâng lên khi hover */
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+            font-size: 1rem; /* Chữ trong bảng lớn hơn */
+            padding: 12px; /* Tăng khoảng cách */
+            color: #2c3e50; /* Màu chữ tối hơn */
+        }
+
+        .table th {
+            background-color: #f1f3f5; /* Nền tiêu đề bảng nhạt hơn */
+            font-weight: 600;
+        }
+
+        .table td img {
+            max-width: 60px; /* Hình ảnh lớn hơn một chút */
+            height: auto;
+            border-radius: 4px; /* Bo góc ảnh */
+        }
+
+        .order-summary .d-flex {
+            font-size: 1.1rem;
+        }
+
+        .order-summary .d-flex strong {
+            font-size: 1.3rem; /* Tổng tiền nổi bật hơn */
+            color: #28a745; /* Màu xanh lá cây */
+            font-weight: 700; /* Đậm hơn */
+        }
+
+        .alert {
+            margin-bottom: 25px;
+            border-radius: 6px;
+            font-size: 1rem; /* Chữ trong cảnh báo dễ đọc */
+            padding: 15px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da; /* Màu đỏ nhạt hơn */
+            color: #721c24; /* Chữ đỏ tối hơn */
+            border-color: #f5c6cb;
+        }
+
+        .empty-cart-message {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .continue-shopping-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .continue-shopping-btn:hover {
+            background-color: #218838;
+            color: white;
+        }
+
+        /* Modal Styling */
+        .modal-content {
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Bóng mạnh hơn */
+        }
+
+        .modal-header {
+            background-color: #28a745; /* Đầu modal xanh lá cây */
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .modal-body {
+            padding: 20px;
+            background-color: #f8f9fa; /* Nền nhạt cho phần thân */
+        }
+
+        .modal-footer {
+            border-top: none;
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+        }
+
+        .form-label {
+            font-weight: 500; /* Nhãn đậm hơn */
+            color: #2c3e50;
+        }
+
+        .form-control {
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            padding: 10px;
+            font-size: 1rem;
+            color: #2c3e50;
+        }
+
+        .form-control:focus {
+            border-color: #28a745; /* Viền xanh khi focus */
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
+        }
+
+        .modal-footer .btn-primary {
+            background-color: #28a745;
+            border-color: #28a745;
+            border-radius: 6px;
+        }
+
+        .modal-footer .btn-primary:hover {
+            background-color: #218838;
+            border-color: #218838;
+        }
+
+        .modal-footer .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            border-radius: 6px;
+        }
+
+        /* Phương thức thanh toán */
+        .list-group-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        .form-check-label {
+            font-size: 1rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .form-check-input:checked {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        /* Liên kết Thay Đổi */
+        .text-primary {
+            color: #28a745 !important; /* Màu xanh lá cây thay vì xanh dương */
+        }
+
+        .text-primary:hover {
+            color: #218838 !important;
+            text-decoration: underline;
+        }
+        
+        .text-muted{
+            font-size: 12px !important;
+        }

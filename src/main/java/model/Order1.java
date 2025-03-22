@@ -30,7 +30,7 @@ import java.util.Date;
 
 /**
  *
- * @author nguyenanh
+ * @author Pc
  */
 @Entity
 @Table(name = "[Order]")
@@ -60,9 +60,6 @@ public class Order1 implements Serializable {
     @NotNull
     @Column(name = "TotalAmount")
     private BigDecimal totalAmount;
-    @JoinColumn(name = "StatusID", referencedColumnName = "StatusID")
-    @ManyToOne(optional = false)
-    private OrderStatus statusID;
     @JoinColumn(name = "PaymentMethodID", referencedColumnName = "PaymentMethodID")
     @ManyToOne(optional = false)
     private PaymentMethod paymentMethodID;
@@ -116,14 +113,6 @@ public class Order1 implements Serializable {
 
     public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
-    }
-
-    public OrderStatus getStatusID() {
-        return statusID;
-    }
-
-    public void setStatusID(OrderStatus statusID) {
-        this.statusID = statusID;
     }
 
     public PaymentMethod getPaymentMethodID() {

@@ -68,7 +68,7 @@ public class AuthServlet extends HttpServlet {
             User user = authservice.findByEmailAndPassword(email, password);
             if (user != null) {
                 HttpSession session = request.getSession();
-                session.setAttribute("googleUser", user);
+                session.setAttribute("user", user);
                 setLoginCookies(response, email, password, "on".equals(remember));
                 String redirectUrl = getRedirectUrlByRole(user.getRoleID().getRoleID());
                 response.sendRedirect(request.getContextPath() + redirectUrl);
@@ -141,7 +141,7 @@ public class AuthServlet extends HttpServlet {
 
             authservice.create(newUser);
             session.setAttribute("user", newUser);
-            session.removeAttribute("googleUser");
+            session.removeAttribute("user");
             setLoginCookies(response, email, password, true);
             response.sendRedirect(request.getContextPath() + "/logins");
         } catch (Exception e) {

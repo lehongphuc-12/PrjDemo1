@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="product_info">
                                     <div class="product_name text">
-                                        <p>${product.productName}</p>
+                                        <p><a href="${pageContext.request.contextPath}/detail?productID=${product.productID}">${product.productName}</a></p>
                                     </div>
                                     <div class="product_price">
                                         <c:choose>
@@ -139,8 +139,10 @@
                                     </div>
                                 </c:if>
                                     
-                                <div class="buy-now ">
-                                        <a href="#">Mua ngay</a>
+                                <div class="buy">
+                                    <button class="btn btn-primary buy-now-btn" data-product-id="${product.productID}" type="button">
+                                        <p>Mua ngay</p>
+                                    </button>
                                 </div>
                             </div>
                         </c:forEach>
@@ -168,6 +170,10 @@
 <script src="/demo1/assets/js/swiper.js"></script>
 <script src="/demo1/assets/js/main.js"></script>
 <script src="/demo1/assets/js/filter.js"></script>
+<script>
+    var contextPath = "${pageContext.request.contextPath}";
+</script>
+<script src="/demo1/assets/js/product_detail.js"></script>
 
 
 </body>

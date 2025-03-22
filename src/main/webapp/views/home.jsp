@@ -4,10 +4,10 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    
-    <!--head-->
-     <jsp:include page="/includes/head.jsp"></jsp:include>
-     
+    <head>
+        <!--head-->
+         <jsp:include page="/includes/head.jsp"></jsp:include>
+    </head>
   
 <body>
 
@@ -43,7 +43,11 @@
                                 
                             <c:forEach var="cg" items="${listCategoryGroup}">
                                 <c:forEach var="category" items="${cg.categoryCollection}">
-                                    <div class="swiper-slide"><img src="${pageContext.request.getContextPath()}/assets/images/Category${category.categoryID}.jpg" alt=""><div class="category_type"><p class="text-category"><a href="${pageContext.request.getContextPath()}/cates?ID=${category.categoryID}"  style="color: white">${category.categoryName}</a></p></div></div>
+                                    <div class="swiper-slide">
+                                        <a href="${pageContext.request.getContextPath()}/cates?ID=${category.categoryID}"  style="display: inline-block; width: 100%;height: 100%;position: absolute"></a>
+                                        <img src="${pageContext.request.getContextPath()}/assets/images/Category${category.categoryID}.jpg" alt="">     
+                                        <div class="category_type"><p class="text-category"><a href="${pageContext.request.getContextPath()}/cates?ID=${category.categoryID}"  style="color: white">${category.categoryName}</a></p></div>
+                                    </div>
                                 </c:forEach>
                             </c:forEach>
                               
@@ -68,7 +72,7 @@
                                 <c:choose>
                                     <c:when test="${not empty product.productImageCollection}">
                                         <c:forEach var="image" items="${product.productImageCollection}" begin="0" end="0">
-                                            <img src="${pageContext.request.getContextPath()}/assets/images/productImages/${image.imageURL}" alt="" >
+                                            <a href="${pageContext.request.contextPath}/detail?productID=${product.productID}"><img src="${pageContext.request.getContextPath()}/assets/images/productImages/${image.imageURL}" alt="" ></a>
                                         </c:forEach>
                                     </c:when>
                                     <c:otherwise>
@@ -78,7 +82,7 @@
                             </div>
                             <div class="product_info">
                                 <div class="product_name text">
-                                    <p>${product.productName}</p>
+                                    <p><a href="${pageContext.request.contextPath}/detail?productID=${product.productID}">${product.productName}</a></p>
                                 </div>
 
                                 <!-- Hiển thị giá sản phẩm và giảm giá nếu có -->
@@ -145,8 +149,10 @@
                                 </div>
                             </c:if>
                             
-                            <div class="buy-now ">
-                                <a href="#">Mua ngay</a>
+                            <div class="buy">
+                                <button class="btn btn-primary buy-now-btn" data-product-id="${product.productID}" type="button">
+                                    <p>Mua ngay</p>
+                                </button>
                             </div>
                         </div>
                     </c:forEach>
@@ -181,7 +187,7 @@
                                     <div class="product_image">
                                     <c:choose>
                                         <c:when test="${not empty product.productImageCollection}">
-                                            <img src="${pageContext.request.getContextPath()}/assets/images/productImages/${product.productImageCollection[0].imageURL}" alt="">
+                                            <a href="${pageContext.request.contextPath}/detail?productID=${product.productID}"><img src="${pageContext.request.getContextPath()}/assets/images/productImages/${product.productImageCollection[0].imageURL}" alt=""></a>
                                         </c:when>
                                         <c:otherwise>
                                             <img src="default-image.jpg" alt="No image available">
@@ -190,7 +196,7 @@
                                 </div>
                                     <div class="product_info">
                                         <div class="product_name text">
-                                            <p>${product.productName}</p>
+                                            <p><a href="${pageContext.request.contextPath}/detail?productID=${product.productID}">${product.productName}</a></p>
                                         </div>
 
                                          <!--Hiển thị giá sản phẩm--> 
@@ -254,8 +260,10 @@
                                             </div>
                                         </c:if>
                                          
-                                         <div class="buy-now ">
-                                            <a href="#">Mua ngay</a>
+                                        <div class="buy">
+                                            <button class="btn btn-primary buy-now-btn" data-product-id="${product.productID}" type="button">
+                                                <p>Mua ngay</p>
+                                            </button>
                                         </div>
                                 </div>
                             </c:forEach>
@@ -305,6 +313,9 @@
     <script src="/demo1/assets/js/swiper.js"></script>
     <script src="/demo1/assets/js/main.js"></script>
     <script src="/demo1/assets/js/chatbot.js"></script>
-
+    <script>
+        var contextPath = "${pageContext.request.contextPath}";
+    </script>
+    <script src="/demo1/assets/js/product_detail.js"></script>
 </body>
 </html>

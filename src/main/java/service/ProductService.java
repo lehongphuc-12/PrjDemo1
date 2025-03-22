@@ -7,14 +7,23 @@ import java.util.Map;
 import model.Category;
 import model.CategoryGroup;
 import model.Product;
+import model.ProductImage;
+import model.Review;
 import productDAO.ProductDAO;
+import productImagesDAO.ProductImageDAO;
+import reviewDAO.ReviewDAO;
 
 public class ProductService {
 
     private final ProductDAO productDAO;
+    
+    private final ProductImageDAO productImageDAO;
+    private final ReviewDAO reviewDAO;
 
     public ProductService() {
         productDAO = new ProductDAO();
+        this.productImageDAO = new ProductImageDAO();
+        this.reviewDAO = new ReviewDAO();
     }
 
     //lấy ra top 10 sản phẩm bán chay của từng category group
@@ -117,6 +126,92 @@ public class ProductService {
     }
     public List<Product> getPopularProductsByCategory(String categoryName, int page, int pageSize) {
         return productDAO.findPopularProductsByCategoryDAO(categoryName, page, pageSize);
+    }
+    
+    
+    
+    
+//    LINH
+    
+    
+    public Product getProductById(int productId) {
+        return productDAO.findById(productId);
+    }
+
+    public List<ProductImage> getProductImages(int productId) {
+        return productImageDAO.findImagesByProductId(productId); 
+    }
+
+    public Map<Integer, ProductImage> getHighStockProductImages(int threshold) {
+        List<Product> highProducts = productDAO.getHighStockProducts(threshold);
+        Map<Integer, ProductImage> highProductImages = new HashMap<>();
+
+        for (Product product : highProducts) {
+            List<ProductImage> images = productImageDAO.findImagesByProductId(product.getProductID());
+            if (images != null && !images.isEmpty()) {
+                highProductImages.put(product.getProductID(), images.get(0)); 
+            }
+        }
+        return highProductImages;
+    }
+
+    public Map<Integer, ProductImage> getProductImage(int sellerID) {
+        List<Product> productsBySeller = productDAO.getProductsBySellerID(sellerID);
+        Map<Integer, ProductImage> productImages = new HashMap<>();
+
+        for (Product product : productsBySeller) {
+            List<ProductImage> images = productImageDAO.findImagesByProductId(product.getProductID());
+            if (images != null && !images.isEmpty()) {
+                productImages.put(product.getProductID(), images.get(0)); 
+            }
+        }
+        return productImages;
+    }
+
+    public List<Product> getHighStockProducts(int threshold) {
+        return productDAO.getHighStockProducts(threshold);
+    }
+
+    public Product getProductWithDetails(int productId) {
+        return productDAO.findProductWithDetails(productId);
+    }
+
+    public List<Product> getProductsBySellerID(int sellerID) {
+        return productDAO.getProductsBySellerID(sellerID);
+    }
+    public List<Review> getReviewsByProductId(int productId) {
+        return reviewDAO.findByProductId(productId);
+    }
+    public void createReview(Review review) {
+        reviewDAO.create(review);
+    }
+    
+    public List<Product> getSimilarProducts(int productID) {
+        List<Product> similarProducts = productDAO.getSimilarProducts(productID);
+        if (similarProducts == null) {
+            return null;
+        }
+        // Kết quả đã được giới hạn 10 sản phẩm từ ProductDAO
+        return similarProducts;
+    }
+    
+    public Map<Integer, ProductImage> getSimilarProductsImage(int sellerID) {
+        List<Product> productsBySimilar = productDAO.getSimilarProducts(sellerID);
+        Map<Integer, ProductImage> productImages = new HashMap<>();
+
+        for (Product product : productsBySimilar) {
+            List<ProductImage> images = productImageDAO.findImagesByProductId(product.getProductID());
+            if (images != null && !images.isEmpty()) {
+                productImages.put(product.getProductID(), images.get(0)); 
+            }
+        }
+        return productImages;
+    }
+    public void updateProduct(Product product) {
+        if (product == null || product.getProductID() == null) {
+            throw new IllegalArgumentException("Product or Product ID cannot be null");
+        }
+        productDAO.update(product);
     }
     
 }

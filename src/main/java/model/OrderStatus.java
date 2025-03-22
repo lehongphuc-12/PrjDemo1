@@ -24,7 +24,7 @@ import java.util.Collection;
 
 /**
  *
- * @author nguyenanh
+ * @author Pc
  */
 @Entity
 @Table(name = "OrderStatus")
@@ -47,7 +47,7 @@ public class OrderStatus implements Serializable {
     @Column(name = "StatusName")
     private String statusName;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "statusID")
-    private Collection<Order1> order1Collection;
+    private Collection<OrderDetail> orderDetailCollection;
 
     public OrderStatus() {
     }
@@ -78,12 +78,12 @@ public class OrderStatus implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Order1> getOrder1Collection() {
-        return order1Collection;
+    public Collection<OrderDetail> getOrderDetailCollection() {
+        return orderDetailCollection;
     }
 
-    public void setOrder1Collection(Collection<Order1> order1Collection) {
-        this.order1Collection = order1Collection;
+    public void setOrderDetailCollection(Collection<OrderDetail> orderDetailCollection) {
+        this.orderDetailCollection = orderDetailCollection;
     }
 
     @Override
