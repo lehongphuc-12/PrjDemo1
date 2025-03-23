@@ -17,7 +17,7 @@
                     </c:when>
                     <c:when test="${userRole == 3}">
                         <span><a href="${pageContext.request.contextPath}/profile" class="text-banner">Hồ sơ của bạn</a></span>
-                        <span><a href="${pageContext.request.contextPath}/seller/register" class="text-banner">Đăng ký bán hàng</a></span>
+                        <span><a href="${pageContext.request.contextPath}/SellerRegistrationServlet" class="text-banner">Đăng ký bán hàng</a></span>
                     </c:when>
                     <c:otherwise>
                         <!-- Guest không hiển thị gì -->

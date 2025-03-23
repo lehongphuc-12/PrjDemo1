@@ -1,4 +1,8 @@
+import {handleHttpStatus,showAlert} from './handleStatus.js'
+
 console.log("PRODUCT DETAIL JS")
+
+//BACK TO TOP
 
 // Back to top button
 $(window)?.scroll(function () {
@@ -109,9 +113,11 @@ function validateQuantity(input) {
 
 function attachEventBuyHandlers() {
     console.log("Gán lại sự kiện cho nút");
-
+    
     // Xử lý thêm vào giỏ hàng
     $('.add-to-cart-btn').off('click').on('click', function() {
+        
+  
         console.log("add to cart");
         
         var productId = $(this).data('product-id');
@@ -135,12 +141,10 @@ function attachEventBuyHandlers() {
                         .text(response).show();
                     setTimeout(() => $('#cart-message').fadeOut(), 5000);
                 }
+                 showAlert("Thành công","Đã thêm sản phẩm vào giỏ hàng","success");
             },
             error: function(xhr) {
-                var errorMsg = xhr.responseText || 'Lỗi khi thêm vào giỏ hàng. Vui lòng thử lại.';
-                $('#cart-message').removeClass('alert-success').addClass('alert-danger')
-                    .text(errorMsg).show();
-                setTimeout(() => $('#cart-message').fadeOut(), 5000);
+                handleHttpStatus(contextPath,xhr);      
             }
         });
     });
@@ -170,11 +174,7 @@ function attachEventBuyHandlers() {
                 }
             },
             error: function(xhr) {
-                var errorMsg = xhr.responseText || 'Vui lòng đăng nhập để tiếp tục mua hàng.';
-//                $('#cart-message').removeClass('alert-success').addClass('alert-danger')
-//                    .text(errorMsg).show();
-                    window.location.href = contextPath + `/views/login.jsp?error-message=${errorMsg}`;
-//                setTimeout(() => $('#cart-message').fadeOut(), 5000);
+                handleHttpStatus(contextPath,xhr);
             }
         });
     });

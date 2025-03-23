@@ -192,6 +192,15 @@ public class CartServlet extends HttpServlet {
     }
     private void addToCart(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Bạn cần đăng nhập để mua ngay.");
+            return;
+        }
+        
         int productId = Integer.parseInt(request.getParameter("productID"));
         int quantity = Integer.parseInt(request.getParameter("quantity") != null ? request.getParameter("quantity") : "1");
 
@@ -208,8 +217,7 @@ public class CartServlet extends HttpServlet {
             return;
         }
 
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+        
         if (user == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.");

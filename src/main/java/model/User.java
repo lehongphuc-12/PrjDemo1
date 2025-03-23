@@ -67,6 +67,8 @@ public class User implements Serializable {
     @Size(max = 255)
     @Column(name = "Address")
     private String address;
+    @Column(name = "shopName")
+    private String shopName;
     @Column(name = "CreatedAt")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
@@ -96,6 +98,14 @@ public class User implements Serializable {
         this.fullName = fullName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+    }
+    
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
     }
 
     public Integer getUserID() {

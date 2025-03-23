@@ -580,6 +580,12 @@
                                                     </a>
                                                 </div>
                                             </c:if>
+                                                
+                                            <div class="buy">
+                                                <button class="btn btn-primary buy-now-btn" data-product-id="${product.productID}" type="button">
+                                                    <p>Mua ngay</p>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </c:forEach>
@@ -678,10 +684,16 @@
                                         </a>
                                     </div>
                                 </c:if>
+                                    
+                                    <div class="buy">
+                                            <button class="btn btn-primary buy-now-btn" data-product-id="${product.productID}" type="button">
+                                                <p>Mua ngay</p>
+                                            </button>
+                                        </div>
                             </div>
                         </c:forEach>
                     </div>
-                    <div href="#" class="view_more"><a href="#">Xem thêm sản phẩm</a></div>
+                    <!--<div href="#" class="view_more"><a href="#">Xem thêm sản phẩm</a></div>-->
                 </div>
             </div>
         </div>
@@ -702,7 +714,7 @@
     <script>
         var contextPath = "${pageContext.request.contextPath}";
     </script>
-    <script src="${pageContext.request.contextPath}/assets/js/product_detail.js"></script>
+    <script type="module" src="${pageContext.request.contextPath}/assets/js/product_detail.js"></script>
     <script src="${pageContext.request.contextPath}/assets/js/review.js"></script>
 
     

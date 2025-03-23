@@ -73,6 +73,13 @@
                     </li>
                 </ul>
             </li>
+            <li>
+                <a>Quản lý yêu cầu bán hàng <i class="fas fa-chevron-down"></i></a>
+                <ul>
+                    <li><a href="${pageContext.request.contextPath}/admin?action=listRequests">Danh sách yêu cầu</a></li>
+                </ul>
+            </li>
+            
         </ul>
         <a href="${pageContext.request.contextPath}/logout" class="back-btn" style="display: inline-block;"><i class="fas fa-arrow-left" style="font-size: 15px;"></i> Đăng xuất</a>
     </div>

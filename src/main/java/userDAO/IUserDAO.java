@@ -10,7 +10,7 @@ public interface IUserDAO {
     public User createDAO(User user);
     public User findByIdDAO(int id);
     public List<User> findAllDAO();
-    public User updateDAO(User user);
+    public void updateDAO(User user);
     public List<User> findAllDAO(int page, int pageSize);
     public void deleteUserByIdDAO(int id);
     public List<User> findAllByRoleDAO(int roleID, int page, int pageSize);

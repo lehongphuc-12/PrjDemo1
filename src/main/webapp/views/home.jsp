@@ -143,11 +143,9 @@
 
                             <c:if test="${userRole != 0}">
                                 <div class="product_actions">
-                                    <a href="#">
-                                        <span class="material-icons-sharp">
-                                            add_shopping_cart
-                                        </span>
-                                    </a>
+                                    <button class="btn btn-primary add-to-cart-btn" data-product-id="${product.productID}" type="button">
+                                        <span class="material-icons-sharp">add_shopping_cart</span>
+                                    </button>
                                 </div>
                             </c:if>
                             
@@ -254,11 +252,9 @@
                                     
                                         <c:if test="${userRole != 0}">
                                             <div class="product_actions">
-                                                <a href="#">
-                                                    <span class="material-icons-sharp">
-                                                        add_shopping_cart
-                                                    </span>
-                                                </a>
+                                                <button class="btn btn-primary add-to-cart-btn" data-product-id="${product.productID}" type="button">
+                                                    <span class="material-icons-sharp">add_shopping_cart</span>
+                                                </button>
                                             </div>
                                         </c:if>
                                          
@@ -282,30 +278,16 @@
         </section>
 
          <!--PRODUCT CATEGORY--> 
+         
+       
+  
+         
     </main>
-    <!-- Chatbot Container -->
-    <div id="chatbot-container" class="chatbot-container minimized">
-        <div id="chatbot-header" class="chatbot-header">
-            <span><i class="fa fa-robot" style="margin-right: 8px;"></i>Chatbot Hỗ Trợ</span>
-            <button id="chatbot-toggle-size" class="chatbot-toggle-btn"><i class="fa fa-comment"></i></button>
-            <button id="chatbot-close" class="chatbot-close-btn">✖</button>
-        </div>
-        <div id="chatbot-body" class="chatbot-body">
-            <div id="chatbot-messages" class="chatbot-messages"></div>
-            <div class="chatbot-input">
-                <input type="text" id="chatbot-input" placeholder="Nhập tin nhắn...">
-                <button id="chatbot-send"><i class="fa fa-paper-plane" style="margin-right: 5px;"></i>Gửi</button>
-            </div>
-        </div>
-    </div>
-
+    
+    
 
     <!--FOOTER-->
     <jsp:include page="/includes/footer.jsp"></jsp:include>
-
-
-
-
 
 
 
@@ -314,10 +296,10 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="/demo1/assets/js/swiper.js"></script>
     <script src="/demo1/assets/js/main.js"></script>
-    <script src="/demo1/assets/js/chatbot.js"></script>
+    
     <script>
         var contextPath = "${pageContext.request.contextPath}";
     </script>
-    <script src="/demo1/assets/js/product_detail.js"></script>
+    <script type="module" src="/demo1/assets/js/product_detail.js"></script>
 </body>
 </html>

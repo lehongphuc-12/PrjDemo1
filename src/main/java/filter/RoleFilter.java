@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.User;
 
-@WebFilter(filterName = "RoleFilter", urlPatterns = {"/*"})
+//@WebFilter(filterName = "RoleFilter", urlPatterns = {"/*"})
 public class RoleFilter implements Filter {
 
     private static final boolean debug = true;
@@ -66,7 +66,9 @@ public class RoleFilter implements Filter {
             "/orders",         // Lịch sử đơn hàng
             "/checkout",
             "/vnpay-return",
-            "/order-confirmation"
+            "/order-confirmation",
+            "/SellerRegistrationServlet",
+            "/views/registerseller.jsp"
         ));
 
         sellerPages = Collections.unmodifiableList(Arrays.asList(

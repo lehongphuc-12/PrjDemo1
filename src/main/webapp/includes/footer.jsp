@@ -2,6 +2,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+
+<div id="alert-container"></div>
 <footer>
         <div class="container">
             <div class="content__footer">
@@ -40,3 +42,7 @@
                 </div>
             </div>
     </footer>
+
+<!--CHATBOT API-->
+<script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.2.0-beta.5/libs/oversea/index.js"></script>
+<script src="/demo1/assets/js/chatbot.js"></script>

@@ -85,10 +85,7 @@ if (user == null || user.getEmail() == null || user.getEmail().trim().isEmpty())
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    @Override
-    public User updateDAO(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    
     public List<User> getAllUserDAO() {
         EntityManager em = JpaUtil.getEntityManager();
         try {
@@ -263,6 +260,25 @@ public User getSellerByProductIdDAO(int productID) {
             em.close();
         }
     }
+    
+    
+    // userDAO
+    @Override
+    public void updateDAO(User user) {
+        EntityTransaction transaction = em.getTransaction();
+        try {
+            transaction.begin();
+            em.merge(user); // Cập nhật thông tin user trong cơ sở dữ liệu
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException("Failed to update user: " + e.getMessage(), e);
+        }
+    }
+    
+    
     public static void main(String[] args) {
         UserDAO dao = new UserDAO();
        

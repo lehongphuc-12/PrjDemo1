@@ -34,8 +34,8 @@ public class UserService {
     public long countUsers() {
         return userDAO.countUsers();
     }
-    public User updateUser(User user) {
-        return userDAO.updateDAO(user);
+    public void updateUser(User user) {
+         userDAO.updateDAO(user);
     }
     public List<User> getUsersByRole(int roleID, int page, int pageSize) {
         return userDAO.findAllByRoleDAO(roleID, page, pageSize);
@@ -95,4 +95,11 @@ public class UserService {
     public User getSellerByProductID(int productID){
         return userDAO.getSellerByProductIdDAO(productID);
     }
+    // userservice
+    public void updateUser1(User user) {
+            if (user == null || user.getUserID() == null) {
+                throw new IllegalArgumentException("User or UserID cannot be null");
+            }
+            userDAO.updateDAO(user);
+        }
 }
