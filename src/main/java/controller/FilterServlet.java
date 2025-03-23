@@ -193,14 +193,16 @@ public class FilterServlet extends HttpServlet {
             html.append(String.format("""
                 <div class="product">
                     <div class="product_image">
-                        <img src="/demo1/assets/images/productImages/%s" alt="%s">
+                        <a href="%s/detail?productID=%d">
+                            <img src="/demo1/assets/images/productImages/%s" alt="%s">
+                        </a>              
                     </div>
                     <div class="product_info">
                         <div class="product_name text">
                             <p><a href="%s/detail?productID=%d">%s</a></p>
                         </div>
                         <div class="product_price">
-                """, imageURL, p.getProductName(),request.getContextPath(),p.getProductID(), StringEscapeUtils.escapeHtml4(p.getProductName())));
+                """, request.getContextPath(),p.getProductID(),imageURL, p.getProductName(),request.getContextPath(),p.getProductID(), StringEscapeUtils.escapeHtml4(p.getProductName())));
 
             if (discount.compareTo(BigDecimal.ZERO) > 0) {
                 html.append(String.format("""

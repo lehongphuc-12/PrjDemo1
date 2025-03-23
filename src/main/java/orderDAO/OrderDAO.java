@@ -160,7 +160,7 @@ public class OrderDAO implements IOrderDAO {
             em.close();
         }
     }
-    
+    @Override
     public boolean hasPurchased(int userID, int productID) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
@@ -168,7 +168,7 @@ public class OrderDAO implements IOrderDAO {
                           "JOIN od.orderID o " +
                           "WHERE o.userID.userID = :userID " +
                           "AND od.productID.productID = :productID " +
-                          "AND od.statusID.statusID = 3";  // Sửa lại so sánh statusID đúng cách
+                          "AND od.statusID.statusID = 3";  //Status 3: đã mua sản phẩm thành công
 
             Long count = em.createQuery(jpql, Long.class)
                            .setParameter("userID", userID)

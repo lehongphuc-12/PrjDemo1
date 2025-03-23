@@ -13,4 +13,5 @@ public interface IOrderDAO {
     List<Order1> getOrdersByUserId(int userId);
     void addOrderDetail(OrderDetail detail);
     void updateOrderDetailStatus(int orderDetailId, String statusName);
+    boolean hasPurchased(int userID, int productID);
 }

@@ -15,9 +15,9 @@ import productImagesDAO.ProductImageDAO;
 
 public class OrderService {
     private static final Logger LOGGER = Logger.getLogger(OrderService.class.getName());
-    private IOrderDAO orderDAO;
-    private IOrderStatusDAO orderStatusDAO;
-    private IProductImageDAO productImageDAO;
+    private final IOrderDAO orderDAO;
+    private final IOrderStatusDAO orderStatusDAO;
+    private final IProductImageDAO productImageDAO;
 
     public OrderService() {
         this.orderDAO = new OrderDAO();
@@ -166,4 +166,9 @@ public class OrderService {
         }
         orderDAO.updateOrderDetailStatus(orderDetailId, statusName);
     }
+    
+    public boolean hasPurchased(int userID, int productID){
+        return orderDAO.hasPurchased(userID, productID);
+    }
+    
 }

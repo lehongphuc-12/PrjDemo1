@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ import model.User;
 import reviewDAO.ReviewDAO;
 import service.CategoryService;
 import service.ProductService;
+import service.ReviewService;
 import service.UserService;
 
 @WebServlet(name = "ProductDetailServlet", urlPatterns = {"/detail"})
@@ -163,6 +165,15 @@ public class ProductDetailServlet extends HttpServlet {
                 reviews = Collections.emptyList();
             }
             List<CategoryGroup> listCategoryGroup = new CategoryService().getAllCategoryGroup();
+            
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("user");
+            boolean hasReviewed = false;
+            
+            if(user != null){
+                hasReviewed = new ReviewService().hasReviewed(user.getUserID(), productId);
+            }
+           
 
             // Gán các thuộc tính cho request
             request.setAttribute("product", product);
@@ -170,6 +181,7 @@ public class ProductDetailServlet extends HttpServlet {
             request.setAttribute("similarProducts", similarProducts);
             request.setAttribute("reviews", reviews);
             request.setAttribute("listCategoryGroup", listCategoryGroup);
+            request.setAttribute("hasReviewed", hasReviewed);
 
             // Xử lý ngày giờ với java.time
             LocalDate today = LocalDate.now();

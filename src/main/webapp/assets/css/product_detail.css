@@ -2,6 +2,7 @@
 /* =====================PRODUCT DETAIL================ */
 .details_container{
     margin-top: 40px;
+    position: relative;
 }
 
 .product_detail {
@@ -289,6 +290,7 @@
 .detail_content_container,
 .review_content_container {
     margin-top: 25px;
+    position: relative;
 }
 
 .product_details_content,
@@ -717,3 +719,54 @@ gửi đánh giá */
         display: block;
     }
 }
+
+
+
+/*//REVIEW*/
+
+.review-action{
+    display: flex;
+    gap: 16px;
+}
+
+.review-action a:hover{
+    text-decoration: underline;
+    color: red !important;
+    transition: all 300ms ease;
+}
+.user-avatar-review{
+    width: 20px;
+    height:20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+.review .review-header{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.update-review-container{
+
+}
+
+@keyframes blinking-border {
+    0% { box-shadow: 1px 1px 6px 2px var(--color-primary), -1px -1px 6px 2px var(--color-primary); }
+    50% { box-shadow: 1px 1px 10px 3px var(--color-primary), -1px -1px 10px 3px var(--color-primary); }
+    100% { box-shadow: 1px 1px 6px 2px var(--color-primary), -1px -1px 6px 2px var(--color-primary); }
+}
+
+.update-form {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px;
+    box-shadow: 1px 1px 6px 2px var(--color-primary), -1px -1px 6px 2px var(--color-primary);
+    animation: blinking-border 1.5s infinite alternate;
+}
+

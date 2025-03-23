@@ -348,41 +348,76 @@
             <div class="row">
                 <div class="product_reviews_content col-12">
                     <h3 class="title">ĐÁNH GIÁ SẢN PHẨM</h3>
+                    <p class="text-primary review-success"></p>
                     <!-- Form gửi đánh giá -->
-                    <form action="detail?action=review" method="post" class="review-form">
-                        <input type="hidden" name="productID" id="productID" value="${product.productID}">
-                        <div class="form-group rating-group">
-                            <label for="rating">Đánh giá của bạn:</label>
-                            <div class="star-rating" id="star-rating">
-                                <span class="fa fa-star" data-value="1"></span>
-                                <span class="fa fa-star" data-value="2"></span>
-                                <span class="fa fa-star" data-value="3"></span>
-                                <span class="fa fa-star" data-value="4"></span>
-                                <span class="fa fa-star" data-value="5"></span>
-                            </div>
-                            <input type="hidden" id="rating" name="rating" value="0" required>
-                        </div>
-                        <div class="form-group comment-group">
-                            <label for="comment">Nhận xét của bạn:</label>
-                            <textarea id="comment" name="comment" rows="3" maxlength="255" placeholder="Nhập nhận xét của bạn (tối đa 255 ký tự)..." required></textarea>
-                        </div>
-                        <div class="form-group submit-group">
-                            <button type="button"  class="btn btn-submit-review">Gửi nhận xét</button>
-                        </div>
-                    </form>
+                    <c:choose>
+                        <c:when test="${hasReviewed != null and hasReviewed}">
+                            <p class="text-primary has-reviewed">Bạn đã đánh giá sản phẩm này</p>
+                            <form action="detail?action=review" method="post" class="review-form" style ="display:none">
+                                <input type="hidden" name="productID" id="productID" value="${product.productID}">
+                                <div class="form-group rating-group">
+                                    <label for="rating">Đánh giá của bạn:</label>
+                                    <div class="star-rating" id="star-rating">
+                                        <span class="fa fa-star" data-value="1"></span>
+                                        <span class="fa fa-star" data-value="2"></span>
+                                        <span class="fa fa-star" data-value="3"></span>
+                                        <span class="fa fa-star" data-value="4"></span>
+                                        <span class="fa fa-star" data-value="5"></span>
+                                    </div>
+                                    <input type="hidden" id="rating" name="rating" value="0" required>
+                                </div>
+                                <div class="form-group comment-group">
+                                    <label for="comment">Nhận xét của bạn:</label>
+                                    <textarea id="comment" name="comment" rows="3" maxlength="255" placeholder="Nhập nhận xét của bạn (tối đa 255 ký tự)..." required></textarea>
+                                </div>
+                                <div class="form-group submit-group">
+                                    <button type="button"  class="btn btn-submit-review">Gửi nhận xét</button>
+                                </div>
+                            </form>
+                        </c:when> 
+                        <c:otherwise>
+                            <form action="detail?action=review" method="post" class="review-form">
+                                <input type="hidden" name="productID" id="productID" value="${product.productID}">
+                                <div class="form-group rating-group">
+                                    <label for="rating">Đánh giá của bạn:</label>
+                                    <div class="star-rating" id="star-rating">
+                                        <span class="fa fa-star" data-value="1"></span>
+                                        <span class="fa fa-star" data-value="2"></span>
+                                        <span class="fa fa-star" data-value="3"></span>
+                                        <span class="fa fa-star" data-value="4"></span>
+                                        <span class="fa fa-star" data-value="5"></span>
+                                    </div>
+                                    <input type="hidden" id="rating" name="rating" value="0" required>
+                                </div>
+                                <div class="form-group comment-group">
+                                    <label for="comment">Nhận xét của bạn:</label>
+                                    <textarea id="comment" name="comment" rows="3" maxlength="255" placeholder="Nhập nhận xét của bạn (tối đa 255 ký tự)..." required></textarea>
+                                </div>
+                                <div class="form-group submit-group">
+                                    <button type="button"  class="btn btn-submit-review">Gửi nhận xét</button>
+                                </div>
+                            </form>
+                        </c:otherwise>
+                    </c:choose>    
                     <!-- Hiển thị danh sách đánh giá -->
                     <div class="list-reviews">
                         <c:choose>
                             <c:when test="${not empty reviews}">
                                 <c:forEach var="review" items="${reviews}">
                                     <div class="review">
-                                        <p><strong>Người dùng:</strong> 
-                                            <c:choose>
-                                                <c:when test="${not empty review.userID}">${review.userID.fullName}</c:when>
-                                                <c:otherwise>Ẩn danh</c:otherwise>
-                                            </c:choose>
-                                        </p>
-                                        <p><strong>Đánh giá:</strong> 
+                                        <div class="review-header">
+                                            <span class="user-avatar-review">
+                                                <img src="${pageContext.request.contextPath}/assets/images/userImages/user-avatar.jpg">
+                                            </span> 
+                                            <p>
+                                                <c:choose>
+                                                    <c:when test="${not empty review.userID}">${review.userID.fullName}</c:when>
+                                                    <c:otherwise>Ẩn danh</c:otherwise>
+                                                </c:choose>
+                                            </p>
+                                        </div>
+                                        <p class="text-muted" style="font-size: 12px">${review.reviewDate}</p>
+                                        <p>
                                             <span class="rating-stars">
                                                 <c:forEach begin="1" end="5" var="i">
                                                     <c:choose>
@@ -397,15 +432,67 @@
                                             </span>
                                         </p>
                                         <p><strong>Nhận xét:</strong> ${review.comment != null ? review.comment : "Không có nhận xét"}</p>
-                                        <p><strong>Ngày:</strong> ${review.reviewDate}</p>
+                                        
+                                        <!--NEU CÓ REVIEW RỒI THÌ CÓ THỂ CHỈNH SỬA ĐÁNH GIÁ--> 
+                                        <c:if test="${hasReviewed != null and hasReviewed and review.userID.userID == user.userID}">
+
+                                            <div class = "review-action" style="font-size: 12px">
+                                                <input type="hidden" name="productID" id="productID" value="${product.productID}">
+                                                <input type="hidden" name="rating" id="rating" value="${review.rating}">
+                                                <input type="hidden" name="comment" id="comment" value="${review.comment}">
+                                               
+                                                <a href="#" class = "text-muted update-review" data-reviewid="${review.reviewID}">Chỉnh sửa đánh giá</a>
+                                                <a href="#" class = "text-muted delete-review" data-reviewid="${review.reviewID}">Xoá</a>
+                                            </div>  
+                                        </c:if>
+                                         
+                                           
+                                            
                                     </div>
+
                                 </c:forEach>
                             </c:when>
                             <c:otherwise>
                                 <p>Chưa có đánh giá nào cho sản phẩm này.</p>
                             </c:otherwise>
                         </c:choose>
+       
+                                
                     </div>
+                    
+                                 
+                                
+                    <!-------------------UPDATE REVIEW------------------->
+                    <div class="update-review-container" style="display: none">
+                        <form action="detail?action=review" method="post" class="review-form update-form">
+                            <input type="hidden" name="productID" id="productID" value="${product.productID}">
+                            <input type="hidden" name="reviewID" id="reviewID" value="${review.reviewID}">
+                            <input type="hidden" id="rating" name="rating" value="0" >
+                            
+                            <div class="form-group rating-group">
+                                <label for="rating">Đánh giá của bạn:</label>
+                                <div class="star-rating">
+                                    <c:forEach begin="1" end="5" var="i">
+                                        <span class="fa fa-star" data-value="${i}"></span>
+                                    </c:forEach>
+                                </div>
+                                
+                            </div>
+
+                            <div class="form-group comment-group">
+                                <label for="comment">Nhận xét của bạn:</label>
+                                <textarea id="comment" name="comment" rows="3"></textarea>
+                            </div>
+
+                            <div class="form-group submit-group">
+                                <button type="button" class="btn btn-confirm-update-review">Cập nhật đánh giá</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-------------------END UPDATE REVIEW------------------->
+                                
+                                
 
                 </div>
             </div>
@@ -616,47 +703,7 @@
         var contextPath = "${pageContext.request.contextPath}";
     </script>
     <script src="${pageContext.request.contextPath}/assets/js/product_detail.js"></script>
-<script>
-    $(document).ready(function () {
-    $(document).on('click', '.btn-submit-review', function () {
-        console.log("SUBMIT REVIEW");
-
-        let productID = $('#productID').val();
-        let rating = $('.fa-star.checked').length; // Lấy số sao đã chọn
-        let comment = $('#comment').val();
-
-        if (rating === 0) {
-            alert("Vui lòng chọn số sao!");
-            return;
-        }
-
-        console.log("ID:", productID, "Rating:", rating, "Comment:", comment);
-
-        $.ajax({
-            url: contextPath + '/review',
-            type: 'POST',
-            data: {
-                action: 'createReview',
-                productID: productID,
-                rating: rating,
-                comment: comment
-            },
-            success: function(response) {
-                console.log("Response từ Servlet:", response);
-                $('.list-reviews').html(response); // Cập nhật danh sách đánh giá
-                $('#comment').val(""); // Đặt lại nội dung ô nhập nhận xét
-                $('.fa-star').removeClass('checked'); // Bỏ chọn sao sau khi gửi đánh giá
-               
-            },
-            error: function(xhr) {
-                console.error("Lỗi:", xhr.responseText);
-                alert("Có lỗi xảy ra!");
-            }
-        });
-    });
-});
-
-</script>
+    <script src="${pageContext.request.contextPath}/assets/js/review.js"></script>
 
     
 </body>

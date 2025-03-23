@@ -72,7 +72,9 @@
                                 <c:choose>
                                     <c:when test="${not empty product.productImageCollection}">
                                         <c:forEach var="image" items="${product.productImageCollection}" begin="0" end="0">
-                                            <a href="${pageContext.request.contextPath}/detail?productID=${product.productID}"><img src="${pageContext.request.getContextPath()}/assets/images/productImages/${image.imageURL}" alt="" ></a>
+                                            <a href="${pageContext.request.contextPath}/detail?productID=${product.productID}">
+                                                <img src="${pageContext.request.getContextPath()}/assets/images/productImages/${image.imageURL}" alt="" >
+                                            </a>
                                         </c:forEach>
                                     </c:when>
                                     <c:otherwise>

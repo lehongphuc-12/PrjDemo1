@@ -54,7 +54,7 @@ public class ReviewDAO implements IReviewDAO {
     }
 
     @Override
-    public Review update(Review review) {
+    public Review updateDAO(Review review) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
             em.getTransaction().begin();
@@ -71,7 +71,7 @@ public class ReviewDAO implements IReviewDAO {
     }
 
     @Override
-    public boolean delete(int reviewId) {
+    public boolean deleteDAO(int reviewId) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
             em.getTransaction().begin();
@@ -84,10 +84,25 @@ public class ReviewDAO implements IReviewDAO {
             return false;
         } catch (Exception e) {
             em.getTransaction().rollback();
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             return false;
         } finally {
             em.close();
+        }
+    }
+    
+    public boolean hasReviewedDAO(int userID, int productID){
+        try(EntityManager em = JpaUtil.getEntityManager()){
+            String jpql = "Select COUNT(r) from Review r "+
+                            "where r.userID.userID = :userID and r.productID.productID = :productID";
+            Long check = em.createQuery(jpql,Long.class)
+                        .setParameter("userID", userID)
+                        .setParameter("productID", productID)
+                        .getSingleResult();
+            return check > 0;
+        }catch (Exception e) {
+            System.out.println("ERROR: "+e.getMessage());
+            return false;
         }
     }
     
@@ -96,7 +111,7 @@ public class ReviewDAO implements IReviewDAO {
 
     
     public static void main(String[] args) {
-        ReviewDAO dao = new ReviewDAO();
-        dao.create(new Review(5,"Tuyet",new Date(),new Product(12),new User(15)));
+        ReviewDAO dao = new ReviewDAO();        
+        System.out.println(dao.hasReviewedDAO(125, 105));
     }
 }

@@ -70,8 +70,10 @@
                                 <div class="product_image">
                                     <c:choose>
                                         <c:when test="${not empty product.productImageCollection}">
-                                            <img src="${pageContext.request.contextPath}/assets/images/productImages/${product.productImageCollection[0].imageURL}"
-                                                 alt="${product.productName}">
+                                            <a href="${pageContext.request.contextPath}/detail?productID=${product.productID}">
+                                                <img src="${pageContext.request.contextPath}/assets/images/productImages/${product.productImageCollection[0].imageURL}"
+                                                     alt="${product.productName}">
+                                            </a>
                                         </c:when>
                                         <c:otherwise>
                                             <img src="${pageContext.request.contextPath}/assets/images/default-image.jpg"
