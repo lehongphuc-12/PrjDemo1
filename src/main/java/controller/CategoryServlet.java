@@ -104,6 +104,7 @@ public class CategoryServlet extends HttpServlet {
         
         List<CategoryGroup> listCategoryGroup = categoryService.getAllCategoryGroup();
         int endPage = totalProducts / SIZE_PAGE;
+        
         if(totalProducts % SIZE_PAGE != 0 ){
             endPage ++;
         }

@@ -143,6 +143,7 @@ document.addEventListener("DOMContentLoaded", function() {
 const listProducts = document.querySelector(".list_products");
 
 function updateGrid() {
+    console.log("RESIZE");
     if (listProducts) {
         console.log(listProducts)
         console.log("Width:", listProducts.clientWidth); // Debug
