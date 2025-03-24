@@ -196,23 +196,23 @@
                         <div class="form-group">
                             <label for="mainImage">Ảnh Trưng Bày:</label>
                             <input type="file" id="mainImage" name="mainImage" accept="image/*" required" onchange="previewImage(this, 'subImage1Preview')">
-                            <div id="subImage1Preview" style="margin-top: 10px;"><p>Ảnh hiện tại: <img src="${pageContext.request.contextPath}/assets/images/productImages/${images[0].imageURL}" alt="Không có ảnh" style="max-width: 100px; margin-top: 5px;"></p></div>
+                            <div id="subImage1Preview" style="margin-top: 10px;"><p>Ảnh hiện tại: <img src="${pageContext.request.contextPath}/assets/images/productImages/${images[0].imageURL}?timestamp=<%= System.currentTimeMillis()%>" alt="Không có ảnh" style="max-width: 100px; margin-top: 5px;"></p></div>
                         </div>
                         <div class="form-group">
                             <label for="subImage1">Ảnh Con 1:</label>
                             <input type="file" id="subImage1" name="subImage1" accept="image/*" onchange="previewImage(this, 'subImage2Preview')">
-                            <div id="subImage2Preview" style="margin-top: 10px;"><p>Ảnh hiện tại: <img src="${pageContext.request.contextPath}/assets/images/productImages/${images[1].imageURL}" alt="Không có ảnh" style="max-width: 100px; margin-top: 5px;"></p></div>
+                            <div id="subImage2Preview" style="margin-top: 10px;"><p>Ảnh hiện tại: <img src="${pageContext.request.contextPath}/assets/images/productImages/${images[1].imageURL}?timestamp=<%= System.currentTimeMillis()%>" alt="Không có ảnh" style="max-width: 100px; margin-top: 5px;"></p></div>
                         </div>
                         <div class="form-group">
                             <label for="subImage2">Ảnh Con 2:</label>
                             <input type="file" id="subImage2" name="subImage2" accept="image/*" onchange="previewImage(this, 'subImage3Preview')">
-                            <div id="subImage3Preview" style="margin-top: 10px;"><p>Ảnh hiện tại: <img src="${pageContext.request.contextPath}/assets/images/productImages/${images[2].imageURL}" alt="Không có ảnh" style="max-width: 100px; margin-top: 5px;"></p></div>
+                            <div id="subImage3Preview" style="margin-top: 10px;"><p>Ảnh hiện tại: <img src="${pageContext.request.contextPath}/assets/images/productImages/${images[2].imageURL}?timestamp=<%= System.currentTimeMillis()%>" alt="Không có ảnh" style="max-width: 100px; margin-top: 5px;"></p></div>
                         </div>
                         <div class="form-group">
                             <label for="subImage3">Ảnh Con 3:</label>
                             <input type="file" id="subImage3" name="subImage3" accept="image/*" onchange="previewImage(this, 'subImage4Preview')">
                             
-                            <div id="subImage4Preview" style="margin-top: 10px;"><p>Ảnh hiện tại: <img src="${pageContext.request.contextPath}/assets/images/productImages/${images[3].imageURL}" alt="Không có ảnh" style="max-width: 100px; margin-top: 5px;"></p></div>
+                            <div id="subImage4Preview" style="margin-top: 10px;"><p>Ảnh hiện tại: <img src="${pageContext.request.contextPath}/assets/images/productImages/${images[3].imageURL}?timestamp=<%= System.currentTimeMillis()%>" alt="Không có ảnh" style="max-width: 100px; margin-top: 5px;"></p></div>
                         </div>
                     </div>
                 </div>

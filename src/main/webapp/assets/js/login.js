@@ -10,7 +10,7 @@ console.log("LOGIN JS")
                 Validator.isRequired('#email-register'),
                 Validator.isEmail('#email-register'),
                     Validator.isRequired('#password-register', 'Vui lòng nhập mật khẩu'),
-                    Validator.minLength('#password-register', 6),
+                    Validator.minLength('#password-register', 8),
                     Validator.isRequired('#password_confirmation-register', 'Vui lòng nhập lại mật khẩu'),
                     Validator.isConfirmed('#password_confirmation-register', function () {
                         return document.querySelector('#form-2 #password-register').value;
@@ -32,7 +32,7 @@ console.log("LOGIN JS")
                 Validator.isRequired('#email-login', 'Vui lòng nhập email'),
                 Validator.isEmail('#email-login'),
                 Validator.isRequired('#password-login', 'Vui lòng nhập mật khẩu'),
-                Validator.minLength('#password-login', 6),
+                Validator.minLength('#password-login', 8),
             ],
             onSubmit: function (data) {
                 document.querySelector("#form-1").submit();

@@ -9,11 +9,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Role;
 import model.User;
 import service.AuthService;
 
-@WebServlet(name = "LoginServlet", urlPatterns = {"/logins", "/register", "/logout"})
+@WebServlet(name = "LoginServlet", urlPatterns = {"/logins", "/register", "/logout","/checkEmail","/reset-password"})
 public class AuthServlet extends HttpServlet {
     private final AuthService authservice = new AuthService();
 
@@ -53,6 +55,8 @@ public class AuthServlet extends HttpServlet {
             switch (action) {
                 case "/logins" -> handleLogin(request, response);
                 case "/register" -> handleRegister(request, response);
+                case "/checkEmail" -> checkEmail(request,response);
+                case "/reset-password" -> resetPassword(request,response);
                 default -> response.sendRedirect(request.getContextPath() + "/logins");
             }
         }
@@ -63,21 +67,44 @@ public class AuthServlet extends HttpServlet {
         String email = request.getParameter("email-login");
         String password = request.getParameter("password-login");
         String remember = request.getParameter("remember_me");
-
+        HttpSession session = request.getSession();
+        
+        
+        int fail = -1;
+        if(session.getAttribute("failedAttempts")==null){
+            session.setAttribute("failedAttempts", 1);
+        } else {
+            fail = (int) session.getAttribute("failedAttempts");
+        }
+            
+//        session.setAttribute("failedAttempts", 1);
+        
         try {
             User user = authservice.findByEmailAndPassword(email, password);
             if (user != null) {
-                HttpSession session = request.getSession();
+                if(user.getStatus()==false){
+                    String errorMessage = "Bạn đã bị chặn bởi admin!";
+                    request.setAttribute("errorMessage", errorMessage);
+                    request.setAttribute("rememberEmail", email);
+                    request.setAttribute("rememberPassword", password);
+                    request.getRequestDispatcher("/views/login.jsp").forward(request, response);
+                }
+                
                 session.setAttribute("user", user);
                 setLoginCookies(response, email, password, "on".equals(remember));
                 String redirectUrl = getRedirectUrlByRole(user.getRoleID().getRoleID());
-                response.sendRedirect(request.getContextPath() + redirectUrl);
+                response.sendRedirect("/demo1/products");
             } else {
-                String errorMessage = "Sai email hoặc mật khẩu!";
+//                String errorMessage = "Sai email hoặc mật khẩu "+(Integer) session.getAttribute("failedAttempts")+" lần";
+//                if (fail >= 3) { // Khi thất bại 3 lần, hiển thị gợi ý
+                    String errorMessage = " Bạn quên mật khẩu? <a href='/demo1/views/checkEmail.jsp'>Nhấn vào đây</a>";
+//                }
+                request.setAttribute("failedAttempts", fail+1);
                 request.setAttribute("errorMessage", errorMessage);
                 request.setAttribute("rememberEmail", email);
                 request.setAttribute("rememberPassword", password);
                 request.getRequestDispatcher("/views/login.jsp").forward(request, response);
+                
 
             }
         } catch (Exception e) {
@@ -190,4 +217,37 @@ public class AuthServlet extends HttpServlet {
             default -> "/products";
         };
     }
+
+    private void checkEmail(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String email = request.getParameter("email-register");
+            User user = authservice.findByEmail(email);
+            
+            if (user != null) {
+                request.setAttribute("message", "Một email đặt lại mật khẩu đã được gửi.");
+            } else {
+                request.setAttribute("message", "Email không tồn tại!");
+            }
+            request.setAttribute("email", email);
+            request.getRequestDispatcher("views/reset-password.jsp").forward(request, response);
+        } catch (ServletException ex) {
+            Logger.getLogger(AuthServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(AuthServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void resetPassword(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String email = request.getParameter("email-register");
+            String newPassword = request.getParameter("password-register");
+            
+            authservice.updatePassword(email, newPassword);
+            request.setAttribute("message", "Mật khẩu đã được đặt lại thành công.");    
+            response.sendRedirect("/demo1/views/login.jsp");
+        } catch (IOException ex) {
+            Logger.getLogger(AuthServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }

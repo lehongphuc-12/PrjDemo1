@@ -71,4 +71,74 @@
         var contextPath = "${pageContext.request.contextPath}";
     </script>
     <script src="${pageContext.request.contextPath}/assets/js/seller_page.js"></script>
+    <script>
+        
+        
+            function initChart() {
+                const canvas = document.getElementById('revenueChart');
+                if (!canvas) {
+                    console.error("Không tìm thấy phần tử canvas với id 'revenueChart'");
+                    return;
+                }
+
+                const ctx = canvas.getContext('2d');
+                if (!ctx)
+                    return;
+                // Hủy biểu đồ cũ nếu tồn tại
+                if (window.revenueChart && typeof window.revenueChart.destroy === "function") {
+                    window.revenueChart.destroy();
+                }
+
+                // Tạo biểu đồ mới với dữ liệu ban đầu là dailyData
+                window.revenueChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dailyData.labels,
+                        datasets: [{
+                                label: 'Doanh Thu',
+                                data: dailyData.values,
+                                borderColor: '#32CD32',
+                                backgroundColor: 'rgba(50, 205, 50, 0.2)',
+                                fill: true,
+                                tension: 0.4
+                            }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function (value) {
+                                        return value.toLocaleString('vi-VN') + ' VND';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                if (!(window.revenueChart instanceof Chart)) {
+                    console.error("Lỗi: window.revenueChart không phải là một đối tượng Chart hợp lệ!");
+                }
+            }
+
+            function updateChart() {
+                const filter = document.getElementById('timeFilter').value;
+                let newLabels, newData;
+                if (filter === 'day') {
+                    newLabels = dailyData.labels;
+                    newData = dailyData.values;
+                } else {
+                    newLabels = weeklyData.labels;
+                    newData = weeklyData.values;
+                }
+
+                if (window.revenueChart) {
+                    window.revenueChart.data.labels = newLabels;
+                    window.revenueChart.data.datasets[0].data = newData;
+                    window.revenueChart.update();
+                } else {
+                    console.error("Lỗi: Biểu đồ chưa được khởi tạo!");
+                }
+            }
+    </script>
 </html>

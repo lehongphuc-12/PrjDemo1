@@ -74,6 +74,7 @@ public class DataServlet extends HttpServlet {
             throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("user");
         int id = user.getUserID();
+        System.out.println(id);
         Map<String, BigDecimal> dailyMap = orderSer.getDailyData(id);
         Map<String, Object> dailyData = new HashMap<>();
             dailyData.put("labels", new ArrayList<>(dailyMap.keySet()));

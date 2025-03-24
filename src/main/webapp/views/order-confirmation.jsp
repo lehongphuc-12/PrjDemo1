@@ -118,7 +118,7 @@
                 <a href="${pageContext.request.contextPath}/products" class="btn btn-primary btn-continue-shopping">
                     <i class="fas fa-shopping-bag"></i> Tiếp Tục Mua Sắm
                 </a>
-                <a href="${pageContext.request.contextPath}/order-history" class="btn btn-primary btn-view-orders">
+                <a href="${pageContext.request.contextPath}/user?action=donHang" class="btn btn-primary btn-view-orders">
                     <i class="fas fa-history"></i> Xem Lịch Sử Đơn Hàng
                 </a>
             </div>

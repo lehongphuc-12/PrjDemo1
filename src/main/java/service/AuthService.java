@@ -28,6 +28,12 @@ public class AuthService {
     public void create(User user){
         userDAO.createDAO(user);
     }
+    public void updatePassword(String email,String newPassword){
+        userDAO.updatePasswordDAO(email, newPassword);
+    }
     
-    
+    public static void main(String[] args) {
+        AuthService a = new AuthService();
+        System.out.println(a.findByEmail("lethiven@gmail.com"));
+    }
 }

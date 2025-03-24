@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 chatbot = new CozeWebSDK.WebChatClient({
                     config: {
-                        bot_id: '7484574725558779922',
+                        bot_id: '7485039828631961607',
                     },
                     componentProps: {
                         title: 'Chatbot Hỗ Trợ',
@@ -12,9 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     auth: {
                         type: 'token',
-                        token: 'pat_OSEe94aKtxWkLLz1RxkCVvp7AccWrwC8tXhIOUIN9hKm7Od50mMmVnoVaRaQVfzK', // Cập nhật token nếu cần
+                        token: 'pat_XAGuOBXIf6l0ko5TBNEjtCbhp101dZrRPuN75deReBKcFMpjd9IUAK9JiwCLDkXW', // Cập nhật token nếu cần
                         onRefreshToken: function () {
-                            return 'pat_OSEe94aKtxWkLLz1RxkCVvp7AccWrwC8tXhIOUIN9hKm7Od50mMmVnoVaRaQVfzK'; // Cập nhật token nếu cần
+                            return 'pat_XAGuOBXIf6l0ko5TBNEjtCbhp101dZrRPuN75deReBKcFMpjd9IUAK9JiwCLDkXW'; // Cập nhật token nếu cần
                         }
                     }
                 });

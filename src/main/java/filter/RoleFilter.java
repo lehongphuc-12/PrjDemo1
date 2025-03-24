@@ -53,7 +53,13 @@ public class RoleFilter implements Filter {
             "/LoginGoogleHandler",
             "/detail",
             "/views/product_detail.jsp",
-            "/review"
+            "/review",
+            "/views/checkEmail.jsp",
+            "/checkEmail",
+            "/views/reset-password.jsp",
+            "/reset-password",
+            "/getProductTypes",
+            "/views/changePassword.jsp"
         ));
 
         guestPages = Collections.unmodifiableList(Arrays.asList(
@@ -68,7 +74,8 @@ public class RoleFilter implements Filter {
             "/vnpay-return",
             "/order-confirmation",
             "/SellerRegistrationServlet",
-            "/views/registerseller.jsp"
+            "/views/registerseller.jsp",
+            "/user"
         ));
 
         sellerPages = Collections.unmodifiableList(Arrays.asList(
@@ -77,7 +84,12 @@ public class RoleFilter implements Filter {
             "/cart",
             "/checkout",
             "/vnpay-return",
-            "/order-confirmation"
+            "/order-confirmation",
+            "/user",
+            "/api/data",
+            "/updateProduct",
+            "/addProduct",
+            "/removeProduct"
         ));
 
         adminPages = Collections.unmodifiableList(Arrays.asList(

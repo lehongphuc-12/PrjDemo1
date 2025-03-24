@@ -15,4 +15,5 @@ public interface IUserDAO {
     public void deleteUserByIdDAO(int id);
     public List<User> findAllByRoleDAO(int roleID, int page, int pageSize);
     public void restoreUserDAO(int id);
+//    void updatePasswordDAO(String email, String newPassword);
 }

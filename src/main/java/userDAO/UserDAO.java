@@ -2,6 +2,7 @@
 package userDAO;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
@@ -38,6 +39,8 @@ public class UserDAO implements IUserDAO{
             }
         }
     public User findByEmailAndPasswordDAO(String email, String password) {
+            EntityManagerFactory emf = JpaUtil.getEntityManagerFactory();
+            EntityManager em = emf.createEntityManager();
             try {
              TypedQuery<User> query = em.createQuery(
                  "SELECT u FROM User u WHERE u.email = :email AND u.password = :password", User.class);
@@ -160,11 +163,7 @@ public User getSellerByProductIdDAO(int productID) {
             transaction.begin();
             User user = em.find(User.class, id);
             if (user != null) {
-                String originalName = user.getFullName();
-                String originalAddress = user.getAddress() != null ? user.getAddress() : "";
-                // Lưu tên gốc vào Address và đánh dấu FullName là "INACTIVE"
-                user.setAddress(originalAddress + " | Original Name: " + originalName);
-                user.setFullName("INACTIVE");
+                user.setStatus(Boolean.FALSE);
                 em.merge(user);
             } else {
                 throw new IllegalArgumentException("User with ID " + id + " not found");
@@ -275,6 +274,22 @@ public User getSellerByProductIdDAO(int productID) {
                 transaction.rollback();
             }
             throw new RuntimeException("Failed to update user: " + e.getMessage(), e);
+        }
+    }
+    
+    public void updatePasswordDAO(String email, String newPassword) {
+//        EntityManager em = JpaUtil.getEntityManager();
+        EntityTransaction transaction = em.getTransaction();
+        try {
+            transaction.begin();
+            User user = findByEmailDAO(email);
+            if (user != null) {
+                user.setPassword(newPassword);
+                em.merge(user);
+            }
+            transaction.commit();
+        } finally {
+            em.close();
         }
     }
     

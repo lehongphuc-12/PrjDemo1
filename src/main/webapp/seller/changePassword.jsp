@@ -5,6 +5,34 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<style>
+    .input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+    .input-wrapper input {
+        width: 100%;
+        padding-right: 40px; /* Chừa khoảng trống cho icon */
+    }
+
+    .input-wrapper button {
+        position: absolute;
+        right: 10px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        color: #666;
+        top: 7px;
+    }
+
+    .input-wrapper button:hover {
+        color: #333;
+    }
+</style>
 <form id="change-password-form" style="margin: 0 auto; width: 50%">
     <div class="profile-header">
         <h2>Đổi Mật Khẩu</h2>
@@ -13,8 +41,10 @@
     <div class="form-group">
         <label for="current-password">Mật khẩu hiện tại</label>
         <div class="input-wrapper">
-            <input type="password" class="form-control" id="current-password" name="current-password"
+            <input type="password" class="form-control password" id="current-password"  name="current-password"
                    placeholder="Nhập mật khẩu hiện tại" required>
+            <button type="button" onclick="togglePassword(this)">👁</button>
+
         </div>
     </div>
     <button type="button" class="save-btn" onclick="verifyCurrentPassword()">Next</button>
@@ -31,6 +61,8 @@
             <div class="input-wrapper">
                 <input type="password" class="form-control" id="new-password" name="newPassword"
                        placeholder="Nhập mật khẩu mới" required>
+                <button type="button" onclick="togglePassword(this)">👁</button>
+
             </div>
         </div>
         <div class="form-group">
@@ -38,9 +70,10 @@
             <div class="input-wrapper">
                 <input type="password" class="form-control" id="confirm-password" name="confirmPassword"
                        placeholder="Xác nhận mật khẩu mới" required>
+                <button type="button" onclick="togglePassword(this)">👁</button>
+
             </div>
         </div>
         <button type="button" class="save-btn" onclick="updatePassword()">Lưu</button>
     </form>
 </div>
-

@@ -77,6 +77,8 @@ public class User implements Serializable {
     @JoinColumn(name = "RoleID", referencedColumnName = "RoleID")
     @ManyToOne(optional = false)
     private Role roleID;
+    @Column(name = "Status")
+    private Boolean status;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
     private Collection<ActivityLog> activityLogCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sellerID")
@@ -106,6 +108,14 @@ public class User implements Serializable {
 
     public void setShopName(String shopName) {
         this.shopName = shopName;
+    }
+    
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public Integer getUserID() {

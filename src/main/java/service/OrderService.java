@@ -413,9 +413,8 @@ public class OrderService {
     
     public static void main(String[] args) {
         OrderService o = new OrderService();
-        List<OrderDetail> list = o.getOrderDetailBySellerId(1);
-        for(OrderDetail od : list){
-            System.out.println(10);
-        }
+        System.out.println(o.getWeeklyData(9));
+        System.out.println(o.getDailyData(9));
+        
     }
 }
