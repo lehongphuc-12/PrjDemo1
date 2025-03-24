@@ -127,10 +127,11 @@ public class CartDAO implements ICartDAO {
             TypedQuery<Cart> query = em.createQuery(
                 "SELECT c FROM Cart c " +
                 "JOIN FETCH c.productID p " +
-                "LEFT JOIN FETCH p.discountCollection d " +  // Eagerly fetch discounts
+                "LEFT JOIN FETCH p.discountCollection d " +
                 "JOIN FETCH p.sellerID " +
                 "JOIN FETCH p.categoryID " +
-                "WHERE c.userID = :user", Cart.class);
+                "WHERE c.userID = :user " +
+                "ORDER BY c.addedDate DESC", Cart.class); 
             query.setParameter("user", user);
             List<Cart> result = query.getResultList();
             System.out.println("Retrieved " + (result != null ? result.size() : 0) + " cart items for user " + (user != null ? user.getUserID() : "null"));
@@ -139,7 +140,6 @@ public class CartDAO implements ICartDAO {
             em.close();
         }
     }
-
     @Override
     public Discount findDiscountByProduct(int productId) {
         EntityManager em = getEntityManager();

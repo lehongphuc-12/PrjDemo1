@@ -1,5 +1,7 @@
 package service;
 
+import dao.OrderDetailDao;
+import dao.OrderDetailStatusDao;
 import orderDAO.IOrderDAO;
 import orderDAO.OrderDAO;
 import model.*;
@@ -7,7 +9,9 @@ import orderStatusDAO.IOrderStatusDAO;
 import orderStatusDAO.OrderStatusDAO;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import model.ProductImage;
 import productImagesDAO.IProductImageDAO;
@@ -15,14 +19,20 @@ import productImagesDAO.ProductImageDAO;
 
 public class OrderService {
     private static final Logger LOGGER = Logger.getLogger(OrderService.class.getName());
+    
     private final IOrderDAO orderDAO;
     private final IOrderStatusDAO orderStatusDAO;
     private final IProductImageDAO productImageDAO;
+    private final OrderDetailDao orderDetailDao;
+    private final OrderDetailStatusDao orderStatus;
+    
 
     public OrderService() {
         this.orderDAO = new OrderDAO();
         this.orderStatusDAO = new OrderStatusDAO();
         this.productImageDAO = new ProductImageDAO();
+        this.orderDetailDao = new OrderDetailDao();
+        this.orderStatus = new OrderDetailStatusDao();
     }
 
     public Order1 createOrder(User user, List<Cart> selectedItems, String shippingAddress, PaymentMethod paymentMethod, BigDecimal totalAmount, String statusName) {
@@ -171,4 +181,241 @@ public class OrderService {
         return orderDAO.hasPurchased(userID, productID);
     }
     
+     public List<OrderDetail> getOrderDetailBySellerId(int id, int page, int size) {
+        return orderDetailDao.getOrderDetailBySellerId(id, page, size);
+    }
+
+    public List<OrderDetail> getOrderDetailByUserId(int id, int page, int size) {
+        return orderDetailDao.getOrderDetailByUserId(id, page, size);
+    }
+
+    public double getTotalMoneySell(int id) {
+
+        return getPaidMoneySell(id) + getPendingMoneySell(id);
+    }
+
+    // 2. Tiền Đã Thanh Toán
+    public double getPaidMoneySell(int id) {
+        List<OrderDetail> orderDetails = getOrderDetailBySellerId(id);
+        if (orderDetails == null || orderDetails.isEmpty()) {
+            return 0.0;
+        }
+
+        BigDecimal paidTotal = BigDecimal.ZERO;
+        for (OrderDetail od : orderDetails) {
+            // Giả sử statusID = 1 là "Đã thanh toán"
+            if (od.getStatusID().getStatusID() == 3) {
+                BigDecimal itemTotal = od.getPrice();
+                paidTotal = paidTotal.add(itemTotal);
+            }
+        }
+        return paidTotal.doubleValue();
+    }
+
+    // 3. Tiền Chờ Xử Lý
+    public double getPendingMoneySell(int id) {
+        List<OrderDetail> orderDetails = getOrderDetailBySellerId(id);
+        if (orderDetails == null || orderDetails.isEmpty()) {
+            return 0.0;
+        }
+
+        BigDecimal pendingTotal = BigDecimal.ZERO;
+        for (OrderDetail od : orderDetails) {
+            // Giả sử statusID = 2 là "Chờ xử lý"
+            if (od.getStatusID().getStatusID() == 1) {
+                BigDecimal itemTotal = od.getPrice().multiply(BigDecimal.valueOf(od.getQuantity()));
+                pendingTotal = pendingTotal.add(itemTotal);
+            }
+        }
+        return pendingTotal.doubleValue();
+    }
+
+    public String getBestSellingProductName(int sellerId) {
+        List<OrderDetail> orderDetails = getOrderDetailBySellerId(sellerId);
+        if (orderDetails == null || orderDetails.isEmpty()) {
+            return "Không có sản phẩm nào được bán";
+        }
+
+        // Map để lưu tổng số lượng bán của từng sản phẩm
+        Map<Integer, Integer> productQuantityMap = new HashMap<>(); // key: productID, value: totalQuantity
+        Map<Integer, String> productNameMap = new HashMap<>();     // key: productID, value: productName
+
+        // Tính tổng số lượng bán cho từng sản phẩm
+        for (OrderDetail od : orderDetails) {
+            int productId = od.getProductID().getProductID();
+            int quantity = od.getQuantity();
+
+            // Cộng dồn số lượng vào map
+            productQuantityMap.put(productId, productQuantityMap.getOrDefault(productId, 0) + quantity);
+            // Lưu tên sản phẩm (giả sử Product có phương thức getProductName())
+            productNameMap.putIfAbsent(productId, od.getProductID().getProductName());
+        }
+
+        // Tìm sản phẩm có số lượng bán lớn nhất
+        int maxQuantity = 0;
+        String bestSellingProductName = null;
+
+        for (Map.Entry<Integer, Integer> entry : productQuantityMap.entrySet()) {
+            if (entry.getValue() > maxQuantity) {
+                maxQuantity = entry.getValue();
+                bestSellingProductName = productNameMap.get(entry.getKey());
+            }
+        }
+
+        return bestSellingProductName != null ? bestSellingProductName : "Không tìm thấy sản phẩm";
+    }
+
+    public List<OrderDetail> getOrderDetailBySellerId(int id) {
+        return orderDetailDao.getOrderDetailBySellerId(id);
+    }
+
+    public List<OrderDetail> getOrderDetailByUserId(int id) {
+        return orderDetailDao.getOrderDetailByUserId(id);
+    }
+
+    public int getTotalSellerOrderPage(int id, int size) {
+        long totalItems = orderDetailDao.countOrderDetailBySellerId(id);
+        System.out.println(totalItems);
+        return (int) Math.ceil((double) totalItems / size);
+    }
+
+    public int getTotalUserOrderPage(int id, int size) {
+        long totalItems = orderDetailDao.countOrderDetailByUserId(id);
+        System.out.println(totalItems);
+        return (int) Math.ceil((double) totalItems / size);
+    }
+
+    public List<OrderDetail> getDonChoXuli(int id, int page, int size, String role) {
+        if (role.equalsIgnoreCase("seller")) {
+            return orderDetailDao.getOrderDetailBySellerIdWithStatus(id, page, size, 1);
+        } else {
+            return orderDetailDao.getOrderDetailByUserIdWithStatus(id, page, size, 1);
+        }
+    }
+
+    public List<OrderDetail> getDonDangGiao(int id, int page, int size, String role) {
+        if (role.equalsIgnoreCase("seller")) {
+            return orderDetailDao.getOrderDetailBySellerIdWithStatus(id, page, size, 2);
+        } else {
+            return orderDetailDao.getOrderDetailByUserIdWithStatus(id, page, size, 2);
+        }
+
+    }
+
+    public List<OrderDetail> getDonDaNhan(int id, int page, int size, String role) {
+        if (role.equalsIgnoreCase("seller")) {
+            return orderDetailDao.getOrderDetailBySellerIdWithStatus(id, page, size, 3);
+        } else {
+            return orderDetailDao.getOrderDetailByUserIdWithStatus(id, page, size, 3);
+        }
+    }
+
+    public long countDonChoXuLy(int id, String role) {
+        if (role.equalsIgnoreCase("seller")) {
+            return orderDetailDao.countOrderDetailBySellerIdAndStatus(id, 1);
+        } else {
+            return orderDetailDao.countOrderDetailByUserIdAndStatus(id, 1);
+        }
+    }
+
+    public long countDonDangGiao(int id, String role) {
+        if (role.equalsIgnoreCase("seller")) {
+            return orderDetailDao.countOrderDetailBySellerIdAndStatus(id, 2);
+        } else {
+            return orderDetailDao.countOrderDetailByUserIdAndStatus(id, 2);
+        }
+    }
+
+    public long countDonDaNhan(int id, String role) {
+        if (role.equalsIgnoreCase("seller")) {
+            return orderDetailDao.countOrderDetailBySellerIdAndStatus(id, 3);
+        } else {
+            return orderDetailDao.countOrderDetailByUserIdAndStatus(id, 3);
+        }
+    }
+
+    public long countDonDaHuy(int id, String role) {
+        if (role.equalsIgnoreCase("seller")) {
+            return orderDetailDao.countOrderDetailBySellerIdAndStatus(id, 4);
+        } else {
+            return orderDetailDao.countOrderDetailByUserIdAndStatus(id, 4);
+        }
+    }
+
+    public int getTotalChoXuLyPage(int id, String role, int size) {
+        long totalItems = countDonChoXuLy(id, role);
+        return (int) Math.ceil((double) totalItems / size);
+    }
+
+// Tính số trang cho "Đang giao"
+    public int getTotalDangGiaoPage(int id, String role, int size) {
+        long totalItems = countDonDangGiao(id, role);
+        return (int) Math.ceil((double) totalItems / size);
+    }
+
+// Tính số trang cho "Đã nhận"
+    public int getTotalDaNhanPage(int id, String role, int size) {
+        long totalItems = countDonDaNhan(id, role);
+        return (int) Math.ceil((double) totalItems / size);
+    }
+
+// Tính số trang cho "Đã hủy"
+    public int getTotalDaHuyPage(int id, String role, int size) {
+        long totalItems = countDonDaHuy(id, role);
+        return (int) Math.ceil((double) totalItems / size);
+    }
+
+    public List<OrderDetail> getDonDaHuy(int id, int page, int size, String role) {
+        if (role.equalsIgnoreCase("seller")) {
+            return orderDetailDao.getOrderDetailBySellerIdWithStatus(id, page, size, 4);
+        } else {
+            return orderDetailDao.getOrderDetailByUserIdWithStatus(id, page, size, 4);
+        }
+
+    }
+
+    public void xacNhanDon(int id) {
+        OrderDetail orderItem = orderDetailDao.findById(id);
+        OrderStatus status = orderStatus.findById(2);
+        orderItem.setStatusID(status);
+        orderDetailDao.update(orderItem);
+    }
+
+    public void huyDon(int id) {
+        OrderDetail orderItem = orderDetailDao.findById(id);
+        OrderStatus status = orderStatus.findById(4);
+        orderItem.setStatusID(status);
+        orderDetailDao.update(orderItem);
+        System.out.println("status: " + orderItem.getStatusID().getStatusName());
+    }
+
+    public void muaLai(int id) {
+        OrderDetail orderItem = orderDetailDao.findById(id);
+        OrderStatus status = orderStatus.findById(1);
+        orderItem.setStatusID(status);
+        orderDetailDao.update(orderItem);
+    }
+
+    public void daNhan(int id) {
+        OrderDetail orderItem = orderDetailDao.findById(id);
+        OrderStatus status = orderStatus.findById(3);
+        orderItem.setStatusID(status);
+        orderDetailDao.update(orderItem);
+    }
+
+    public Map<String, BigDecimal> getWeeklyData(int sellerID) {
+        return orderDAO.getWeeklyData(sellerID);
+    }
+
+    public Map<String, BigDecimal> getDailyData(int sellerID) {
+        return orderDAO.getDailyData(sellerID);
+    }
+    
+    public static void main(String[] args) {
+        OrderService o = new OrderService();
+        List<OrderDetail> list = o.getOrderDetailBySellerId(1);
+        for(OrderDetail od : list){
+            System.out.println(10);
+        }
+    }
 }

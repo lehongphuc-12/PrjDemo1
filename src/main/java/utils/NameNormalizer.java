@@ -1,10 +1,9 @@
-
 package utils;
 
 import java.text.Normalizer;
 
 public class NameNormalizer {
-    public static String nameNormalized(String name) {
+    public static String nameNormalized(String name, int index) {
         if (name == null) {
             return "";
         }
@@ -23,7 +22,7 @@ public class NameNormalizer {
         }
         
         // Loại bỏ khoảng trắng và chuyển thành chữ thường
-        return result.toString().replace(" ", "").toLowerCase().replace("-", "");
+        return result.toString().replace(" ", "").toLowerCase().replace("-", "") +"_"+index;
     }
 
     // Hàm main để kiểm tra
@@ -35,9 +34,10 @@ public class NameNormalizer {
             "Không có tên",
             "Gạo Tẻ Séng Cù - Đặc Sản Tây Bắc"
         };
-
+        int i = 0;
         for (String name : testNames) {
-            String normalized = nameNormalized(name);
+            i++;
+            String normalized = nameNormalized(name, i);
             System.out.println("Original: " + name + " -> Normalized: " + normalized);
         }
     }

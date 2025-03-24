@@ -124,7 +124,13 @@
                         
                         
                         <hr>
-                        <p class="discount_tags">Mã giảm giá của Shop: Giảm giá 11%</p>
+                        <c:choose>
+                            <c:when test="${not empty product.discountCollection}">
+                                <c:set var="discount" value="${product.discountCollection.iterator().next()}" />
+                                <p class="discount_tags">Mã giảm giá của Shop: Giảm giá ${discount.discountPercent}</p>
+                            </c:when>
+                        </c:choose>
+                        
                         <table class="detail_body">
                             <tr class="product_location">
                                 <td>Gửi từ: </td>
@@ -225,9 +231,9 @@
                             <div class="quantity_input">
                                 <label for="quantity">Số lượng: </label>
                                 <div class="quantity-control">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="decreaseQuantity()">-</button>
+                                    <button type="button" class="btn btn-outline-secondary decrease-btn" onclick="decreaseQuantity()">-</button>
                                     <input id="quantity" type="text" value="<fmt:formatNumber value='1' type='number' maxFractionDigits='0' />" min="1" max="${not empty product.quantity ? product.quantity : 1}" oninput="validateQuantity(this)">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="increaseQuantity()">+</button>
+                                    <button type="button" class="btn btn-outline-secondary increase-btn" onclick="increaseQuantity()">+</button>
                                 </div>
                             </div>
                             <div class="available">
@@ -353,7 +359,7 @@
                     <c:choose>
                         <c:when test="${hasReviewed != null and hasReviewed}">
                             <p class="text-primary has-reviewed">Bạn đã đánh giá sản phẩm này</p>
-                            <form action="detail?action=review" method="post" class="review-form" style ="display:none">
+                            <form action="detail?action=review" method="post" class="review-form create-review" style ="display:none">
                                 <input type="hidden" name="productID" id="productID" value="${product.productID}">
                                 <div class="form-group rating-group">
                                     <label for="rating">Đánh giá của bạn:</label>
@@ -376,7 +382,7 @@
                             </form>
                         </c:when> 
                         <c:otherwise>
-                            <form action="detail?action=review" method="post" class="review-form">
+                            <form action="detail?action=review" method="post" class="review-form create-review">
                                 <input type="hidden" name="productID" id="productID" value="${product.productID}">
                                 <div class="form-group rating-group">
                                     <label for="rating">Đánh giá của bạn:</label>
@@ -677,11 +683,9 @@
                                 </div>
                                 <c:if test="${userRole != 0}">
                                     <div class="product_actions">
-                                        <a href="#">
-                                            <span class="material-icons-sharp">
-                                                add_shopping_cart
-                                            </span>
-                                        </a>
+                                       <button class="btn btn-primary add-to-cart-btn" data-product-id="${product.productID}" type="button">
+                                            <span class="material-icons-sharp">add_shopping_cart</span>
+                                        </button>
                                     </div>
                                 </c:if>
                                     
@@ -706,7 +710,7 @@
     <jsp:include page="/includes/footer.jsp"></jsp:include>
 
     <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

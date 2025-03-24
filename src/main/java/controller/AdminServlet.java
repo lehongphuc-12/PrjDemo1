@@ -18,6 +18,7 @@ import model.User;
 import service.UserService;
 import service.ProductService;
 import service.SellerRegistrationService;
+import service.EmailService;
 
 @WebServlet(name = "AdminnServlet", urlPatterns = {"/admin"})
 public class AdminServlet extends HttpServlet {
@@ -380,35 +381,44 @@ public class AdminServlet extends HttpServlet {
     }
 
     private void approveRequest(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    int requestID = Integer.parseInt(request.getParameter("requestId"));
-    SellerRegistrationRequest req = sellerRegistrationService.getRequestById(requestID);
-    if (req == null || !"pending".equals(req.getStatus())) {
-        request.getSession().setAttribute("error", "Yêu cầu không tồn tại hoặc đã được xử lý!");
-        response.sendRedirect(request.getContextPath() + "/admin?action=listRequests");
-        return;
-    }
-
-    try {
-        User user = userService.getUserById(req.getUser().getUserID());
-        if (user != null && (user.getRoleID() == null || user.getRoleID().getRoleID() != 2)) {
-            Role sellerRole = new Role();
-            sellerRole.setRoleID(2);
-            user.setRoleID(sellerRole);
-            userService.updateUser(user);
-
-            req.setStatus("approved");
-            sellerRegistrationService.updateRequest(req);
-            request.getSession().setAttribute("message", "Phê duyệt yêu cầu thành công!");
-        } else {
-            request.getSession().setAttribute("error", "Không thể phê duyệt: Người dùng không hợp lệ hoặc đã là người bán!");
+            throws ServletException, IOException {
+        int requestID = Integer.parseInt(request.getParameter("requestId"));
+        SellerRegistrationRequest req = sellerRegistrationService.getRequestById(requestID);
+        if (req == null || !"pending".equals(req.getStatus())) {
+            request.getSession().setAttribute("error", "Yêu cầu không tồn tại hoặc đã được xử lý!");
+            response.sendRedirect(request.getContextPath() + "/admin?action=listRequests");
+            return;
         }
-    } catch (Exception e) {
-        request.getSession().setAttribute("error", "Lỗi khi phê duyệt yêu cầu: " + e.getMessage());
-        e.printStackTrace();
+
+        try {
+            User user = userService.getUserById(req.getUser().getUserID());
+            if (user != null && (user.getRoleID() == null || user.getRoleID().getRoleID() != 2)) {
+                Role sellerRole = new Role();
+                sellerRole.setRoleID(2);
+                user.setRoleID(sellerRole);
+                userService.updateUser(user);
+
+                req.setStatus("approved");
+                sellerRegistrationService.updateRequest(req);
+
+                // Gửi email thông báo cho khách hàng
+                EmailService.sendSellerRegistrationStatusEmail(
+                        user.getEmail(),
+                        user.getFullName(),
+                        req.getShopName(),
+                        "approved"
+                );
+
+                request.getSession().setAttribute("message", "Phê duyệt yêu cầu thành công!");
+            } else {
+                request.getSession().setAttribute("error", "Không thể phê duyệt: Người dùng không hợp lệ hoặc đã là người bán!");
+            }
+        } catch (Exception e) {
+            request.getSession().setAttribute("error", "Lỗi khi phê duyệt yêu cầu: " + e.getMessage());
+            e.printStackTrace();
+        }
+        response.sendRedirect(request.getContextPath() + "/admin?action=listRequests");
     }
-    response.sendRedirect(request.getContextPath() + "/admin?action=listRequests");
-}
 
     private void rejectRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -420,9 +430,26 @@ public class AdminServlet extends HttpServlet {
             return;
         }
 
-        req.setStatus("rejected");
-        sellerRegistrationService.updateRequest(req);
-        request.getSession().setAttribute("message", "Từ chối yêu cầu thành công!");
+        try {
+            req.setStatus("rejected");
+            sellerRegistrationService.updateRequest(req);
+
+            // Gửi email thông báo cho khách hàng
+            User user = userService.getUserById(req.getUser().getUserID());
+            if (user != null) {
+                EmailService.sendSellerRegistrationStatusEmail(
+                        user.getEmail(),
+                        user.getFullName(),
+                        req.getShopName(),
+                        "rejected"
+                );
+            }
+
+            request.getSession().setAttribute("message", "Từ chối yêu cầu thành công!");
+        } catch (Exception e) {
+            request.getSession().setAttribute("error", "Lỗi khi từ chối yêu cầu: " + e.getMessage());
+            e.printStackTrace();
+        }
         response.sendRedirect(request.getContextPath() + "/admin?action=listRequests");
     }
 

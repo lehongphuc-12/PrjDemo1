@@ -48,7 +48,9 @@ export function handleHttpStatus(contextPath,xhr) {
             message = "Hết thời gian chờ phản hồi từ máy chủ.";
             break;
         default:
-            message = `Lỗi không xác định (Mã lỗi: ${xhr.status})`;
+            message = "Bạn cần đăng nhập để tiếp tục.";
+            window.location.href = contextPath +`/views/login.jsp?error-message=${message}`;
+//            message = `Lỗi không xác định (Mã lỗi: ${xhr.status})`;
     }
 
     console.error(`${title}: ${message}`);
@@ -87,7 +89,7 @@ export function showAlert(title, message, type) {
                 alertContainer.fadeOut(); // Ẩn container nếu không còn alert nào
             }
         });
-    }, 5000);
+    }, 1000);
 }
 
 

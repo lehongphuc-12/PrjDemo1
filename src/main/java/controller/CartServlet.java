@@ -20,7 +20,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -69,87 +71,87 @@ public class CartServlet extends HttpServlet {
         }
     }
 
-    private void viewCart(HttpServletRequest request, HttpServletResponse response)
+private void viewCart(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null || session.isNew()) {
-            response.sendRedirect(request.getContextPath() + "/logins");
-            return;
+    HttpSession session = request.getSession();
+    User user = (User) session.getAttribute("user");
+    if (user == null || session.isNew()) {
+        response.sendRedirect(request.getContextPath() + "/logins");
+        return;
+    }
+
+    LOGGER.info("Viewing cart for user: " + user.getUserID());
+    List<Cart> cartItems;
+
+    try {
+        // Lấy danh sách giỏ hàng
+        List<Cart> allCartItems = cartService.getCartItemsByUser(user);
+        cartItems = new ArrayList<>(allCartItems);
+        if (allCartItems.size() > cartItems.size()) {
+            request.setAttribute("warningMessage", "Một số sản phẩm trong giỏ hàng đã hết hạn (quá 30 ngày) và bị xóa.");
         }
 
-        LOGGER.info("Viewing cart for user: " + user.getUserID());
+        // Sử dụng lastAddedSellerId để sắp xếp
+        Integer lastAddedSellerId = CartService.getLastAddedSellerId();
+        if (lastAddedSellerId != null) {
+            cartItems.sort((cart1, cart2) -> {
+                int sellerId1 = cart1.getProductID().getSellerID().getUserID();
+                int sellerId2 = cart2.getProductID().getSellerID().getUserID();
 
-        List<Cart> cartItems = null;
-        try {
-            cartItems = cartService.getCartItemsByUser(user);
-        } catch (Exception e) {
-            LOGGER.severe("Error fetching cart items: " + e.getMessage());
-            request.setAttribute("errorMessage", "Lỗi khi tải giỏ hàng: " + e.getMessage());
-            request.getRequestDispatcher("/views/cart.jsp").forward(request, response);
-            return;
+                // Ưu tiên shop vừa thêm/cập nhật sản phẩm
+                if (sellerId1 == lastAddedSellerId && sellerId2 != lastAddedSellerId) return -1;
+                if (sellerId1 != lastAddedSellerId && sellerId2 == lastAddedSellerId) return 1;
+
+                // Trong cùng shop, sắp xếp theo addedDate DESC
+                if (sellerId1 == sellerId2) {
+                    return cart2.getAddedDate().compareTo(cart1.getAddedDate());
+                }
+
+                // Các shop khác sắp xếp theo addedDate DESC
+                return cart2.getAddedDate().compareTo(cart1.getAddedDate());
+            });
+            CartService.clearLastAddedSellerId(); // Xóa sau khi sắp xếp
         }
-        if (cartItems == null) {
-            cartItems = Collections.emptyList();
-        }
-        // Nhóm cartItems theo sellerID
+
+        // Nhóm theo sellerID
         Map<Integer, List<Cart>> groupedCartItems = groupCartItemsBySellerID(cartItems);
 
-        // Lấy thông tin seller (tên shop)
+        // Lấy tên shop
         Map<Integer, String> sellerNames = new HashMap<>();
         for (Cart cartItem : cartItems) {
             if (cartItem != null && cartItem.getProductID() != null && cartItem.getProductID().getSellerID() != null) {
                 User seller = cartItem.getProductID().getSellerID();
-                sellerNames.put(seller.getUserID(), seller.getFullName()); // Giả sử User có getUsername()
+                sellerNames.put(seller.getUserID(), seller.getFullName());
             }
         }
 
+        // Xử lý ảnh, giá giảm, và tổng tiền
         Map<Integer, List<ProductImage>> cartItemImages = new HashMap<>();
         Map<Integer, BigDecimal> discountedPrices = new HashMap<>();
         Map<Integer, BigDecimal> itemTotals = new HashMap<>();
         BigDecimal productDiscounts = BigDecimal.ZERO;
 
         for (Cart cartItem : cartItems) {
-            if (cartItem == null) {
-                LOGGER.warning("Found null cartItem, skipping...");
+            if (cartItem == null || cartItem.getProductID() == null) {
+                LOGGER.warning("Found null cartItem or product, skipping...");
                 continue;
             }
 
             Product product = cartItem.getProductID();
-            if (product == null) {
-                LOGGER.warning("Product is null for cartItem: " + cartItem.getCartID());
-                continue;
-            }
-
-            List<ProductImage> images = null;
-            try {
-                images = productService.getProductImages(product.getProductID());
-            } catch (Exception e) {
-                LOGGER.severe("Error fetching images for product " + product.getProductID() + ": " + e.getMessage());
-            }
+            List<ProductImage> images = productService.getProductImages(product.getProductID());
             cartItemImages.put(product.getProductID(), images != null ? images : Collections.emptyList());
 
             BigDecimal originalPrice = cartItem.getPrice() != null ? cartItem.getPrice() : BigDecimal.ZERO;
             BigDecimal discountedPrice = originalPrice;
-            Discount discount = null;
-            try {
-                discount = cartService.findDiscountByProduct(product.getProductID());
-            } catch (Exception e) {
-                LOGGER.severe("Error fetching discount for product " + product.getProductID() + ": " + e.getMessage());
-            }
-            if (discount != null && discount.getStartDate().before(new java.util.Date())
-                    && discount.getEndDate().after(new java.util.Date())) {
-                BigDecimal discountPercent = discount.getDiscountPercent() != null
-                        ? discount.getDiscountPercent().divide(BigDecimal.valueOf(100))
-                        : BigDecimal.ZERO;
+            Discount discount = cartService.findDiscountByProduct(product.getProductID());
+            if (discount != null && discount.getStartDate().before(new Date()) && discount.getEndDate().after(new Date())) {
+                BigDecimal discountPercent = discount.getDiscountPercent() != null ?
+                        discount.getDiscountPercent().divide(BigDecimal.valueOf(100)) : BigDecimal.ZERO;
                 discountedPrice = originalPrice.subtract(originalPrice.multiply(discountPercent));
             }
             discountedPrices.put(product.getProductID(), discountedPrice);
 
-            BigDecimal itemTotal = BigDecimal.ZERO;
-            if (cartItem.getPrice() != null) {
-                itemTotal = discountedPrice.multiply(BigDecimal.valueOf(cartItem.getQuantity()));
-            }
+            BigDecimal itemTotal = discountedPrice.multiply(BigDecimal.valueOf(cartItem.getQuantity()));
             itemTotals.put(product.getProductID(), itemTotal);
 
             BigDecimal original = originalPrice.multiply(BigDecimal.valueOf(cartItem.getQuantity()));
@@ -157,50 +159,44 @@ public class CartServlet extends HttpServlet {
             productDiscounts = productDiscounts.add(original.subtract(discounted));
         }
 
-        BigDecimal subTotal = BigDecimal.ZERO;
-        try {
-            subTotal = cartService.calculateSubTotal(cartItems);
-        } catch (Exception e) {
-            LOGGER.severe("Error calculating subtotal: " + e.getMessage());
-        }
+        // Tính tổng tiền
+        BigDecimal subTotal = cartService.calculateSubTotal(cartItems);
         BigDecimal discountAmount = (BigDecimal) session.getAttribute("discountAmount");
         discountAmount = discountAmount != null ? discountAmount.add(productDiscounts) : productDiscounts;
-        session.setAttribute("discountAmount", discountAmount);
         BigDecimal total = subTotal.subtract(discountAmount != null ? discountAmount : BigDecimal.ZERO);
 
+        // Truyền dữ liệu tới JSP
         request.setAttribute("cartItems", cartItems);
         request.setAttribute("groupedCartItems", groupedCartItems);
-        request.setAttribute("sellerNames", sellerNames); // Truyền tên seller vào JSP
+        request.setAttribute("sellerNames", sellerNames);
         request.setAttribute("cartItemImages", cartItemImages);
         request.setAttribute("discountedPrices", discountedPrices);
         request.setAttribute("itemTotals", itemTotals);
         request.setAttribute("subTotal", subTotal);
         request.setAttribute("discountAmount", discountAmount);
         request.setAttribute("total", total);
+        session.setAttribute("discountAmount", discountAmount);
 
         LOGGER.info("Forwarding to /views/cart.jsp with cartItems size: " + cartItems.size());
         request.getRequestDispatcher("/views/cart.jsp").forward(request, response);
+
+    } catch (Exception e) {
+        LOGGER.severe("Error in viewCart: " + e.getMessage());
+        request.setAttribute("errorMessage", "Lỗi khi tải giỏ hàng: " + e.getMessage());
+        request.getRequestDispatcher("/views/cart.jsp").forward(request, response);
     }
+}
     private Map<Integer, List<Cart>> groupCartItemsBySellerID(List<Cart> cartItems) {
         return cartItems.stream()
                 .filter(cartItem -> cartItem != null && cartItem.getProductID() != null && cartItem.getProductID().getSellerID() != null)
                 .collect(Collectors.groupingBy(
                         cartItem -> cartItem.getProductID().getSellerID().getUserID(),
-                        HashMap::new,
+                        LinkedHashMap::new,
                         Collectors.toList()
                 ));
     }
     private void addToCart(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Bạn cần đăng nhập để mua ngay.");
-            return;
-        }
-        
         int productId = Integer.parseInt(request.getParameter("productID"));
         int quantity = Integer.parseInt(request.getParameter("quantity") != null ? request.getParameter("quantity") : "1");
 
@@ -217,7 +213,8 @@ public class CartServlet extends HttpServlet {
             return;
         }
 
-        
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
         if (user == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.");

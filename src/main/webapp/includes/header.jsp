@@ -12,11 +12,11 @@
                         <span><a href="${pageContext.request.contextPath}/admin?action=hoso" class="text-banner">Hồ sơ của bạn</a></span>
                     </c:when>
                     <c:when test="${userRole == 2}">
-                        <span><a href="${pageContext.request.contextPath}/seller" class="text-banner">Kênh bán hàng</a></span>
-                        <span><a href="${pageContext.request.contextPath}/profile" class="text-banner">Hồ sơ của bạn</a></span>
+                        <span><a href="${pageContext.request.contextPath}/seller?action=sellerPage" class="text-banner">Kênh bán hàng</a></span>
+                        <span><a href="${pageContext.request.contextPath}/seller?action=sellerPage" class="text-banner">Hồ sơ của bạn</a></span>
                     </c:when>
                     <c:when test="${userRole == 3}">
-                        <span><a href="${pageContext.request.contextPath}/profile" class="text-banner">Hồ sơ của bạn</a></span>
+                        <span><a href="${pageContext.request.contextPath}/user?action=userPage" class="text-banner">Hồ sơ của bạn</a></span>
                         <span><a href="${pageContext.request.contextPath}/SellerRegistrationServlet" class="text-banner">Đăng ký bán hàng</a></span>
                     </c:when>
                     <c:otherwise>

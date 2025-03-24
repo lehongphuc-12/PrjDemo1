@@ -1,7 +1,7 @@
 <%-- 
-    Document   : order_history
-    Created on : Mar 7, 2025, 12:56:37 AM
-    Author     : nguyenanh
+    Document   : ThongBao
+    Created on : Mar 13, 2025, 6:18:02 PM
+    Author     : ASUS
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -12,6 +12,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h1>Thông báo</h1>
     </body>
 </html>

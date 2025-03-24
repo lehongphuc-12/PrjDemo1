@@ -8,7 +8,7 @@ console.log("REVIEW JS");
         console.log("SUBMIT REVIEW");
 
         let productID = $('#productID').val();
-        let rating = $('.fa-star.checked').length; // Lấy số sao đã chọn
+        let rating = $(this).closest('.create-review').find('.fa-star.checked').length;
         let comment = $('#comment').val();
 
         if (rating === 0) {
@@ -32,7 +32,7 @@ console.log("REVIEW JS");
                 $('.list-reviews').html(response); // Cập nhật danh sách đánh giá
                 $('#comment').val(""); // Đặt lại nội dung ô nhập nhận xét
                 $('.fa-star').removeClass('checked'); // Bỏ chọn sao sau khi gửi đánh giá
-                $('.review-form').css('display', 'none');
+                $('.review-form.create-review').css('display', 'none');
                 $('.review-success').html("Bạn đã đánh giá sản phẩm thành công");
                 $('.has-reviewed').css('display', 'none');
                
@@ -114,7 +114,7 @@ $(document).on("click", ".btn-confirm-update-review", function (e) {
                 $('.list-reviews').html(response); // Cập nhật danh sách đánh giá
                 $('.has-reviewed').css('display', 'none');
                 $('.review-success').html("Bạn đã cập nhật đánh giá sản phẩm thành công");
-               
+                updateForm.css('display','none');
             },
             error: function(xhr) {
                 console.error("Lỗi:", xhr.responseText);
@@ -143,6 +143,12 @@ $(document).on("click", ".btn-confirm-update-review", function (e) {
 
     // Đưa dữ liệu vào form cập nhật
     let updateForm = $(".update-review-container"); // Giữ đúng phạm vi form
+    if(!updateForm){
+        console.log("KO TIM THAY UPDATE FORM");
+    }else{
+        console.log(updateForm.length);
+    }
+    
     updateForm.find("#comment").val(reviewText);
     updateForm.find("#rating").val(currentRating);
     updateForm.find("#reviewID").val(reviewID);

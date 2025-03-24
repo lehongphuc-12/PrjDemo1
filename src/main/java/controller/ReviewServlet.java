@@ -24,6 +24,7 @@ public class ReviewServlet extends HttpServlet {
     private  ReviewService reviewService;
     private OrderService orderService;
     
+    @Override
     public void init(){
         orderService = new OrderService();
         reviewService = new ReviewService();
@@ -155,10 +156,10 @@ public class ReviewServlet extends HttpServlet {
 
             // Lưu đánh giá vào database
             Review review = new Review(rating, comment, new Date(), product, user);
-            new ReviewDAO().create(review);
+            reviewService.createReview(review);
 
             // Lấy danh sách đánh giá mới nhất
-            List<Review> reviews = new ReviewDAO().findByProductId(productID);
+            List<Review> reviews = reviewService.findReviewsByProductID(productID);
 
             // Render danh sách đánh giá thành HTML
             String renderedHTML = renderReviewsHTML(reviews,user);
@@ -193,7 +194,7 @@ public class ReviewServlet extends HttpServlet {
                 reviewService.deleteReview(reID);
                 
                  // Lấy danh sách đánh giá mới nhất
-                List<Review> reviews = new ReviewDAO().findByProductId(proID);
+                List<Review> reviews = reviewService.findReviewsByProductID(proID);
 
                 // Render danh sách đánh giá thành HTML
                 String renderedHTML = renderReviewsHTML(reviews,user);
@@ -235,7 +236,7 @@ public class ReviewServlet extends HttpServlet {
                 reviewService.updateReview(review);
                 
                  // Lấy danh sách đánh giá mới nhất
-                List<Review> reviews = new ReviewDAO().findByProductId(proID);
+                List<Review> reviews = reviewService.findReviewsByProductID(proID);
 
                 // Render danh sách đánh giá thành HTML
                 String renderedHTML ="";

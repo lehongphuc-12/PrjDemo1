@@ -177,4 +177,55 @@ public class EmailService {
 
         sendEmail(toEmail, subject, content, true);
     }
+    public static void sendSellerRegistrationStatusEmail(String toEmail, String username, String shopName, String status) throws MessagingException {
+        String subject = "Thông báo trạng thái đăng ký người bán - Hội Chợ Nông Sản";
+        String statusMessage = status.equals("approved") ? "Đã được phê duyệt" : "Đã bị từ chối";
+        String statusColor = status.equals("approved") ? "#28a745" : "#dc3545"; // Green for approved, red for rejected
+
+        // Create HTML content for the email
+        String content = "<html>" +
+                "<head>" +
+                "<style>" +
+                "body { font-family: Arial, sans-serif; color: #333; line-height: 1.6; margin: 0; padding: 0; background-color: #f4f4f4; }" +
+                ".container { width: 80%; max-width: 600px; margin: 20px auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }" +
+                ".header { text-align: center; padding: 20px 0; background-color: " + statusColor + "; color: #ffffff; border-radius: 8px 8px 0 0; }" +
+                ".header h2 { margin: 0; font-size: 24px; }" +
+                ".content { padding: 20px; }" +
+                ".content p { margin: 10px 0; }" +
+                ".status { font-size: 18px; font-weight: bold; color: " + statusColor + "; text-align: center; margin: 20px 0; }" +
+                ".footer { text-align: center; padding: 10px 0; color: #777; font-size: 14px; border-top: 1px solid #ddd; margin-top: 20px; }" +
+                ".footer a { color: #28a745; text-decoration: none; }" +
+                "</style>" +
+                "</head>" +
+                "<body>" +
+                "<div class='container'>" +
+                "<p style='color: #777; font-size: 12px;'>Đây không phải thư rác. Vui lòng thêm " + FROM_EMAIL + " vào danh bạ để nhận email trong hộp thư đến.</p>" +
+                "<div class='header'>" +
+                "<h2>Thông báo trạng thái đăng ký người bán</h2>" +
+                "</div>" +
+                "<div class='content'>" +
+                "<p>Chào <strong>" + username + "</strong>,</p>" +
+                "<p>Cảm ơn bạn đã đăng ký trở thành người bán tại <strong>Hội Chợ Nông Sản</strong>!</p>" +
+                "<p>Chúng tôi xin thông báo rằng yêu cầu đăng ký của bạn với tên cửa hàng <strong>" + shopName + "</strong> đã được xử lý.</p>" +
+                "<div class='status'>" +
+                "Trạng thái: " + statusMessage +
+                "</div>" +
+                (status.equals("approved") ?
+                "<p>Chúc mừng bạn! Bạn đã chính thức trở thành người bán tại Hội Chợ Nông Sản. Bạn có thể bắt đầu đăng sản phẩm và bán hàng ngay bây giờ.</p>" :
+                "<p>Rất tiếc, yêu cầu của bạn đã bị từ chối. Nếu bạn có bất kỳ thắc mắc nào, vui lòng liên hệ với chúng tôi để được hỗ trợ.</p>") +
+                "<p>Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi qua email <a href='mailto:support@hoichonongsan.com'>support@hoichonongsan.com</a> hoặc số điện thoại <strong>0123 456 789</strong>.</p>" +
+                "<p>Trân trọng,</p>" +
+                "<p><strong>Hội Chợ Nông Sản</strong></p>" +
+                "</div>" +
+                "<div class='footer'>" +
+                "<p>© 2025 Hội Chợ Nông Sản. All rights reserved.</p>" +
+                "<p><a href='https://hoichonongsan.com'>Truy cập website của chúng tôi</a></p>" +
+                "</div>" +
+                "</div>" +
+                "</body>" +
+                "</html>";
+
+        sendEmail(toEmail, subject, content, true);
+    }
+
 }

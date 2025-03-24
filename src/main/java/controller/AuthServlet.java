@@ -185,7 +185,7 @@ public class AuthServlet extends HttpServlet {
     private String getRedirectUrlByRole(int roleID) {
         return switch (roleID) {
             case 1 -> "/admin";
-            case 2 -> "/views/sellerPage.jsp";
+            case 2 -> "/seller?action=sellerPage";
             case 3 -> "/products";
             default -> "/products";
         };

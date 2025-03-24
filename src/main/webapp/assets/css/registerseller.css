@@ -1,6 +1,6 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f4f8;
+    background: #ffffff; /* Added a soft gradient background */
     margin: 0;
     padding: 0;
     display: flex;
@@ -9,85 +9,132 @@ body {
     min-height: 100vh;
 }
 
-.form-container {
-    max-width: 500px;
+.profile-container {
+    max-width: 600px;
     width: 100%;
     margin: 50px auto;
     padding: 30px;
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border: none;
-    transition: transform 0.3s ease;
+    border: 2px solid #27ae60; /* Added a green border to the container */
 }
 
-.form-container:hover {
-    transform: translateY(-5px);
-}
-
-.form-container h2 {
+.profile-container h2 {
     text-align: center;
     color: #2c3e50;
     margin-bottom: 30px;
     font-size: 26px;
     font-weight: 600;
     letter-spacing: 1px;
+    position: relative;
 }
 
-.form-group {
+.profile-container h2::after {
+    content: '';
+    width: 50px;
+    height: 3px;
+    background-color: #27ae60; /* Green underline for the title */
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
     margin-bottom: 20px;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    color: #34495e;
-    font-size: 14px;
+table th, table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #dfe6e9;
+}
+
+table th {
+    background-color: #27ae60; /* Green background for "Thuộc Tính" and "Giá Trị" */
+    color: white;
     font-weight: 500;
 }
 
-.form-group input {
+table td {
+    background-color: #f9fbfc;
+    color: #2d3436;
+}
+
+table tr:nth-child(even) td {
+    background-color: #e6f4ea; /* Light green for alternating rows */
+}
+
+table tr:hover td {
+    background-color: #d4edda; /* Slightly darker green on hover */
+}
+
+table input {
     width: 100%;
-    padding: 12px;
+    padding: 8px;
     box-sizing: border-box;
-    border: 1px solid #dfe6e9;
+    border: 1px solid #27ae60; /* Green border for input fields */
     border-radius: 5px;
     font-size: 14px;
     color: #2d3436;
-    background-color: #f9fbfc;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #ffffff;
 }
 
-.form-group input[readonly] {
+table input[readonly] {
     background-color: #e9ecef;
     cursor: not-allowed;
 }
 
-.form-group input:focus {
+table input:focus {
     outline: none;
-    border-color: #27ae60;
+    border-color: #219653; /* Darker green on focus */
     box-shadow: 0 0 5px rgba(39, 174, 96, 0.3);
 }
 
-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #27ae60;
+.btn-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 12px 30px;
     color: white;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.1s ease;
+    transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
 }
 
-button:hover {
-    background-color: #219653;
+.btn-info {
+    background-color: #17a2b8; /* Cyan color for "Gửi yêu cầu" */
+    box-shadow: 0 2px 5px rgba(23, 162, 184, 0.3); /* Added shadow */
+}
+
+.btn-info:hover {
+    background-color: #138496; /* Darker cyan on hover */
     transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(23, 162, 184, 0.5);
 }
 
-button:active {
+.btn-primary {
+    background-color: #007bff; /* Blue color for "Quay lại" */
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3); /* Added shadow */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.5);
+}
+
+.btn:active {
     transform: translateY(0);
 }
 

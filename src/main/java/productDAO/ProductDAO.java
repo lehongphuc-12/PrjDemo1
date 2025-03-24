@@ -2,10 +2,12 @@
 package productDAO;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.StoredProcedureQuery;
 import jakarta.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.List;
 import model.Category;
 import model.CategoryGroup;
@@ -267,7 +269,7 @@ public class ProductDAO implements IProductDAO{
             int offset = (pageNumber - 1) * pageSize; // Tính vị trí bắt đầu            
 
             String jpql = "SELECT p FROM Product p " +
-                          "WHERE p.categoryID.categoryID = :categoryId " +
+                          "WHERE p.categoryID.categoryID = :categoryId and p.status = true " +
                           "GROUP BY p " + orderProducts;
                           
             TypedQuery<Product> query = em.createQuery(jpql, Product.class);
@@ -326,7 +328,7 @@ public class ProductDAO implements IProductDAO{
             int offset = (pageNumber - 1) * pageSize; // Tính vị trí bắt đầu
 
             String jpql = "SELECT p FROM Product p " +
-                          "WHERE p.categoryID.groupID.groupID = :categoryGroupId " + // Lọc theo CategoryGroup
+                          "WHERE p.categoryID.groupID.groupID = :categoryGroupId and p.status = true " + // Lọc theo CategoryGroup
                           "GROUP BY p " +
                           orderProducts;
 
@@ -384,7 +386,7 @@ public class ProductDAO implements IProductDAO{
             
             int offset = (pageNumber - 1) * pageSize; // Tính vị trí bắt đầu            
 
-            String jpql = "SELECT p FROM Product p WHERE p.productName LIKE :productName "+
+            String jpql = "SELECT p FROM Product p WHERE p.productName LIKE :productName and p.status = true "+
                            "GROUP BY p " +
                            orderProducts;
             TypedQuery<Product> query = em.createQuery(jpql, Product.class); 
@@ -453,7 +455,7 @@ public class ProductDAO implements IProductDAO{
         public List<Product> getTopSellingProductsDAO(List<Category> categories, int limit) {
             try(EntityManager em = JpaUtil.getEntityManager()){
                 String jpql = "SELECT p FROM Product p " +
-                      "WHERE p.categoryID IN :categories " +
+                      "WHERE p.categoryID IN :categories and p.status = true " +
                       "GROUP BY p " + orderProducts ;
 
                 TypedQuery<Product> query = em.createQuery(jpql, Product.class);
@@ -477,7 +479,7 @@ public class ProductDAO implements IProductDAO{
     
         public List<Category> getAllCategoryDAO(int id){
             try(EntityManager em = JpaUtil.getEntityManager()){
-                return em.createQuery("select c from Category c where c.groupID.groupID  = :id")
+                return em.createQuery("select c from Category c where c.groupID.groupID  = :id",Category.class)
                         .setParameter("id", id)
                         .getResultList();
             }
@@ -581,33 +583,49 @@ public class ProductDAO implements IProductDAO{
         }
 
     public List<Product> getSimilarProducts(int productID) {
-        EntityManager em = JpaUtil.getEntityManager();
-        try {
-            StoredProcedureQuery query = em.createStoredProcedureQuery("GetSimilarProducts6", Product.class);
-            query.registerStoredProcedureParameter("ProductID", Integer.class, jakarta.persistence.ParameterMode.IN);
-            query.setParameter("ProductID", productID);
-            query.setMaxResults(10);
-            
-            // Thực thi và lấy danh sách kết quả
-            @SuppressWarnings("unchecked")
-            List<Product> resultList = query.getResultList();
-            
-            for(Product p :resultList){
-                    Hibernate.initialize(p.getProductImageCollection()); // Load ảnh nếu FetchType.LAZY
-                Hibernate.initialize(p.getDiscountCollection()); // Load ảnh nếu FetchType.LAZY
+    EntityManagerFactory emf = JpaUtil.getEntityManagerFactory(); // Lấy factory thay vì entity manager trực tiếp
+    EntityManager em = emf.createEntityManager(); // Luôn tạo EntityManager mới
+    List<Product> resultList = new ArrayList<>();
+
+    try {
+        em.getTransaction().begin(); // Bắt đầu transaction (nếu cần)
+
+        StoredProcedureQuery query = em.createStoredProcedureQuery("GetSimilarProducts6", Product.class);
+        query.registerStoredProcedureParameter("ProductID", Integer.class, jakarta.persistence.ParameterMode.IN);
+        query.setParameter("ProductID", productID);
+
+        resultList = query.getResultList(); // Lấy danh sách sản phẩm
+
+        // Đảm bảo các collection được load trước khi đóng session
+        if (resultList != null && !resultList.isEmpty()) {
+            for (Product p : resultList) {
+                p = em.merge(p); // Đảm bảo đối tượng nằm trong persistence context
+                Hibernate.initialize(p.getProductImageCollection());
+                Hibernate.initialize(p.getDiscountCollection());
                 Hibernate.initialize(p.getOrderDetailCollection());
                 Hibernate.initialize(p.getReviewCollection());
                 Hibernate.initialize(p.getProductViewCollection());
-                }
-            
-            return resultList;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            em.close();
+            }
+        }
+
+        em.getTransaction().commit(); // Commit transaction (nếu có)
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        if (em.getTransaction().isActive()) {
+            em.getTransaction().rollback(); // Rollback nếu có lỗi
+        }
+    } finally {
+        if (em.isOpen()) {
+            em.close(); // Đóng EntityManager
         }
     }
+
+    return resultList;
+}
+
+
+
     @Override
     public void update(Product product) {
         EntityManager em = JpaUtil.getEntityManager();
@@ -627,19 +645,7 @@ public class ProductDAO implements IProductDAO{
     public static void main(String[] args) {
         String orderProducts =  "ORDER BY (0.7 * COALESCE(SIZE(p.orderDetailCollection), 0) + 0.3 * COALESCE(SIZE(p.productViewCollection), 0)) DESC";
         ProductDAO dao = new ProductDAO();
-        
-        long startTime = System.nanoTime(); // Bắt đầu đo
-        dao.searchProductsByNameDAO("cá", 10, 1, orderProducts).forEach(p -> System.out.println(p));
-        long endTime = System.nanoTime(); // Kết thúc đo
-        long duration = endTime - startTime; // Thời gian chạy (nanoseconds)
-
-        System.out.println("Thời gian chạy: " + duration / 1_000_000.0 + " ms"); 
-        //C2 : 1376-1500
-        //C1:  1450-1540  
-        System.out.println(dao.getSimilarProducts(1));
-//        System.out.println("COUNT: "+ dao.countProductsByCategoryGroupId(2));
-
-        System.out.println(dao.findById(2).getProductImageCollection());
+        System.out.println(dao.getSimilarProducts(82));
     }
     
 }

@@ -12,11 +12,12 @@ import utils.JpaUtil;
 public class ReviewDAO implements IReviewDAO {
 
     @Override
-    public Review create(Review review) {
+    public Review createDAO(Review review) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(review);
+            em.flush();
             em.getTransaction().commit();
             return review;
         } catch (Exception e) {
@@ -29,7 +30,7 @@ public class ReviewDAO implements IReviewDAO {
     }
 
     @Override
-    public List<Review> findByProductId(int productId) {
+    public List<Review> findByProductIdDAO(int productId) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
             TypedQuery<Review> query = em.createQuery(
@@ -112,6 +113,8 @@ public class ReviewDAO implements IReviewDAO {
     
     public static void main(String[] args) {
         ReviewDAO dao = new ReviewDAO();        
-        System.out.println(dao.hasReviewedDAO(125, 105));
+        System.out.println(dao.hasReviewedDAO(125, 4));
+        dao.createDAO(new Review(4,"ngon",new Date(),new Product(4),new User(125)));
+        System.out.println(dao.findByProductIdDAO(4));
     }
 }

@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.User;
 
-//@WebFilter(filterName = "RoleFilter", urlPatterns = {"/*"})
+@WebFilter(filterName = "RoleFilter", urlPatterns = {"/*"})
 public class RoleFilter implements Filter {
 
     private static final boolean debug = true;

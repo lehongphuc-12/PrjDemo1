@@ -31,7 +31,18 @@ import java.math.BigDecimal;
     @NamedQuery(name = "OrderDetail.findAll", query = "SELECT o FROM OrderDetail o"),
     @NamedQuery(name = "OrderDetail.findByOrderD1", query = "SELECT o FROM OrderDetail o WHERE o.orderD1 = :orderD1"),
     @NamedQuery(name = "OrderDetail.findByQuantity", query = "SELECT o FROM OrderDetail o WHERE o.quantity = :quantity"),
-    @NamedQuery(name = "OrderDetail.findByPrice", query = "SELECT o FROM OrderDetail o WHERE o.price = :price")})
+    @NamedQuery(name = "OrderDetail.findByPrice", query = "SELECT o FROM OrderDetail o WHERE o.price = :price"),
+    @NamedQuery(
+            name = "OrderDetail.getOrderDetailBySellerId",
+            query = "SELECT od FROM OrderDetail od WHERE od.productID.sellerID.userID = :sellerID"
+    ),
+    @NamedQuery(
+            name = "OrderDetail.getOrderDetailByUserId",
+            query = "SELECT od FROM OrderDetail od WHERE od.orderID.userID.userID = :userID"
+    ),
+}
+        
+)
 public class OrderDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;

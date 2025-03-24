@@ -71,19 +71,6 @@ public class ProductService {
         return list;
     }
 
-    public static void main(String[] args) {
-
-        ProductService ps = new ProductService();
-
-        Map<CategoryGroup, List<Product>> list = ps.listCategoryGroupProductsDAO(10);
-        
-//
-//        for (CategoryGroup key : list.keyCollection()) {
-//            System.out.println("CategoryGroup :" + key.getGroupName() + "list : \n" + "\t" + list.get(key));
-//        }
-
-//        System.out.println(ps.listTop10Products());
-    }
     public List<Product> getProductsByName(String productName, int page, int pageSize) {
         return productDAO.findByProductNameDAO(productName, page, pageSize);
     }
@@ -180,10 +167,10 @@ public class ProductService {
         return productDAO.getProductsBySellerID(sellerID);
     }
     public List<Review> getReviewsByProductId(int productId) {
-        return reviewDAO.findByProductId(productId);
+        return reviewDAO.findByProductIdDAO(productId);
     }
     public void createReview(Review review) {
-        reviewDAO.create(review);
+        reviewDAO.createDAO(review);
     }
     
     public List<Product> getSimilarProducts(int productID) {
@@ -216,5 +203,10 @@ public class ProductService {
     
     public double getAverageRatingBySellerId(int sellerID){
         return productDAO.getAverageRatingBySellerIdDAO(sellerID);
+    }
+    
+    public static void main(String[] args) {
+        ProductService p = new ProductService();
+        System.out.println(p.getSimilarProducts(82));
     }
 }

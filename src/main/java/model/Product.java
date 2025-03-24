@@ -15,7 +15,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.NamedStoredProcedureQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.ParameterMode;
+import jakarta.persistence.StoredProcedureParameter;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -45,6 +48,13 @@ import java.util.List;
     @NamedQuery(name = "Product.findByQuantity", query = "SELECT p FROM Product p WHERE p.quantity = :quantity"),
     @NamedQuery(name = "Product.findByUnit", query = "SELECT p FROM Product p WHERE p.unit = :unit"),
     @NamedQuery(name = "Product.findByCreatedDate", query = "SELECT p FROM Product p WHERE p.createdDate = :createdDate")})
+@NamedStoredProcedureQuery(
+    name = "GetSimilarProducts6",
+    procedureName = "GetSimilarProducts6",
+    resultClasses = Product.class,
+    parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "ProductID")
+    })
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -89,6 +99,8 @@ public class Product implements Serializable {
     @JoinColumn(name = "SellerID", referencedColumnName = "UserID")
     @ManyToOne(optional = false)
     private User sellerID;
+    @Column(name = "Status")
+    private Boolean status;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productID")
     private Collection<Review> reviewCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productID")
@@ -150,6 +162,14 @@ public class Product implements Serializable {
         this.quantity = quantity;
     }
 
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+    
     public String getUnit() {
         return unit;
     }

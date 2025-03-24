@@ -1,6 +1,7 @@
 
 package service;
 
+import java.util.List;
 import model.Review;
 import reviewDAO.IReviewDAO;
 import reviewDAO.ReviewDAO;
@@ -24,6 +25,12 @@ public class ReviewService {
     
     public void updateReview(Review review){
         reviewDAO.updateDAO(review);
+    }
+    public void createReview(Review review){
+        reviewDAO.createDAO(review);
+    }
+    public List<Review> findReviewsByProductID(int productID){
+        return reviewDAO.findByProductIdDAO(productID);
     }
 }
 

@@ -8,6 +8,7 @@ import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -50,7 +51,7 @@ public class CategoryGroup implements Serializable {
     @Size(max = 50)
     @Column(name = "GroupDescription")
     private String groupDescription;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupID")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupID",  fetch = FetchType.EAGER)
     private Collection<Category> categoryCollection;
 
     public CategoryGroup() {

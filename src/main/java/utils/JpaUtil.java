@@ -12,6 +12,9 @@ public class JpaUtil {
         emf = Persistence.createEntityManagerFactory("jpa-demo-pu");
     }
 
+    public static EntityManagerFactory getEntityManagerFactory() {
+        return emf;
+    }
     public static EntityManager getEntityManager() {
         return emf.createEntityManager();
     }

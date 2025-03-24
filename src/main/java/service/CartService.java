@@ -3,8 +3,12 @@ package service;
 import cartDAO.CartDAO;
 import cartDAO.ICartDAO;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import model.Cart;
 import model.Discount;
 import model.Product;
@@ -15,6 +19,7 @@ public class CartService {
 
     private final ICartDAO cartDAO;
 
+    private static final ThreadLocal<Integer> lastAddedSellerId = new ThreadLocal<>();
     public CartService() {
         this.cartDAO = new CartDAO();
     }
@@ -28,23 +33,36 @@ public class CartService {
             throw new IllegalArgumentException("Not enough stock available");
         }
 
-        // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng của user chưa
         Cart existingCart = cartDAO.findCartByUserAndProduct(user, product.getProductID());
+        LocalDateTime now = LocalDateTime.now();
 
         if (existingCart != null) {
-            // Nếu sản phẩm đã tồn tại, cập nhật số lượng
+            LocalDateTime addedTime = existingCart.getAddedDate() != null ?
+                    existingCart.getAddedDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime() :
+                    now;
             int newQuantity = existingCart.getQuantity() + quantity;
-            // Kiểm tra lại số lượng tồn kho sau khi cộng dồn
             if (product.getQuantity().compareTo(BigDecimal.valueOf(newQuantity)) < 0) {
                 throw new IllegalArgumentException("Not enough stock available after updating quantity");
             }
+            // Cập nhật số lượng và addedDate thay vì xóa và thêm lại
             existingCart.setQuantity(newQuantity);
+            existingCart.setAddedDate(new Date()); // Cập nhật thời gian mới nhất
             cartDAO.updateCart(existingCart);
+            lastAddedSellerId.set(product.getSellerID().getUserID()); // Lưu sellerID để sắp xếp
         } else {
             // Nếu sản phẩm chưa tồn tại, thêm mới
             Cart cart = new Cart(user, product, quantity, product.getPrice());
             cartDAO.addCart(cart);
+            lastAddedSellerId.set(product.getSellerID().getUserID()); // Lưu sellerID
         }
+    }
+
+    public static Integer getLastAddedSellerId() {
+        return lastAddedSellerId.get();
+    }
+
+    public static void clearLastAddedSellerId() {
+        lastAddedSellerId.remove();
     }
 
     public BigDecimal updateCartItem(User user, int productId, int quantity) {
@@ -85,6 +103,33 @@ public class CartService {
     public List<Cart> getCartItemsByUser(User user) {
         if (user == null) throw new IllegalArgumentException("User cannot be null");
         List<Cart> cartItems = cartDAO.findCartByUser(user);
+        
+        // Lọc các sản phẩm trong giỏ hàng quá 30 ngày
+        LocalDateTime now = LocalDateTime.now();
+        cartItems = cartItems.stream()
+                .filter(cart -> {
+                    if (cart.getAddedDate() == null) return true; // Giữ lại nếu không có ngày thêm
+                    LocalDateTime addedTime = cart.getAddedDate().toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDateTime();
+                    return addedTime.plusDays(30).isAfter(now); // Giữ lại nếu chưa quá 30 ngày
+                })
+                .collect(Collectors.toList());
+
+        // Xóa các sản phẩm quá hạn khỏi cơ sở dữ liệu
+        List<Integer> expiredCartIds = cartItems.stream()
+                .filter(cart -> cart.getAddedDate() != null && 
+                        cart.getAddedDate().toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDateTime()
+                                .plusDays(30)
+                                .isBefore(now))
+                .map(Cart::getCartID)
+                .collect(Collectors.toList());
+        if (!expiredCartIds.isEmpty()) {
+            expiredCartIds.forEach(cartDAO::removeCart);
+        }
+
         return cartItems != null ? cartItems : Collections.emptyList();
     }
 

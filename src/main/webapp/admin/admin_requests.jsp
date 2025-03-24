@@ -21,7 +21,6 @@
     </div>
     <table>
         <tr>
-            <th>ID Yêu cầu</th>
             <th>ID Người dùng</th>
             <th>Tên cửa hàng</th>
             <th>Trạng thái</th>
@@ -29,7 +28,6 @@
         </tr>
         <c:forEach var="request" items="${requestList}">
             <tr>
-                <td>${request.requestID}</td>
                 <td>${request.user != null ? request.user.userID : 'N/A'}</td>
                 <td>${request.shopName}</td>
                 <td>${request.status}</td>
