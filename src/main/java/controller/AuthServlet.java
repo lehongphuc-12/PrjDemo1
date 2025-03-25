@@ -93,7 +93,7 @@ public class AuthServlet extends HttpServlet {
                 session.setAttribute("user", user);
                 setLoginCookies(response, email, password, "on".equals(remember));
                 String redirectUrl = getRedirectUrlByRole(user.getRoleID().getRoleID());
-                response.sendRedirect("/demo1/products");
+                response.sendRedirect(request.getContextPath() + redirectUrl);
             } else {
 //                String errorMessage = "Sai email hoặc mật khẩu "+(Integer) session.getAttribute("failedAttempts")+" lần";
 //                if (fail >= 3) { // Khi thất bại 3 lần, hiển thị gợi ý
@@ -108,7 +108,7 @@ public class AuthServlet extends HttpServlet {
 
             }
         } catch (Exception e) {
-            request.setAttribute("error", "Đã xảy ra lỗi, vui lòng thử lại!");
+            request.setAttribute("errorMessage", "Đã xảy ra lỗi, vui lòng thử lại!");
             request.setAttribute("rememberEmail", email);
             request.setAttribute("rememberPassword", password);
             request.getRequestDispatcher("/views/login.jsp").forward(request, response);

@@ -79,7 +79,7 @@ public class Product implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "Quantity")
-    private BigDecimal quantity;
+    private Integer quantity;
     @Size(max = 50)
     @Column(name = "Unit")
     private String unit;
@@ -115,7 +115,7 @@ public class Product implements Serializable {
         this.productID = productID;
     }
 
-    public Product(Integer productID, String productName, BigDecimal price, BigDecimal quantity) {
+    public Product(Integer productID, String productName, BigDecimal price, Integer quantity) {
         this.productID = productID;
         this.productName = productName;
         this.price = price;
@@ -154,11 +154,11 @@ public class Product implements Serializable {
         this.price = price;
     }
 
-    public BigDecimal getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(BigDecimal quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 

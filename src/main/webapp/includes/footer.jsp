@@ -3,7 +3,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
-<div id="alert-container"></div>
+<div id="alert-container">
+    
+<!--            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <div class="alert-title">
+                    <strong>Thành công</strong> 
+                </div>
+                <div class="alert-message">
+                    Thêm sản phẩm thành công asdasddsdasdasdadaa fasssffa
+                </div>
+            </div>-->
+    
+</div>
 <footer>
         <div class="container">
             <div class="content__footer">

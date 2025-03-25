@@ -91,7 +91,7 @@ public class CategoryServlet extends HttpServlet {
                 typeOfProducts = search;
                 
                 request.setAttribute("search", search);
-                break;
+            break;
                         
             default :
                 listPro = categoryService.getProductsByCategoryId(ID, SIZE_PAGE, page,ORDER_PRODUCTS);

@@ -7,19 +7,18 @@ import utils.JpaUtil;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class CheckoutService {
     private static final Logger LOGGER = Logger.getLogger(CheckoutService.class.getName());
     private final CartService cartService;
-    private final ProductService productService;
     private final OrderService orderService;
     private final PaymentService paymentService;
 
     public CheckoutService() {
         this.cartService = new CartService();
-        this.productService = new ProductService();
         this.orderService = new OrderService();
         this.paymentService = new PaymentService();
     }
@@ -40,12 +39,11 @@ public class CheckoutService {
         if (discountAmount != null && discountAmount.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Discount amount cannot be negative");
         }
-
         EntityManager em = JpaUtil.getEntityManager();
         try {
             em.getTransaction().begin();
 
-            LOGGER.info("Starting checkout process for user: " + user.getUserID());
+            LOGGER.log(Level.INFO, "Starting checkout process for user: {0}", user.getUserID());
 
             BigDecimal subTotal = cartService.calculateSubTotal(cartItems);
             BigDecimal total = subTotal.subtract(discountAmount != null ? discountAmount : BigDecimal.ZERO);
@@ -66,7 +64,7 @@ public class CheckoutService {
             order.setPaymentMethodID(paymentMethod);
 
             orderService.createOrder(order);
-            LOGGER.info("Created order with ID: " + order.getOrderID());
+            LOGGER.log(Level.INFO, "Created order with ID: {0}", order.getOrderID());
 
             List<OrderDetail> orderDetails = cartItems.stream()
                     .map(cart -> new OrderDetail(null, cart.getQuantity(), cart.getPrice(), order, pendingStatus, cart.getProductID()))
@@ -76,7 +74,7 @@ public class CheckoutService {
                 orderService.addOrderDetail(detail);
             }
             order.setOrderDetailCollection(orderDetails);
-            LOGGER.info("Added " + orderDetails.size() + " order details");
+            LOGGER.log(Level.INFO, "Added {0} order details", orderDetails.size());
 
             Payment payment = new Payment();
             payment.setOrderID(order);
@@ -85,28 +83,33 @@ public class CheckoutService {
             payment.setPaymentDate(new Date());
             payment.setStatusID(paymentService.getPaymentStatusByName("Đang xử lý"));
             em.persist(payment);
-            LOGGER.info("Persisted payment for order ID: " + order.getOrderID());
+            LOGGER.log(Level.INFO, "Persisted payment for order ID: {0}", order.getOrderID());
 
             for (Cart cart : cartItems) {
-                Product product = cart.getProductID();
-                BigDecimal newStock = product.getQuantity().subtract(BigDecimal.valueOf(cart.getQuantity()));
-                if (newStock.compareTo(BigDecimal.ZERO) < 0) {
+                Product product = cart.getProductID(); // Đảm bảo getProduct() trả về Product
+
+                int currentStock = product.getQuantity(); // Lấy số lượng hiện có
+                int quantityToSubtract = cart.getQuantity(); // Lấy số lượng cần trừ
+
+                int newStock = currentStock - quantityToSubtract; // Tính số lượng mới
+
+                if (newStock < 0) {
                     throw new IllegalStateException("Insufficient stock for product: " + product.getProductName());
                 }
-                product.setQuantity(newStock);
-                em.merge(product);
+
+                product.setQuantity(newStock); // Cập nhật số lượng mới
+                em.merge(product); // Lưu thay đổi vào DB
             }
-            LOGGER.info("Updated stock for " + cartItems.size() + " products");
+
+            LOGGER.log(Level.INFO, "Updated stock for {0} products", cartItems.size());
 
             em.getTransaction().commit();
-            LOGGER.info("Checkout completed successfully for order ID: " + order.getOrderID());
+            LOGGER.log(Level.INFO, "Checkout completed successfully for order ID: {0}", order.getOrderID());
             return order;
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
             em.getTransaction().rollback();
-            LOGGER.severe("Failed to process checkout for user " + user.getUserID() + ": " + e.getMessage());
-            throw new RuntimeException("Failed to process checkout: " + e.getMessage(), e);
-        } finally {
-            em.close();
+            LOGGER.log(Level.SEVERE, "Failed to process checkout for user {0}: {1}", new Object[]{user.getUserID(), e.getMessage()});
+            throw new RuntimeException(e.getMessage() + "Failed to process checkout: ", e);
         }
     }
 }

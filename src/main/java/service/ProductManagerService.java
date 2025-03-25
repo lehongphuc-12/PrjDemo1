@@ -14,23 +14,19 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import model.Product;
 import model.ProductImage;
 import model.User;
 import utils.NameNormalizer;
 
-/**
- *
- * @author ASUS
- */
+
 public class ProductManagerService {
 
-    private ProductDao productDao;
-    private CityDao cityDao;
-    private CategoryDao cateDao;
-    private ImageProductDao imageDao;
+    private final ProductDao productDao;
+    private final CityDao cityDao;
+    private final CategoryDao cateDao;
+    private final ImageProductDao imageDao;
 
     public ProductManagerService() {
         productDao = new ProductDao();
@@ -56,7 +52,7 @@ public class ProductManagerService {
         product.setSellerID(user);
         product.setProductName(name);
         product.setPrice(BigDecimal.valueOf(price));
-        product.setQuantity(BigDecimal.valueOf(quantity));
+        product.setQuantity(quantity);
         product.setCityID(cityDao.findById(cityId));
         product.setCategoryID(cateDao.findById(categoryId));
         product.setDescription(description);
@@ -128,7 +124,7 @@ public class ProductManagerService {
         return imageDao.findByProductId(id);
     }
 
-    public void updateProduct(int id, String name, double price, double quantity, int cityId, int categoryId, String description, List<Part> fileParts, String uploadPath) throws IOException {
+    public void updateProduct(int id, String name, double price, int quantity, int cityId, int categoryId, String description, List<Part> fileParts, String uploadPath) throws IOException {
         Product product = productDao.findById(id);
         if (product == null) {
             throw new IOException("Không tìm thấy sản phẩm với ID: " + id);
@@ -137,7 +133,7 @@ public class ProductManagerService {
         // Cập nhật thông tin cơ bản
         product.setProductName(name);
         product.setPrice(BigDecimal.valueOf(price));
-        product.setQuantity(BigDecimal.valueOf(quantity));
+        product.setQuantity(quantity);
         product.setCityID(cityDao.findById(cityId));
         product.setCategoryID(cateDao.findById(categoryId));
         product.setDescription(description);

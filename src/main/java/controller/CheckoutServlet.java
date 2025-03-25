@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -119,8 +120,8 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     // Kiểm tra tồn kho trước khi xử lý
     for (Cart cart : selectedItems) {
         Product product = cart.getProductID();
-        if (product.getQuantity().compareTo(BigDecimal.valueOf(cart.getQuantity())) < 0) {
-            LOGGER.warning("Insufficient stock for product: " + product.getProductName());
+        if (product.getQuantity().compareTo(cart.getQuantity()) < 0) {
+            LOGGER.log(Level.WARNING, "Insufficient stock for product: {0}", product.getProductName());
             request.setAttribute("errorMessage", "Sản phẩm '" + product.getProductName() + "' không đủ hàng.");
             prepareCheckoutPage(request, selectedItems);
             request.setAttribute("paymentMethods", paymentMethodService.getAllPaymentMethods());
@@ -163,17 +164,17 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         } else {
             cartService.clearSelectedItems(user, productIds);
             clearSessionDiscount(request);
-            LOGGER.info("Checkout successful, redirecting to order confirmation for order: " + order.getOrderID());
+            LOGGER.log(Level.INFO, "Checkout successful, redirecting to order confirmation for order: {0}", order.getOrderID());
             response.sendRedirect(request.getContextPath() + "/order-confirmation?orderId=" + order.getOrderID());
         }
     } catch (IllegalStateException e) {
-        LOGGER.severe("Checkout error: " + e.getMessage());
+        LOGGER.log(Level.SEVERE, "Checkout error: {0}", e.getMessage());
         request.setAttribute("errorMessage", e.getMessage());
         prepareCheckoutPage(request, selectedItems);
         request.setAttribute("paymentMethods", paymentMethodService.getAllPaymentMethods());
         request.getRequestDispatcher("/views/checkout.jsp").forward(request, response);
-    } catch (Exception e) {
-        LOGGER.severe("Unexpected error during checkout: " + e.getMessage());
+    } catch (IOException e) {
+        LOGGER.log(Level.SEVERE, "Unexpected error during checkout: {0}", e.getMessage());
         request.setAttribute("errorMessage", "Đã xảy ra lỗi không mong muốn trong quá trình thanh toán. Vui lòng thử lại sau.");
         prepareCheckoutPage(request, selectedItems);
         request.setAttribute("paymentMethods", paymentMethodService.getAllPaymentMethods());
@@ -186,9 +187,9 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         String[] productIdsArray = productIdsParam.split(",");
         for (String id : productIdsArray) {
             try {
-                productIds.add(Integer.parseInt(id.trim()));
+                productIds.add(Integer.valueOf(id.trim()));
             } catch (NumberFormatException e) {
-                LOGGER.warning("Invalid product ID in checkout: " + id);
+                LOGGER.log(Level.WARNING, "Invalid product ID in checkout: {0}", id);
             }
         }
         return productIds;
@@ -200,14 +201,14 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         try {
             cartItems = cartService.getCartItemsByUser(user);
         } catch (Exception e) {
-            LOGGER.severe("Error fetching cart items: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Error fetching cart items: {0}", e.getMessage());
             request.setAttribute("errorMessage", "Lỗi khi tải giỏ hàng. Vui lòng thử lại.");
             request.getRequestDispatcher("/views/cart.jsp").forward(request, response);
             return null;
         }
 
         if (cartItems == null || cartItems.isEmpty()) {
-            LOGGER.warning("Cart is empty for user: " + user.getUserID());
+            LOGGER.log(Level.WARNING, "Cart is empty for user: {0}", user.getUserID());
             request.setAttribute("errorMessage", "Giỏ hàng của bạn trống.");
             request.getRequestDispatcher("/views/cart.jsp").forward(request, response);
             return null;
@@ -239,7 +240,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         String tempPhoneNumber = request.getParameter("tempPhoneNumber");
         String tempAddress = request.getParameter("tempAddress");
 
-        LOGGER.info("Temp shipping info - FullName: " + tempFullName + ", PhoneNumber: " + tempPhoneNumber + ", Address: " + tempAddress);
+        LOGGER.log(Level.INFO, "Temp shipping info - FullName: {0}, PhoneNumber: {1}, Address: {2}", new Object[]{tempFullName, tempPhoneNumber, tempAddress});
 
         String fullName, phoneNumber, address;
 
@@ -250,7 +251,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             fullName = tempFullName.trim();
             phoneNumber = tempPhoneNumber.trim();
             address = tempAddress.trim();
-            LOGGER.info("Using temporary shipping info.");
+            LOGGER.log(Level.INFO,"Using temporary shipping info.");
         } else {
             // Nếu không có thông tin tạm thời, lấy từ user
             if (user == null) {
@@ -262,7 +263,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             phoneNumber = user.getPhoneNumber();
             address = user.getAddress();
 
-            LOGGER.info("Using user shipping info - FullName: " + fullName + ", PhoneNumber: " + phoneNumber + ", Address: " + address);
+            LOGGER.log(Level.INFO, "Using user shipping info - FullName: {0}, PhoneNumber: {1}, Address: {2}", new Object[]{fullName, phoneNumber, address});
 
             // Kiểm tra xem thông tin từ user có hợp lệ không
             if (fullName == null || fullName.trim().isEmpty() ||
@@ -279,14 +280,14 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
         // Kiểm tra thông tin giao hàng có hợp lệ không
         if (!isValidShippingInfo(fullName, phoneNumber, address)) {
-            LOGGER.warning("Shipping info is invalid - FullName: " + fullName + ", PhoneNumber: " + phoneNumber + ", Address: " + address);
+            LOGGER.log(Level.WARNING, "Shipping info is invalid - FullName: {0}, PhoneNumber: {1}, Address: {2}", new Object[]{fullName, phoneNumber, address});
             return null;
         }
 
         // Định dạng chuỗi địa chỉ giao hàng
         String shippingAddress = String.format("Họ và tên: %s\nSố điện thoại: %s\nĐịa chỉ Giao Hàng: %s",
                 fullName, phoneNumber, address);
-        LOGGER.info("Formatted shipping address: " + shippingAddress);
+        LOGGER.log(Level.INFO, "Formatted shipping address: {0}", shippingAddress);
 
         return shippingAddress.replace("\n", "<br>");
     }
@@ -301,7 +302,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
         // Kiểm tra định dạng số điện thoại (ví dụ: 10 chữ số, bắt đầu bằng 0)
         if (!phoneNumber.matches("0\\d{9}")) {
-            LOGGER.warning("Invalid phone number format: " + phoneNumber);
+            LOGGER.log(Level.WARNING, "Invalid phone number format: {0}", phoneNumber);
             return false;
         }
 

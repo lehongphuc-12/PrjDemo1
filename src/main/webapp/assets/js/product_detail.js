@@ -2,9 +2,8 @@ import { handleHttpStatus, showAlert } from './handleStatus.js';
 
 console.log("PRODUCT DETAIL JS");
 
-// Khi trang tải xong
-$(document).ready(function () {
 
+function showScrollBtn(){
     // Nút quay lại đầu trang
     $(window).scroll(function () {
         if ($(this).scrollTop() > 100) {
@@ -13,12 +12,15 @@ $(document).ready(function () {
             $('.back-to-top').fadeOut('slow');
         }
     });
-
+    }
+function scrollToHead(){ 
     $('.back-to-top').click(function () {
         $('html, body').animate({ scrollTop: 0 }, 1500, 'easeInOutExpo');
         return false;
     });
-
+    }       
+    
+function ratingStarHandler(){
     // Hệ thống đánh giá sao
     $('.star-rating .fa-star').on('click mouseover', function (event) {
         let ratingValue = $(this).data('value');
@@ -34,12 +36,13 @@ $(document).ready(function () {
             $('#rating').val(ratingValue);
         }
     });
+    }    
 
     // Định dạng số có dấu phân cách
     function formatNumber(number) {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
-
+function decreaseBtn(){
     // Giảm số lượng
     $('.decrease-btn').click(function () {
         let quantityInput = $('#quantity');
@@ -56,7 +59,8 @@ $(document).ready(function () {
             quantityInput.val(formatNumber(currentQuantity));
         }
     });
-
+    }
+function increaseBtn(){    
     // Tăng số lượng
     $('.increase-btn').click(function () {
         let quantityInput = $('#quantity');
@@ -73,7 +77,8 @@ $(document).ready(function () {
             quantityInput.val(formatNumber(currentQuantity));
         }
     });
-
+    }
+function handleQuantityBtn(){    
     // Định dạng số lượng khi tải trang
     let quantityInput = $('#quantity');
     if (quantityInput.length) {
@@ -103,7 +108,12 @@ $(document).ready(function () {
 
         input.val(formatNumber(parsedValue));
     });
+    }
 
+    
+    
+    function attachEventBuyHandlers(){
+    console.log("Attach Event BuyHandlers");
     // Xử lý thêm vào giỏ hàng
     $('.add-to-cart-btn').click(function () {
         console.log("add to cart");
@@ -158,5 +168,20 @@ $(document).ready(function () {
                 handleHttpStatus(contextPath, xhr);
             });
     });
+}
+export {attachEventBuyHandlers}
 
+
+// Khi trang tải xong
+$(document).ready(function () {
+    
+    attachEventBuyHandlers();
+    ratingStarHandler();
+    showScrollBtn();
+    scrollToHead();
+    decreaseBtn();
+    increaseBtn();
+    handleQuantityBtn();
+    
 });
+

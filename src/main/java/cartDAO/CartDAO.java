@@ -90,8 +90,7 @@ public class CartDAO implements ICartDAO {
 
     @Override
     public Cart findCartByUserAndProduct(User user, int productID) {
-        EntityManager em = getEntityManager();
-        try {
+        try (EntityManager em = getEntityManager()) {
             TypedQuery<Cart> query = em.createQuery(
                 "SELECT c FROM Cart c WHERE c.userID = :user AND c.productID.productID = :productID", Cart.class);
             query.setParameter("user", user);
@@ -99,8 +98,6 @@ public class CartDAO implements ICartDAO {
             return query.getSingleResult();
         } catch (NoResultException e) {
             return null;
-        } finally {
-            em.close();
         }
     }
 

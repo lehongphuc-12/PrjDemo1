@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -177,11 +178,11 @@ private void viewCart(HttpServletRequest request, HttpServletResponse response)
         request.setAttribute("total", total);
         session.setAttribute("discountAmount", discountAmount);
 
-        LOGGER.info("Forwarding to /views/cart.jsp with cartItems size: " + cartItems.size());
+        LOGGER.log(Level.INFO, "Forwarding to /views/cart.jsp with cartItems size: {0}", cartItems.size());
         request.getRequestDispatcher("/views/cart.jsp").forward(request, response);
 
-    } catch (Exception e) {
-        LOGGER.severe("Error in viewCart: " + e.getMessage());
+    } catch (ServletException | IOException e) {
+        LOGGER.log(Level.SEVERE, "Error in viewCart: {0}", e.getMessage());
         request.setAttribute("errorMessage", "Lỗi khi tải giỏ hàng: " + e.getMessage());
         request.getRequestDispatcher("/views/cart.jsp").forward(request, response);
     }
@@ -199,19 +200,21 @@ private void viewCart(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int productId = Integer.parseInt(request.getParameter("productID"));
         int quantity = Integer.parseInt(request.getParameter("quantity") != null ? request.getParameter("quantity") : "1");
-
-        if (productId <= 0 || quantity <= 0) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("ID sản phẩm hoặc số lượng không hợp lệ.");
-            return;
-        }
-
+        
         Product product = productService.getProductById(productId);
         if (product == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             response.getWriter().write("Sản phẩm không tồn tại.");
             return;
         }
+
+        if (productId <= 0 || quantity <= 0 || product.getQuantity() <= 0) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Sản phẩm đã hết vui lòng lựa chọn sản phẩm khác!");
+            return;
+        }
+
+        
 
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
@@ -251,9 +254,9 @@ private void viewCart(HttpServletRequest request, HttpServletResponse response)
             return;
         }
 
-        if (product.getQuantity().compareTo(BigDecimal.valueOf(quantity)) < 0) {
+        if (product.getQuantity().compareTo(quantity) < 0) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("Sản phẩm không đủ số lượng.");
+            response.getWriter().write("Sản phẩm đã hết vui lòng lựa chọn sản phẩm khác!");
             return;
         }
 
@@ -261,7 +264,7 @@ private void viewCart(HttpServletRequest request, HttpServletResponse response)
             cartService.addToCart(user, product, quantity);
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write("success");
-        } catch (Exception e) {
+        } catch (IOException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("Lỗi khi mua ngay: " + e.getMessage());
         }
@@ -286,7 +289,7 @@ private void viewCart(HttpServletRequest request, HttpServletResponse response)
         try {
             cartService.removeCartItem(user, productId);
             response.sendRedirect(request.getContextPath() + "/cart?action=view");
-        } catch (Exception e) {
+        } catch (IOException e) {
             request.setAttribute("errorMessage", "Failed to remove item: " + e.getMessage());
             viewCart(request, response);
         }
@@ -319,7 +322,7 @@ private void viewCart(HttpServletRequest request, HttpServletResponse response)
         } catch (NumberFormatException e) {
             request.setAttribute("errorMessage", "ID sản phẩm không hợp lệ.");
             viewCart(request, response);
-        } catch (Exception e) {
+        } catch (ServletException | IOException e) {
             request.setAttribute("errorMessage", "Không thể xóa sản phẩm: " + e.getMessage());
             viewCart(request, response);
         }
@@ -348,7 +351,7 @@ private void viewCart(HttpServletRequest request, HttpServletResponse response)
             BigDecimal newPrice = cartService.updateCartItem(user, productId, newQuantity);
             response.setContentType("application/json");
             response.getWriter().write("{\"success\": true, \"newPrice\": " + newPrice.toString() + "}");
-        } catch (Exception e) {
+        } catch (IOException e) {
             response.setContentType("application/json");
             response.getWriter().write("{\"success\": false, \"message\": \"Lỗi khi cập nhật giỏ hàng: " + e.getMessage() + "\"}");
         }
@@ -367,7 +370,7 @@ private void viewCart(HttpServletRequest request, HttpServletResponse response)
             cartService.clearCart(user);
             session.removeAttribute("discountAmount");
             response.sendRedirect(request.getContextPath() + "/cart?action=view");
-        } catch (Exception e) {
+        } catch (IOException e) {
             request.setAttribute("errorMessage", "Failed to clear cart: " + e.getMessage());
             viewCart(request, response);
         }
@@ -393,7 +396,7 @@ private void viewCart(HttpServletRequest request, HttpServletResponse response)
             BigDecimal discountAmount = cartService.applyDiscount(user, discountCode);
             session.setAttribute("discountAmount", discountAmount);
             response.sendRedirect(request.getContextPath() + "/cart?action=view");
-        } catch (Exception e) {
+        } catch (IOException e) {
             request.setAttribute("errorMessage", "Invalid or expired coupon code: " + e.getMessage());
             viewCart(request, response);
         }
@@ -419,9 +422,9 @@ private void viewCart(HttpServletRequest request, HttpServletResponse response)
         List<Integer> validProductIds = new ArrayList<>();
         for (String id : productIds) {
             try {
-                validProductIds.add(Integer.parseInt(id));
+                validProductIds.add(Integer.valueOf(id));
             } catch (NumberFormatException e) {
-                LOGGER.warning("Invalid product ID: " + id);
+                LOGGER.log(Level.WARNING, "Invalid product ID: {0}", id);
             }
         }
 

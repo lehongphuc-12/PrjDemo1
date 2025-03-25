@@ -20,7 +20,7 @@ export function handleHttpStatus(contextPath,xhr) {
             alertType = "info";
             break;
         case 400:
-            message = "Yêu cầu không hợp lệ. Vui lòng kiểm tra dữ liệu đầu vào.";
+            message = xhr.responseText;
             break;
         case 401:
             message = "Bạn cần đăng nhập để tiếp tục.";
@@ -36,7 +36,7 @@ export function handleHttpStatus(contextPath,xhr) {
             message = "Phương thức không được phép.";
             break;
         case 500:
-            message = "Lỗi máy chủ nội bộ. Vui lòng thử lại sau.";
+            message = xhr.responseText;
             break;
         case 502:
             message = "Lỗi từ máy chủ phản hồi không hợp lệ.";
@@ -63,8 +63,10 @@ export function showAlert(title, message, type) {
     if (type === "warning") alertClass = "alert-warning"; // Vàng
 
     let alertBox = `
-        <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
-            <strong>${title}</strong> 
+        <div class="alert ${alertClass} alert-dismissible fade show">
+            <div class="alert-title">
+                <strong>${title}</strong> 
+            </div>
             <div class="alert-message">
                 ${message}
             </div>

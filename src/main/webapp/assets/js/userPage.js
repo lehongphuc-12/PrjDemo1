@@ -1,4 +1,7 @@
- function filterOrders(status) {
+
+console.log("USER PAGE JS");
+
+function filterOrders(status) {
     console.log("PHAN TRANG");
     console.log("Status received in filterOrders:", status); // Log giá trị status
     document.querySelectorAll('table').forEach(table => table.classList.remove('active'));

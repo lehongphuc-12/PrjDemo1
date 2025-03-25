@@ -123,6 +123,7 @@ public class RoleFilter implements Filter {
 
         // Lấy thông tin user từ session
         User user = (session != null) ? (User) session.getAttribute("user") : null;
+        
         int roleID = (user != null) ? user.getRoleID().getRoleID() : 0; // 0 là Guest
 
         if(relativeURI.contains("paymentv2")){

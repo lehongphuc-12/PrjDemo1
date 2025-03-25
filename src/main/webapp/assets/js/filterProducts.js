@@ -1,7 +1,10 @@
+import {attachEventBuyHandlers} from './product_detail.js'
+
 console.log("FILTER");
 
-function filter(ID, search, page, action, filter) {
-    console.log("ID:", ID, "Search:", search, "Page:", page, "Action:", action, "Filter:", filter);
+
+function filterProducts(ID="", search="", page=1, action="", filterType="") {
+    console.log("ID:", ID, "Search:", search, "Page:", page, "Action:", action, "Filter:", filterType);
     window.dispatchEvent(new Event('resize'));
     console.log("WINDOW RESIZE");
 
@@ -13,7 +16,7 @@ function filter(ID, search, page, action, filter) {
             search: search,
             pageNumber: page,
             action: action,
-            filter: filter
+            filterType: filterType
         },
         success: function (data) {
             if (data && data.trim() !== "") {
@@ -25,7 +28,16 @@ function filter(ID, search, page, action, filter) {
         },
         error: function (xhr, status, error) {
             console.error("Error:", error, "Status:", status);
-            jQuery("#search_results").html("<p>Đã xảy ra lỗi khi tải dữ liệu. Vui lòng thử lại.</p>");
+            jQuery("#search_results").html("<p>Đã xảy ra lỗi khi tải dữ liệus. Vui lòng thử lại.</p>");
         }
     });
 }
+
+$(document).ready(function () {
+    console.log("FILTER READY");
+    filterProducts();
+    attachEventBuyHandlers();
+});
+
+// ✅ Gán hàm vào `window` để có thể gọi từ HTML
+window.filterProducts = filterProducts;

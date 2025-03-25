@@ -196,7 +196,7 @@ public class ProductDAO implements IProductDAO{
     public long countProductsBySellerIdDAO(int sellerId) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            return em.createQuery("SELECT COUNT(p) FROM Product p WHERE p.sellerID.userID = :sellerId", Long.class)
+            return em.createQuery("SELECT COUNT(p) FROM Product p WHERE p.sellerID.userID = :sellerId and p.status = true ", Long.class)
                      .setParameter("sellerId", sellerId)
                      .getSingleResult();
         } finally {
@@ -243,7 +243,7 @@ public class ProductDAO implements IProductDAO{
         try {
             TypedQuery<Product> query = em.createQuery(
                 "SELECT p FROM Product p LEFT JOIN FETCH p.productImageCollection " +
-                "WHERE LOWER(p.productName) LIKE :productName", Product.class);
+                "WHERE LOWER(p.productName) LIKE :productName  and p.status = true ", Product.class);
             query.setParameter("productName", "%" + productName.toLowerCase() + "%");
             query.setFirstResult((page - 1) * pageSize);
             query.setMaxResults(pageSize);
@@ -298,7 +298,7 @@ public class ProductDAO implements IProductDAO{
     public long countProductsByCategoryIdDAO(int categoryId) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            String jpql = "SELECT COUNT(p) FROM Product p WHERE p.categoryID.categoryID = :categoryId";
+            String jpql = "SELECT COUNT(p) FROM Product p WHERE p.categoryID.categoryID = :categoryId and p.status = true ";
             TypedQuery<Long> query = em.createQuery(jpql, Long.class);
             query.setParameter("categoryId", categoryId);
             return query.getSingleResult();
@@ -354,7 +354,7 @@ public class ProductDAO implements IProductDAO{
     public long countProductsByCategoryGroupIdDAO(int categoryGroupId) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            String jpql = "SELECT COUNT(p) FROM Product p WHERE p.categoryID.groupID.groupID = :categoryId";
+            String jpql = "SELECT COUNT(p) FROM Product p WHERE p.categoryID.groupID.groupID = :categoryId and p.status = true ";
             TypedQuery<Long> query = em.createQuery(jpql, Long.class);
             query.setParameter("categoryId", categoryGroupId);
             return query.getSingleResult(); // Trả về số lượng sản phẩm
@@ -430,7 +430,7 @@ public class ProductDAO implements IProductDAO{
     
     public long countProductsBySearchDAO(String productName) {
         try (EntityManager em = JpaUtil.getEntityManager()) {
-            String jpql = "SELECT COUNT(p) FROM Product p WHERE p.productName LIKE :productName ";
+            String jpql = "SELECT COUNT(p) FROM Product p WHERE p.productName LIKE :productNameProducts and p.status = true ";
             TypedQuery<Long> query = em.createQuery(jpql, Long.class);
             query.setParameter("productName", "%"+productName+" %");
             return query.getSingleResult();
@@ -563,7 +563,7 @@ public class ProductDAO implements IProductDAO{
         public List<Product> getProductsBySellerID(int sellerID) {
             try (EntityManager em = JpaUtil.getEntityManager()) {
                 TypedQuery<Product> query = em.createQuery(
-                    "SELECT p FROM Product p WHERE p.sellerID.id = :sellerID ORDER BY p.productID DESC",
+                    "SELECT p FROM Product p WHERE p.sellerID.id = :sellerID and p.status = true ORDER BY p.productID DESC",
                     Product.class
                 );
                 query.setParameter("sellerID", sellerID);   
@@ -646,6 +646,7 @@ public class ProductDAO implements IProductDAO{
         String orderProducts =  "ORDER BY (0.7 * COALESCE(SIZE(p.orderDetailCollection), 0) + 0.3 * COALESCE(SIZE(p.productViewCollection), 0)) DESC";
         ProductDAO dao = new ProductDAO();
         System.out.println(dao.getSimilarProducts(82));
+        System.out.println(dao.getProductsByCategoryIdDAO(15, 0, 0, orderProducts));
     }
     
 }

@@ -65,8 +65,8 @@ public class FilterServlet extends HttpServlet {
         }
     }
 
-    private String getOrderQuery(String filter) {
-        return switch (filter) {
+    private String getOrderQuery(String filterType) {
+        return switch (filterType) {
             case "newest" -> ORDER_NEWEST_PRODUCTS;
             case "asc" -> ORDER_PRODUCTS_ASC;
             case "desc" -> ORDER_PRODUCTS_DESC;
@@ -92,8 +92,8 @@ public class FilterServlet extends HttpServlet {
             LOGGER.log(Level.WARNING, "Invalid page number", e);
         }
 
-        String filter = request.getParameter("filter");
-        filter = (filter == null) ? "" : filter;
+        String filterType = request.getParameter("filterType");
+        filterType = (filterType == null) ? "" : filterType;
 
         String search = request.getParameter("search");
         search = (search == null) ? "" : search;
@@ -104,17 +104,17 @@ public class FilterServlet extends HttpServlet {
 
         switch (action) {
             case "cateGroup" -> {
-                products = categoryService.getProductsByCategoryGroupId(id, SIZE_PAGE, page, getOrderQuery(filter));
+                products = categoryService.getProductsByCategoryGroupId(id, SIZE_PAGE, page, getOrderQuery(filterType));
                 totalProducts = categoryService.countProductsByCategoryGroupId(id);
                 typeOfProducts = categoryService.getCategoryGroupByID(id).getGroupName();
             }
             case "search" -> {
-                products = categoryService.searchProductsByName(search, SIZE_PAGE, page, getOrderQuery(filter));
+                products = categoryService.searchProductsByName(search, SIZE_PAGE, page, getOrderQuery(filterType));
                 totalProducts = categoryService.countProductsBySearch(search);
                 typeOfProducts = search;
             }
             default -> {
-                products = categoryService.getProductsByCategoryId(id, SIZE_PAGE, page, getOrderQuery(filter));
+                products = categoryService.getProductsByCategoryId(id, SIZE_PAGE, page, getOrderQuery(filterType));
                 totalProducts = categoryService.countProductsByCategoryId(id);
                 typeOfProducts = categoryService.getCategoryByID(id).getCategoryName();
             }
@@ -123,10 +123,10 @@ public class FilterServlet extends HttpServlet {
         int endPage = (totalProducts + SIZE_PAGE - 1) / SIZE_PAGE;
 
         PrintWriter out = response.getWriter();
-        out.print(renderFilters(id, search, page, action, filter, totalProducts, typeOfProducts)
+        out.print(renderFilters(id, search, page, action, filterType, totalProducts, typeOfProducts)
                 + "<div class=\"list_products\" style=\"display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;\">" 
                 + renderProducts(products,request) + "</div>"
-                + renderPagination(id, search, page, endPage, action, filter));
+                + renderPagination(id, search, page, endPage, action, filterType));
     }
 
     private String renderFilters(int id, String search, int page, String action, String selectedFilter, int total, String typeOfProducts) {
@@ -148,7 +148,7 @@ public class FilterServlet extends HttpServlet {
             String escapedFilter = StringEscapeUtils.escapeEcmaScript(filter);
             String filterLabel = StringEscapeUtils.escapeHtml4(FILTER_LABELS.get(filter));
             html.append(String.format("""
-                                              <a href="javascript:void(0);" onclick="filter(%d, '%s', %d, '%s', '%s')" class='%s'>
+                                              <a href="javascript:void(0);" onclick="filterProducts(%d, '%s', %d, '%s', '%s')" class='%s'>
                                                   <p>%s</p>
                                               </a>
                                       """,
@@ -231,7 +231,7 @@ public class FilterServlet extends HttpServlet {
             if (avgRating == -1) {
                 html.append("<p class=\"no_rating\">Chưa có đánh giá</p>");
             } else {
-                html.append(String.format("<p class=\"total_rating text\">%.1f sao</p>", avgRating));
+                html.append(String.format("<p class=\"total_rating text\">%.1f ★</p>", avgRating));
             }
             html.append("</div>");
 
@@ -242,15 +242,13 @@ public class FilterServlet extends HttpServlet {
 
             // Kiểm tra userRole để hiển thị giỏ hàng
             if (userRole != 0) {
-                html.append("""
+                html.append(String.format("""
                     <div class="product_actions">
-                        <a href="#">
-                            <span class="material-icons-sharp">
-                                add_shopping_cart
-                            </span>
-                        </a>
+                        <button class="btn btn-primary add-to-cart-btn" data-product-id="%d" type="button">
+                            <span class="material-icons-sharp">add_shopping_cart</span>
+                        </button>
                     </div>
-                """);
+                """,p.getProductID()));
             }
 
             // Nút "Mua ngay"
@@ -271,18 +269,18 @@ public class FilterServlet extends HttpServlet {
 
 
 
-    private String renderPagination(int id, String search, int currentPage, int totalPages, String action, String filter) {
+    private String renderPagination(int id, String search, int currentPage, int totalPages, String action, String typeOfProducts) {
         StringBuilder html = new StringBuilder();
         html.append("<div class=\"page_numbers\">\n");
         search = StringEscapeUtils.escapeEcmaScript(search);
         action = StringEscapeUtils.escapeEcmaScript(action);
-        filter = StringEscapeUtils.escapeEcmaScript(filter);
+        typeOfProducts = StringEscapeUtils.escapeEcmaScript(typeOfProducts);
 
         for (int i = 1; i <= totalPages; i++) {
             html.append("    <span class=\"page-item ").append(i == currentPage ? "active" : "").append("\">\n")
-                    .append("        <a href=\"javascript:void(0);\" onclick=\"filter(")
+                    .append("        <a href=\"javascript:void(0);\" onclick=\"filterProducts(")
                     .append(id).append(", '").append(search).append("', ").append(i).append(", '")
-                    .append(action).append("', '").append(filter).append("')\">").append(i).append("</a>\n")
+                    .append(action).append("', '").append(typeOfProducts).append("')\">").append(i).append("</a>\n")
                     .append("    </span>\n");
         }
         html.append("</div>\n");

@@ -25,23 +25,11 @@ public class CartService {
     }
 
     public void addToCart(User user, Product product, int quantity) {
-        if (user == null) throw new IllegalArgumentException("User cannot be null");
-        if (product == null) throw new IllegalArgumentException("Product cannot be null");
-        if (quantity <= 0) throw new IllegalArgumentException("Quantity must be greater than 0");
-        if (product.getPrice() == null) throw new IllegalArgumentException("Product price cannot be null");
-        if (product.getQuantity() == null || product.getQuantity().compareTo(BigDecimal.valueOf(quantity)) < 0) {
-            throw new IllegalArgumentException("Not enough stock available");
-        }
-
         Cart existingCart = cartDAO.findCartByUserAndProduct(user, product.getProductID());
-        LocalDateTime now = LocalDateTime.now();
 
         if (existingCart != null) {
-            LocalDateTime addedTime = existingCart.getAddedDate() != null ?
-                    existingCart.getAddedDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime() :
-                    now;
             int newQuantity = existingCart.getQuantity() + quantity;
-            if (product.getQuantity().compareTo(BigDecimal.valueOf(newQuantity)) < 0) {
+            if (product.getQuantity().compareTo(newQuantity) < 0) {
                 throw new IllegalArgumentException("Not enough stock available after updating quantity");
             }
             // Cập nhật số lượng và addedDate thay vì xóa và thêm lại
@@ -70,7 +58,7 @@ public class CartService {
         if (quantity <= 0) throw new IllegalArgumentException("Quantity must be greater than 0");
         Cart cart = cartDAO.findCartByUserAndProduct(user, productId);
         if (cart == null) throw new IllegalArgumentException("Cart item not found for user " + user.getUserID() + " and product " + productId);
-        if (cart.getProductID().getQuantity() == null || cart.getProductID().getQuantity().compareTo(BigDecimal.valueOf(quantity)) < 0) {
+        if (cart.getProductID().getQuantity() == null || cart.getProductID().getQuantity().compareTo(Integer.valueOf(quantity)) < 0) {
             throw new IllegalArgumentException("Not enough stock available");
         }
 

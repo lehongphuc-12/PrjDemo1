@@ -178,7 +178,7 @@ header{
     width: 100%;
     position: sticky;
     top: 0;
-    z-index: 99999;
+    z-index: 100;
     /*box-shadow: 0px 1px 12px 2px black;*/
 }
 
@@ -847,12 +847,11 @@ footer .left .logo__footer .title__footer{
     position: fixed;
     width: 200px;
     height: 200px;
-    background: white;
+    background: transparent;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     border-radius: 8px;
-    box-shadow: 1px 1px 8px var(--color-primary),-1px -1px 8px var(--color-primary);
     text-align: center;
     z-index: 100000;
 }
@@ -863,12 +862,33 @@ footer .left .logo__footer .title__footer{
     text-align: center;
     display: flex;
     flex-direction: column;
+    gap:12px;
     align-items: center;
     justify-content: center;
+    padding:20px;
+    margin:0;
+}
+
+#alert-container .alert .alert-title{
+    font-size: 20px;
+    font-weight: 500;
 }
 
 #alert-container .alert .alert-message{
     /*display: flex;*/
     font-weight: 500;
 
+}
+
+#alert-container .alert.alert-danger{
+    box-shadow: 1px 1px 8px #dc3545,-1px -1px 8px #dc3545;
+}
+#alert-container .alert.alert-success{
+    box-shadow: 1px 1px 8px var(--color-primary),-1px -1px 8px var(--color-primary);
+}
+#alert-container .alert.alert-info{
+    box-shadow: 1px 1px 8px #17a2b8,-1px -1px 8px #17a2b8;
+}
+#alert-container .alert.alert-warning{
+    box-shadow: 1px 1px 8px #ffc107,-1px -1px 8px #ffc107;
 }

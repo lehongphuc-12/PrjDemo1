@@ -112,7 +112,7 @@ public class ProductServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             request.setAttribute("error", "ID người bán không hợp lệ");
             request.getRequestDispatcher("/admin/adminPage.jsp").forward(request, response);
-        } catch (Exception e) {
+        } catch (ServletException | IOException e) {
             request.setAttribute("error", "Lỗi khi lấy danh sách sản phẩm: " + e.getMessage());
             request.getRequestDispatcher("/admin/adminPage.jsp").forward(request, response);
         }

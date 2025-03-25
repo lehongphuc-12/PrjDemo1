@@ -27,7 +27,7 @@
                                 <c:forEach var="category" items="${cg.categoryCollection}">
                                     <li>
                                         <a href="javascript:void(0);"
-                                           onclick="filter(${category.categoryID}, '', 1, '', 'popular')">
+                                           onclick="filterProducts(${category.categoryID}, '', 1, '', 'popular')">
                                             ${category.categoryName}
                                         </a>
                                     </li>
@@ -50,17 +50,17 @@
                         </div>
                         <div class="criterias">
                             <a href="javascript:void(0);"
-                               onclick="filter(${ID}, '${search}', ${page}, '${action}', 'popular')"
-                               class="${filter == 'popular' ? 'text-primary' : ''}"><p>Bán chạy</p></a>
+                               onclick="filterProducts(${ID}, '${search}', ${page}, '${action}', 'popular')"
+                               class="${filterProducts == 'popular' ? 'text-primary' : ''}"><p>Bán chạy</p></a>
                             <a href="javascript:void(0);"
-                               onclick="filter(${ID}, '${search}', ${page}, '${action}', 'newest')"
-                               class="${filter == 'newest' ? 'text-primary' : ''}"><p>Hàng mới</p></a>
+                               onclick="filterProducts(${ID}, '${search}', ${page}, '${action}', 'newest')"
+                               class="${filterProducts == 'newest' ? 'text-primary' : ''}"><p>Hàng mới</p></a>
                             <a href="javascript:void(0);"
-                               onclick="filter(${ID}, '${search}', ${page}, '${action}', 'asc')"
-                               class="${filter == 'asc' ? 'text-primary' : ''}"><p>Giá từ thấp đến cao</p></a>
+                               onclick="filterProducts(${ID}, '${search}', ${page}, '${action}', 'asc')"
+                               class="${filterProducts == 'asc' ? 'text-primary' : ''}"><p>Giá từ thấp đến cao</p></a>
                             <a href="javascript:void(0);"
-                               onclick="filter(${ID}, '${search}', ${page}, '${action}', 'desc')"
-                               class="${filter == 'desc' ? 'text-primary' : ''}"><p>Giá từ cao đến thấp</p></a>
+                               onclick="filterProducts(${ID}, '${search}', ${page}, '${action}', 'desc')"
+                               class="${filterProducts == 'desc' ? 'text-primary' : ''}"><p>Giá từ cao đến thấp</p></a>
                         </div>
                     </div>
 
@@ -124,7 +124,7 @@
                                                 <p class="no-rating">Chưa có đánh giá</p>
                                             </c:when>
                                             <c:otherwise>
-                                                <p class="total_rating">${String.format("%.1f", rating)} ★</p>
+                                                <p class="total_rating text-warning">${String.format("%.1f", rating)} ★</p>
                                             </c:otherwise>
                                         </c:choose>
                                     </div>
@@ -133,11 +133,9 @@
                                 </div>
                                <c:if test="${userRole != 0}">
                                     <div class="product_actions">
-                                        <a href="#">
-                                            <span class="material-icons-sharp">
-                                                add_shopping_cart
-                                            </span>
-                                        </a>
+                                        <button class="btn btn-primary add-to-cart-btn" data-product-id="${product.productID}" type="button">
+                                            <span class="material-icons-sharp">add_shopping_cart</span>
+                                        </button>
                                     </div>
                                 </c:if>
                                     
@@ -154,7 +152,7 @@
                         <c:forEach var="index" begin="1" end="${endPage}">
                             <span class="page-item ${index == page ? 'active' : ''}">
                                 <a href="javascript:void(0);"
-                                   onclick="filter(${ID}, '${search}', ${index}, '${action}', '${filter}')">${index}</a>
+                                   onclick="filterProducts(${ID}, '${search}', ${index}, '${action}', '${filterType}')">${index}</a>
                             </span>
                         </c:forEach>
                     </div>
@@ -172,11 +170,10 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="/demo1/assets/js/swiper.js"></script>
 <script src="/demo1/assets/js/main.js"></script>
-<script src="/demo1/assets/js/filter.js"></script>
+<script type="module" src="/demo1/assets/js/filterProducts.js"></script>
 <script>
     var contextPath = "${pageContext.request.contextPath}";
 </script>
-<script type="module" src="/demo1/assets/js/product_detail.js"></script>
 
 
 </body>
