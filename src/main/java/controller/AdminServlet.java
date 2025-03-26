@@ -291,6 +291,7 @@ public class AdminServlet extends HttpServlet {
         response.sendRedirect(referer);
     }
 
+
     private void showUserProfile(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));

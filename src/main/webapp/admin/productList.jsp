@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +10,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Danh sách sản phẩm</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/product_list.css">
-
 </head>
 <body>
     <div class="product-container">
@@ -34,22 +34,19 @@
                         <th>Hành Động</th>
                     </tr>
                     <c:forEach var="product" items="${productList}">
-                        <tr>
+                        <tr class="${product.status == false ? 'inactive-row' : ''}">
                             <td>${product.productID}</td>
                             <td>
-                                <c:choose>
-                                    <c:when test="${product.productName == 'INACTIVE'}">
-                                        <span class="inactive">
-                                            ${fn:substringAfter(product.description, 'Original Name: ')} + inactive
-                                        </span>
-                                    </c:when>
-                                    <c:otherwise>${product.productName}</c:otherwise>
-                                </c:choose>
+                                <div class="name-container">
+                                    <span>${product.productName}</span>
+                                    <c:if test="${product.status == false}">
+                                        <span class="inactive-name">(không hoạt động)</span>
+                                    </c:if>
+                                </div>
                             </td>
                             <td>
                                 <c:choose>
                                     <c:when test="${not empty product.productImageCollection}">
-                                        <!-- Hiển thị hình ảnh đầu tiên -->
                                         <c:forEach var="image" items="${product.productImageCollection}" begin="0" end="0">
                                             <img src="${pageContext.request.getContextPath()}/assets/images/productImages/${image.imageURL}" alt="Product Image" class="product-image">
                                         </c:forEach>
@@ -62,12 +59,14 @@
                             <td>${product.description}</td>
                             <td>${product.price}</td>
                             <td>${product.quantity}</td>
-                            <td>${product.createdDate}</td>
+                            <td>
+                                <fmt:formatDate value="${product.createdDate}" pattern="yyyy-MM-dd HH:mm" />
+                            </td>
                             <td>${product.categoryID.categoryName}</td>
                             <td>${product.cityID.cityName}</td>
                             <td>
                                 <c:choose>
-                                    <c:when test="${product.productName != 'INACTIVE'}">
+                                    <c:when test="${product.status == true}">
                                         <a href="${pageContext.request.contextPath}/products?action=delete&productId=${product.productID}&sellerId=${sellerId}" 
                                            class="action-btn delete-btn" 
                                            onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">Xóa</a>
@@ -75,7 +74,7 @@
                                     <c:otherwise>
                                         <a href="${pageContext.request.contextPath}/products?action=restore&productId=${product.productID}&sellerId=${sellerId}" 
                                            class="action-btn restore-btn" 
-                                           onclick="return confirm('Bạn có chắc chắn muốn khôi phục sản phẩm này?')">Restore</a>
+                                           onclick="return confirm('Bạn có chắc chắn muốn khôi phục sản phẩm này?')">Khôi phục</a>
                                     </c:otherwise>
                                 </c:choose>
                             </td>

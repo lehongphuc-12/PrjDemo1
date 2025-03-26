@@ -48,6 +48,7 @@
                         <li><a onclick="loadSection('sanphamlist')">Tất cả sản phẩm</a></li>
                         <li><a onclick="loadSection('removedProduct')">Sản phẩm đã xóa</a></li>
                         <li><a onclick="loadSection('addSanpham')">Thêm sản phẩm</a></li>
+                        <li><a onclick="loadSection('discountList')">Quản lí discount</a></li>
                     </ul>
                 </li>
                 <li>
@@ -140,5 +141,6 @@
                     console.error("Lỗi: Biểu đồ chưa được khởi tạo!");
                 }
             }
+            
     </script>
 </html>

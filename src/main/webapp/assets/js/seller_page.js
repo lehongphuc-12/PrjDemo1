@@ -1,3 +1,5 @@
+/* global param, page */
+
 function isConfirm(message) {
     return confirm(message);
 }
@@ -16,54 +18,66 @@ menuItems.forEach(item => {
         });
     }
 });
+function attachSearchListener() {
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                const searchValue = this.value.trim();
+                loadSection(`sanphamlist&page=1&search=${searchValue}`);
+            }
+        });
+    }
+}
 function loadSection(action) {
-    var xhr = new XMLHttpRequest();
-    console.log(contextPath + "/seller?action=" + action);
-    xhr.open("GET", contextPath + "/seller?action=" + action, true);
-    let cleanAction = action.split("&")[0];
-    console.log(cleanAction);
+    const xhr = new XMLHttpRequest();
+    const urlParams = new URLSearchParams(action.split('&')[1] || '');
+    let page = urlParams.get('page') || 1;
+    let search = urlParams.get('search') || document.getElementById('searchInput')?.value || '';
+    let url = contextPath + "/seller?action=" + action.split('&')[0];
+    if (page)
+        url += "&page=" + page;
+    if (search)
+        url += "&search=" + encodeURIComponent(search);
+    if (action.split('&')[0] === 'updateProduct')
+        url += "&" + action.split('&')[1];
+    console.log("Action:", action);
+    console.log("Page:", page);
+    console.log("Request URL:", url);
+    console.log("Request URL:", url);
+
+    xhr.open("GET", url, true);
     xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            const mainContent = document.getElementById("main-content");
+        if (xhr.readyState === 4 && xhr.status === 200) {
             document.getElementById("main-content").innerHTML = xhr.responseText;
-            if (cleanAction === "donhang") {
-                const urlParams = new URLSearchParams(action);
+
+            let cleanAction = action.split("&")[0];
+            if (cleanAction === "sanphamlist") {
+                attachSearchListener(); // Gắn lại sự kiện tìm kiếm sau khi load
+            } else if (cleanAction === "donhang") {
                 const status = urlParams.get('status') || 'all';
-                console.log("Status before filterOrders:", status); // Log để kiểm tra
                 setTimeout(() => {
                     const statusFilter = document.getElementById('statusFilter');
                     if (statusFilter) {
                         statusFilter.value = status;
                         filterOrders(status);
-                    } else {
-                        console.error("Không tìm thấy #statusFilter!");
                     }
                 }, 100);
-
-            }
-
-            // Chỉ gọi biểu đồ khi trang "doanhthu" được tải xong
-            else if (cleanAction === "doanhthu") {
+            } else if (cleanAction === "doanhthu") {
                 setTimeout(() => {
-                    if (typeof initChart === "function") {
+                    if (typeof initChart === "function")
                         initChart();
-                    } else {
-                        console.error("initChart không được định nghĩa!");
-                    }
                 }, 500);
-            } else if (cleanAction === "addSanpham") {
-                setTimeout(() => {
-                    initializeProductTypeLoader();
-                }, 500);
-            } else if (cleanAction === "updateProduct") {
+            } else if (cleanAction === "addSanpham" || cleanAction === "updateProduct") {
                 setTimeout(() => {
                     initializeProductTypeLoader();
                 }, 500);
             }
         }
-    }; // Đóng đúng hàm onreadystatechange
-    xhr.send(); // Gửi request ngay sau khi thiết lập
+    };
+    xhr.send();
 }
+
 
 function filterOrders(status) {
     console.log("Status received in filterOrders:", status); // Log giá trị status
@@ -443,7 +457,95 @@ function reCreateProduct(productID) {
             })
             .catch(error => console.error("Lỗi:", error));
 }
+function showVoucherForm() {
+    document.getElementById('voucherFormContainer').style.display = 'block';
+}
 
+function hideVoucherForm() {
+    document.getElementById('voucherFormContainer').style.display = 'none';
+    // Reset form
+    document.getElementById('discountCode').value = '';
+    document.getElementById('discountPercent').value = '';
+    document.getElementById('startDate').value = '';
+    document.getElementById('endDate').value = '';
+    document.getElementById('productId').value = '';
+}
+function generateRandomVoucherCode() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let randomCode = '';
+    for (let i = 0; i < 10; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        randomCode += characters[randomIndex];
+    }
+    document.getElementById('discountCode').value = randomCode;
+}
+function addVoucherToProduct() {
+    const code = document.getElementById('discountCode').value.trim();
+    const discountPercent = document.getElementById('discountPercent').value;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    const productId = document.getElementById('productId').value;
+
+    if (!code || !discountPercent || !startDate || !endDate || !productId) {
+        alert("Vui lòng nhập đầy đủ thông tin!");
+        return;
+    }
+    console.log(discountPercent);
+    const today = new Date().toISOString().split('T')[0];
+    if (startDate < today) {
+        alert("Ngày bắt đầu không thể là ngày trong quá khứ!");
+        return;
+    }
+    if (endDate < startDate) {
+        alert("Ngày kết thúc phải sau ngày bắt đầu!");
+        return;
+    }
+
+    const xhr = new XMLHttpRequest();
+    const url = contextPath + "/voucher?action=addVoucherToProduct";
+
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    const data = "code=" + encodeURIComponent(code) +
+            "&discountPercent=" + encodeURIComponent(discountPercent) +
+            "&startDate=" + encodeURIComponent(startDate) +
+            "&endDate=" + encodeURIComponent(endDate) +
+            "&productId=" + encodeURIComponent(productId);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            document.getElementById("main-content").innerHTML = xhr.responseText;
+            attachSearchListener();
+            alert("Add success!")
+        }
+    };
+    xhr.send(data);
+}
+function removeVoucher(code, discountID) {
+    if (!confirm(`Bạn có chắc muốn xóa voucher ${code}?`))
+        return;
+
+    const xhr = new XMLHttpRequest();
+    const url = contextPath + "/voucher?action=removeVoucher";
+
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    const data = "discountID=" + encodeURIComponent(discountID); // Sửa cú pháp dữ liệu
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                document.getElementById("main-content").innerHTML = xhr.responseText;
+                alert("Xóa thành công voucher!");
+            } else {
+                console.error("Lỗi: ", xhr.status, xhr.responseText);
+                alert("Có lỗi xảy ra khi xóa voucher: " + xhr.responseText);
+            }
+        }
+    };
+    xhr.send(data);
+}
 
 
 

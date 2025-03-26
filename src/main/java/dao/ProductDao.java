@@ -54,7 +54,62 @@ public class ProductDao extends GenericDAO<Product> {
             return null;
         }
     }
+    public List<Product> findActiveBySellerId(int id, int page, int size, String search) {
+        try (EntityManager em = JpaUtil.getEntityManager()) {
+            // Xây dựng truy vấn JPQL cơ bản
+            String jpql = "SELECT p FROM Product p WHERE p.sellerID.userID = :sellerId AND p.status = true";
 
+            // Nếu có search, thêm điều kiện tìm kiếm
+            if (search != null && !search.trim().isEmpty()) {
+                jpql += " AND (LOWER(p.productName) LIKE :search OR LOWER(p.description) LIKE :search)";
+            }
+
+            // Tạo query
+            TypedQuery<Product> query = em.createQuery(jpql, Product.class);
+            query.setParameter("sellerId", id);
+
+            // Nếu có search, set tham số search
+            if (search != null && !search.trim().isEmpty()) {
+                query.setParameter("search", "%" + search.toLowerCase() + "%");
+            }
+
+            // Phân trang
+            query.setFirstResult((page - 1) * size);
+            query.setMaxResults(size);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public int getTotalProductActivePageWithSearch(int sellerId, int pageSize, String search) {
+        try (EntityManager em = JpaUtil.getEntityManager()) {
+            // Xây dựng truy vấn JPQL để đếm
+            String jpql = "SELECT COUNT(p) FROM Product p WHERE p.sellerID.userID = :sellerId AND p.status = true";
+
+            // Nếu có search, thêm điều kiện tìm kiếm
+            if (search != null && !search.trim().isEmpty()) {
+                jpql += " AND (LOWER(p.productName) LIKE :search OR LOWER(p.description) LIKE :search)";
+            }
+
+            // Tạo query
+            TypedQuery<Long> query = em.createQuery(jpql, Long.class);
+            query.setParameter("sellerId", sellerId);
+
+            // Nếu có search, set tham số search
+            if (search != null && !search.trim().isEmpty()) {
+                query.setParameter("search", "%" + search.toLowerCase() + "%");
+            }
+
+            Long totalRecords = query.getSingleResult();
+            return (int) Math.ceil(totalRecords.doubleValue() / pageSize);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1; // Trả về 1 nếu có lỗi
+        }
+    }
+    
     public List<Product> findBySellerId(int id) {
         try (EntityManager em = JpaUtil.getEntityManager()) {
             TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p WHERE p.sellerID.userID = :sellerId", Product.class);

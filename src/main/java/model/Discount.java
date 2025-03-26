@@ -76,6 +76,13 @@ public class Discount implements Serializable {
     public Discount(Integer discountID) {
         this.discountID = discountID;
     }
+    public Discount(Product productId, String discountCode, Double discountPercent,Date startDate, Date endDate) {
+        this.discountCode = discountCode;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.productID = productId;
+        this.discountPercent = BigDecimal.valueOf(discountPercent);
+    }
 
     public Discount(Integer discountID, String discountCode, BigDecimal discountPercent, Date startDate, Date endDate) {
         this.discountID = discountID;

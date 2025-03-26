@@ -1,7 +1,7 @@
 
 console.log("USER PAGE JS");
 
-function filterOrders(status) {
+function filterOrders(status = "all") {
     console.log("PHAN TRANG");
     console.log("Status received in filterOrders:", status); // Log giá trị status
     document.querySelectorAll('table').forEach(table => table.classList.remove('active'));
@@ -181,3 +181,8 @@ function cancelOrder(orderdetailId) {
                             })
                             .catch(error => console.error("Lỗi:", error));
                 }
+                
+                
+//
+window.loadSection=loadSection;
+    

@@ -155,6 +155,7 @@ public User getSellerByProductIdDAO(int productID) {
 
 
     // Xóa người dùng theo ID
+    
     @Override
     public void deleteUserByIdDAO(int id) {
         EntityManager em = JpaUtil.getEntityManager();
@@ -163,7 +164,7 @@ public User getSellerByProductIdDAO(int productID) {
             transaction.begin();
             User user = em.find(User.class, id);
             if (user != null) {
-                user.setStatus(Boolean.FALSE);
+                user.setStatus(Boolean.FALSE); 
                 em.merge(user);
             } else {
                 throw new IllegalArgumentException("User with ID " + id + " not found");
@@ -215,16 +216,9 @@ public User getSellerByProductIdDAO(int productID) {
         try {
             transaction.begin();
             User user = em.find(User.class, id);
-            if (user != null && user.getFullName().equals("INACTIVE")) {
-                String address = user.getAddress();
-                if (address != null && address.contains("| Original Name: ")) {
-                    int index = address.lastIndexOf("| Original Name: ");
-                    String originalAddress = address.substring(0, index).trim();
-                    String originalName = address.substring(index + "| Original Name: ".length()).trim();
-                    user.setFullName(originalName);
-                    user.setAddress(originalAddress.equals("|") ? "" : originalAddress);
-                    em.merge(user);
-                }
+            if (user != null && user.getStatus() == false) {
+                user.setStatus(Boolean.TRUE); // Khôi phục status thành true
+                em.merge(user);
             }
             transaction.commit();
         } catch (Exception e) {

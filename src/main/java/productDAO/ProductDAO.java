@@ -138,47 +138,14 @@ public class ProductDAO implements IProductDAO{
             }
         }
     }
-    public void restoreProductDAO(int productId) {
-        EntityManager em = JpaUtil.getEntityManager();
-        EntityTransaction transaction = em.getTransaction();
-        try {
-            transaction.begin();
-            Product product = em.find(Product.class, productId);
-            if (product != null && product.getProductName().equals("INACTIVE")) {
-                String description = product.getDescription();
-                if (description != null && description.contains("| Original Name: ")) {
-                    // Tách Description để lấy tên gốc và mô tả ban đầu
-                    int index = description.lastIndexOf("| Original Name: ");
-                    String originalDescription = description.substring(0, index).trim();
-                    String originalName = description.substring(index + "| Original Name: ".length()).trim();
-                    product.setProductName(originalName);
-                    product.setDescription(originalDescription.equals("|") ? "" : originalDescription); // Khôi phục mô tả ban đầu
-                    em.merge(product);
-                }
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e;
-        } finally {
-            em.close();
-        }
-    }
-    @Override
-    public void updateProductNameDAO(int productId, String newName) {
+    public void deleteProductDAO(int productId) {
         EntityManager em = JpaUtil.getEntityManager();
         EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
             Product product = em.find(Product.class, productId);
             if (product != null) {
-                String originalName = product.getProductName();
-                String originalDescription = product.getDescription() != null ? product.getDescription() : "";
-                // Nối tên gốc vào Description thay vì ghi đè
-                product.setDescription(originalDescription + " | Original Name: " + originalName);
-                product.setProductName(newName);
+                product.setStatus(Boolean.FALSE); // Đặt status = false khi xóa
                 em.merge(product);
             }
             transaction.commit();
@@ -191,6 +158,29 @@ public class ProductDAO implements IProductDAO{
             em.close();
         }
     }
+    
+    public void restoreProductDAO(int productId) {
+        EntityManager em = JpaUtil.getEntityManager();
+        EntityTransaction transaction = em.getTransaction();
+        try {
+            transaction.begin();
+            Product product = em.find(Product.class, productId);
+            if (product != null && product.getStatus() == false) {
+                product.setStatus(Boolean.TRUE); // Đặt status = true khi khôi phục
+                em.merge(product);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+    
+    
 
     // Thêm phương thức để đếm tổng số sản phẩm theo sellerId
     public long countProductsBySellerIdDAO(int sellerId) {

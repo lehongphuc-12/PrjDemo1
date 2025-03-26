@@ -182,36 +182,36 @@
         </style>
     </head>
     <body>
-        <div class="container">
-            <h2>Danh Sách Đơn Hàng</h2>
-            <div class="filter">
-                <label for="statusFilter">Lọc theo trạng thái: </label>
-                <select id="statusFilter" onchange="filterOrders(this.value)">
-                    <option value="all">Tất cả</option>
-                    <option value="cho-xu-ly">Chờ xử lý</option>
-                    <option value="dang-giao">Đang giao</option>
-                    <option value="da-nhan">Đã nhận</option>
-                    <option value="da-huy">Đã hủy</option>
-                </select>
-            </div>
+            <div class="container">
+                <h2>Danh Sách Đơn Hàng</h2>
+                <div class="filter">
+                    <label for="statusFilter">Lọc theo trạng thái: </label>
+                    <select id="statusFilter" onchange="filterOrders(this.value)">
+                        <option value="all">Tất cả</option>
+                        <option value="cho-xu-ly">Chờ xử lý</option>
+                        <option value="dang-giao">Đang giao</option>
+                        <option value="da-nhan">Đã nhận</option>
+                        <option value="da-huy">Đã hủy</option>
+                    </select>
+                </div>
 
-            <!-- Bảng hiển thị tất cả đơn hàng -->
-            <table id="all" class="active">
-                <thead>
-                    <tr>
-                        <th>Mã Đơn Hàng</th>
-                        <th>Tên Sản Phẩm</th>
-                        <th>Số Lượng</th>
-                        <th>Tổng Tiền</th>
-                        <th>Trạng Thái</th>
-                        <th>Hành động</th>
-                    </tr>
-                </thead>
-                <tbody>
+                <!-- Bảng hiển thị tất cả đơn hàng -->
+                <table id="all" class="active">
+                    <thead>
+                        <tr>
+                            <th>Mã Đơn Hàng</th>
+                            <th>Tên Sản Phẩm</th>
+                            <th>Số Lượng</th>
+                            <th>Tổng Tiền</th>
+                            <th>Trạng Thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     <c:forEach var="orderDetail" items="${orderList}">
                         <tr>
                             <td>${orderDetail.orderID.orderID}</td>
-                            <td>${orderDetail.productID.productName}</td>
+                            <td><p>${orderDetail.productID.productName}</p></td>
                             <td>${orderDetail.quantity}</td>
                             <td>
                                 <fmt:formatNumber value="${orderDetail.price}" type="currency" currencySymbol="VND" />
@@ -228,7 +228,11 @@
                                         <button type="button" onclick="confirmReceived(${orderDetail.orderD1})" class="received-btn">Đã nhận</button>
                                     </c:when>
                                     <c:when test="${orderDetail.statusID.statusName eq 'Đã hủy'}">
-                                        <button type="button" onclick="repurchaseOrder(${orderDetail.orderD1})" class="repurchase-btn">Mua lại</button>
+                                        <button type="button" class="repurchase-btn">
+                                            <a href="${pageContext.request.contextPath}/detail?productID=${orderDetail.productID.productID}" style="text-decoration: none">    
+                                                Mua lại
+                                            </a>
+                                        </button>
                                     </c:when>
                                     <c:otherwise>
                                         <!-- Trạng thái 'Đã hủy' hoặc các trạng thái khác không có hành động -->
@@ -289,7 +293,7 @@
                     <c:forEach var="orderDetail" items="${choXuLyList}">
                         <tr>
                             <td>${orderDetail.orderID.orderID}</td>
-                            <td>${orderDetail.productID.productName}</td>
+                            <td><p>${orderDetail.productID.productName}</p></td>
                             <td>${orderDetail.quantity}</td>
                             <td>
                                 <fmt:formatNumber value="${orderDetail.price}" type="currency" currencySymbol="VND" />
@@ -317,7 +321,7 @@
                     <c:forEach var="orderDetail" items="${dangGiaoList}">
                         <tr>
                             <td>${orderDetail.orderID.orderID}</td>
-                            <td>${orderDetail.productID.productName}</td>
+                            <td><p>${orderDetail.productID.productName}</p></td>
                             <td>${orderDetail.quantity}</td>
                             <td>
                                 <fmt:formatNumber value="${orderDetail.price}" type="currency" currencySymbol="VND" />
@@ -345,16 +349,16 @@
                     <c:forEach var="orderDetail" items="${daNhanList}">
                         <tr>
                             <td>${orderDetail.orderID.orderID}</td>
-                            <td>${orderDetail.productID.productName}</td>
+                            <td><p>${orderDetail.productID.productName}</p></td>
                             <td>${orderDetail.quantity}</td>
                             <td>
                                 <fmt:formatNumber value="${orderDetail.price}" type="currency" currencySymbol="VND" />
                             </td>
                             <td class="status da-nhan">${orderDetail.statusID.statusName}</td>
                             <td><button type="button" class="rating-btn">
-                                <a href="${pageContext.request.contextPath}/detail?productID=${orderDetail.productID.productID}" style="text-decoration: none">    
-                                    Đánh giá
-                                </a>
+                                    <a href="${pageContext.request.contextPath}/detail?productID=${orderDetail.productID.productID}" style="text-decoration: none">    
+                                        Đánh giá
+                                    </a>
                                 </button>
                             </td>
                         </tr>
@@ -378,13 +382,17 @@
                     <c:forEach var="orderDetail" items="${daHuyList}">
                         <tr>
                             <td>${orderDetail.orderID.orderID}</td>
-                            <td>${orderDetail.productID.productName}</td>
+                            <td><p>${orderDetail.productID.productName}</p></td>
                             <td>${orderDetail.quantity}</td>
                             <td>
                                 <fmt:formatNumber value="${orderDetail.price}" type="currency" currencySymbol="VND" />
                             </td>
                             <td class="status da-huy">${orderDetail.statusID.statusName}</td>
-                            <td><button type="button" onclick="repurchaseOrder(${orderDetail.orderD1})" class="repurchase-btn">Mua lại</button></td>
+                            <td><button type="button" class="repurchase-btn">
+                                    <a href="${pageContext.request.contextPath}/detail?productID=${orderDetail.productID.productID}" style="text-decoration: none">    
+                                        Mua lại
+                                    </a>
+                                </button></td>
 
                         </tr>
                     </c:forEach>
@@ -392,10 +400,10 @@
             </table>
 
         </div>
-        
-        
-        
-        
+
+
+
+
         <script>
             var contextPath = "${pageContext.request.contextPath}";
         </script>

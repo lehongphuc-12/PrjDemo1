@@ -55,6 +55,7 @@ public class UserService {
             throw new RuntimeException("Failed to delete user with ID " + id + ": " + e.getMessage(), e);
         }
     }
+
     public void restoreUser(int id) {
         try {
             userDAO.restoreUserDAO(id);

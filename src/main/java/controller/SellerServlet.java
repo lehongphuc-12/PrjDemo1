@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import model.CategoryGroup;
 import model.City;
+import model.Discount;
 import model.OrderDetail;
 import model.Product;
 import model.ProductImage;
@@ -21,6 +22,7 @@ import service.CityService;
 import service.OrderService;
 import service.ProductManagerService;
 import service.UserProfileService;
+import service.VoucherService;
 
 /**
  *
@@ -28,8 +30,9 @@ import service.UserProfileService;
  */
 @WebServlet(name = "SellerServlet", urlPatterns = {"/seller"})
 public class SellerServlet extends HttpServlet {
-
+    
     private static final int SIZE = 8;
+    private VoucherService voucherService;
     private CityService cityService;
     private ProductManagerService productService;
     private UserProfileService userService;
@@ -39,6 +42,7 @@ public class SellerServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
+        voucherService = new VoucherService();
         userService = new UserProfileService();
         productService = new ProductManagerService();
         cateGroupService = new CategoryGroupService();
@@ -64,7 +68,12 @@ public class SellerServlet extends HttpServlet {
             case "sellerPage" -> {
                 part += "SellerProfile.jsp";
             }
-
+            case "discountList" -> {
+                part += "voucherManager.jsp";
+                int id = user.getUserID();
+                List<Discount> voucherList = voucherService.voucherListBySellerId(id);
+                request.setAttribute("voucherList", voucherList);
+            }
             case "donhang" -> {
                 part += "DonHang.jsp";
                 int id = user.getUserID();
@@ -200,19 +209,19 @@ public class SellerServlet extends HttpServlet {
                 request.setAttribute("bestProductSell", orderService.getBestSellingProductName(user.getUserID()));
             }
             case "sanphamlist" -> {
-                if (request.getParameter("page") != null) {
-                    page = Integer.parseInt(request.getParameter("page"));
-                }
-                int id = user.getUserID();
                 part += "SanPhamList.jsp";
-                int totalPage = productService.getTotalProductActivePage(id, SIZE);
-                System.out.println(totalPage);
-                request.setAttribute("totalPage", totalPage);
-                List<Product> productList = productService.getAllBySellerIdActive(user.getUserID(), page, SIZE);
-                request.setAttribute("productList", productList);
+                int id = user.getUserID();
+                page = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
+                String search = request.getParameter("search") != null ? request.getParameter("search") : "";
 
-                String pageStr = request.getParameter("page");
-                page = (pageStr == null || pageStr.isEmpty()) ? 1 : Integer.parseInt(pageStr);
+                // Tính tổng số trang (cần thêm hàm mới)
+                int totalPage = productService.getTotalProductActivePageWithSearch(id, SIZE, search);
+                List<Product> productList = productService.getAllBySellerIdActive(id, page, SIZE, search);
+
+                request.setAttribute("totalPage", totalPage);
+                request.setAttribute("productList", productList);
+                request.setAttribute("currentPage", page);
+                request.setAttribute("currentSearch", search);
             }
             case "addSanpham" -> {
                 part += "addProduct.jsp";

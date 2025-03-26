@@ -102,8 +102,8 @@ public class ProductService {
     public long countProductsBySellerId(int sellerId) {
         return productDAO.countProductsBySellerIdDAO(sellerId);
     }
-    public void updateProductNameToInactive(int productId) {
-        productDAO.updateProductNameDAO(productId, "INACTIVE");
+    public void deleteProduct(int productId) {
+        productDAO.deleteProductDAO(productId);
     }
     public void restoreProduct(int productId) {
         productDAO.restoreProductDAO(productId);

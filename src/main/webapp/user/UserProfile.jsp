@@ -1,4 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -9,23 +11,83 @@
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/userProfile.css">
+         <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    
+    <!--AWESOME-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     </head>
 
     <body>
         <!-- Header -->
-        <div class="header">
-            <div class="container">
-                <nav class="navbar navbar-expand-lg">
-                    <a class="navbar-brand text-white" href="${pageContext.request.contextPath}/products" >Back</a>
-                    <div class="ms-auto">
-                        <a href="${pageContext.request.contextPath}/logout" class="text-white">Đăng xuất</a>
-                    </div>
-                </nav>
+        <header>
+    <c:set var="userRole" value="${sessionScope.user != null && sessionScope.user.roleID != null ? sessionScope.user.roleID.roleID : 0}" />
+
+    <div class="top__header">
+        <div class="container">
+            <div class="top_header_content">
+                <c:choose>
+                    <c:when test="${userRole == 1}">
+                        <span><a href="${pageContext.request.contextPath}/admin" class="text-banner">Kênh quản lý</a></span>
+                        <span><a href="${pageContext.request.contextPath}/admin?action=hoso" class="text-banner">Hồ sơ của bạn</a></span>
+                    </c:when>
+                    <c:when test="${userRole == 2}">
+                        <span><a href="${pageContext.request.contextPath}/seller?action=sellerPage" class="text-banner">Kênh bán hàng</a></span>
+                        <span><a href="${pageContext.request.contextPath}/seller?action=sellerPage" class="text-banner">Hồ sơ của bạn</a></span>
+                    </c:when>
+                    <c:when test="${userRole == 3}">
+                        <span><a href="${pageContext.request.contextPath}/user?action=userPage" class="text-banner">Hồ sơ của bạn</a></span>
+                        <span><a href="${pageContext.request.contextPath}/SellerRegistrationServlet" class="text-banner">Đăng ký bán hàng</a></span>
+                    </c:when>
+                    <c:otherwise>
+                        <!-- Guest không hiển thị gì -->
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
+    </div>
 
+    <div class="container">
+        <div class="header_page">
+            <div class="logo__header">
+                <a href="${pageContext.request.contextPath}/products"><img src="${pageContext.request.contextPath}/assets/images/logo.png" alt=""></a>
+                <div class="title__header">
+                    <span><p class="text-warning">Hội chợ</p></span>
+                    <span><p class="text-primary">Nông sản</p></span>
+                </div>
+            </div>
+            
+            <div class="right__header">
+                <c:choose>
+                    <c:when test="${userRole == 0}">
+                        <a href="${pageContext.request.contextPath}/logins" class="user_profile">
+                            <span class="material-icons-sharp">person</span>
+                            <p>Đăng nhập</p>
+                        </a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="${pageContext.request.contextPath}/logout" class="user_profile">
+                            <span class="material-icons-sharp">logout</span>
+                            <p>Đăng xuất</p>
+                        </a>
+                        <a href="${pageContext.request.contextPath}/cart" class="cart-processing">
+                            <span class="material-icons-sharp">add_shopping_cart</span>
+                            <p>Giỏ hàng</p>
+                        </a>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+        </div>
+    </div>
+</header>
+        
+        
+        
+        
+        
+        
+        
         <!-- Main Content -->
-        <div class="container mt-4">
+        <div class="container mt-4" style="width: fit-content !important;">
             <div class="profile-container">
                 <!-- Sidebar -->
                 <div class="sidebar">
@@ -75,6 +137,17 @@
                     var contextPath = "${pageContext.request.contextPath}";
                 </script>
                 <script src="${pageContext.request.contextPath}/assets/js/userPage.js"></script>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        var urlParams = new URLSearchParams(window.location.search);
+                        var autoLoad = urlParams.get("autoLoad");
+
+                        if (autoLoad === "donHang") {
+                            loadSection("donHang");
+                        }
+                    });
+
+                </script>
            
     </body>
 </html>

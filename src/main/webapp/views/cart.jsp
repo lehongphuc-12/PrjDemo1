@@ -156,7 +156,12 @@
                 </div>
             </div>
         </div>
+                    <div style="margin-top: 16px">
+                        <a href="javascript:void(0);" onclick="history.back();" class="btn btn-primary"> Trở về trang trước</a>
+                    </div>
     </div>
+    
+                   
 
     <!--FOOTER-->
     <jsp:include page="/includes/footer.jsp"></jsp:include>

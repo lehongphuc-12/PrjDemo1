@@ -5,7 +5,6 @@
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/user_list.css">
 
-
 <div class="content-header">
     <h1>${param.action == 'nguoidung' ? 'Danh Sách Khách Hàng' : param.action == 'nguoiban' ? 'Danh Sách Người Bán' : 'Danh Sách Người Dùng'}</h1>
     <div class="search-container">
@@ -49,19 +48,14 @@
             </c:when>
             <c:otherwise>
                 <c:forEach var="user" items="${listUser}">
-                    <tr class="${user.fullName == 'INACTIVE' ? 'inactive-row' : ''}">
+                    <tr class="${user.status == false ? 'inactive-row' : ''}">
                         <td>${user.userID}</td>
                         <td>
                             <div class="name-container">
-                                <c:choose>
-                                    <c:when test="${user.fullName == 'INACTIVE'}">
-                                        <span>${fn:substringAfter(user.address, 'Tên Gốc: ')}</span>
-                                        <span class="inactive-name">(không hoạt động)</span>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <span>${user.fullName}</span>
-                                    </c:otherwise>
-                                </c:choose>
+                                <span>${user.fullName}</span>
+                                <c:if test="${user.status == false}">
+                                    <span class="inactive-name">(bị chặn)</span>
+                                </c:if>
                             </div>
                         </td>
                         <td>${user.email}</td>
@@ -73,7 +67,7 @@
                         </td>
                         <td>
                             <c:choose>
-                                <c:when test="${user.fullName != 'INACTIVE'}">
+                                <c:when test="${user.status == true}">
                                     <a href="${pageContext.request.contextPath}/admin?action=edit&id=${user.userID}" 
                                        class="action-btn edit-btn" 
                                        title="Sửa"><i class="fas fa-edit"></i></a>

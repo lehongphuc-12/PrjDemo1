@@ -72,7 +72,7 @@ var swiperProductMain = new Swiper(".mySwiper2.product_detail_slide", {
 // Swiper 5: Store Product
 var swiperStore = new Swiper(".mySwiper.store_product", {
   cssMode: true,
-  loop: true,
+  loop: document.querySelectorAll('.mySwiper.store_product .swiper-slide').length > 5, // Kiểm tra trực tiếp số lượng sản phẩm
   navigation: {
     nextEl: ".mySwiper.store_product .swiper-button-next",
     prevEl: ".mySwiper.store_product .swiper-button-prev"

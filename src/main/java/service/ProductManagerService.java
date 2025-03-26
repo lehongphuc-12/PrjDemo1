@@ -45,6 +45,12 @@ public class ProductManagerService {
     public List<Product> getAllBySellerIdInActive(int id) {
         return productDao.findBySellerId(id).stream().filter(product -> product.getStatus().equals(false)).collect(Collectors.toList());
     }
+    public int getTotalProductActivePageWithSearch(int sellerId, int pageSize, String search) {
+        return productDao.getTotalProductActivePageWithSearch(sellerId, pageSize, search);
+    }
+    public List<Product> getAllBySellerIdActive(int id, int page, int size, String search) {
+        return productDao.findActiveBySellerId(id, page, size, search);
+    }
 
     public void addProduct(User user, String name, double price, int quantity, int cityId, int categoryId, String description, List<Part> fileParts, String uploadPath) throws IOException {
         Product product = new Product();

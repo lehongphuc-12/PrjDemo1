@@ -1,8 +1,4 @@
-<%-- 
-    Document   : Hoso
-    Created on : Mar 13, 2025, 6:15:25 PM
-    Author     : ASUS
---%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

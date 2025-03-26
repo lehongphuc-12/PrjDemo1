@@ -119,7 +119,7 @@ public class ProductServlet extends HttpServlet {
     }
     
     private void deleteProduct(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         String productIdStr = request.getParameter("productId");
         String sellerIdStr = request.getParameter("sellerId");
 
@@ -127,10 +127,8 @@ public class ProductServlet extends HttpServlet {
             int productId = Integer.parseInt(productIdStr);
             int sellerId = Integer.parseInt(sellerIdStr);
 
-            // Gọi service để cập nhật ProductName thành "INACTIVE"
-            productService.updateProductNameToInactive(productId);
+            productService.deleteProduct(productId);
 
-            // Quay lại danh sách sản phẩm
             response.sendRedirect(request.getContextPath() + "/products?action=listProductsBySeller&sellerId=" + sellerId);
 
         } catch (NumberFormatException e) {
@@ -141,7 +139,7 @@ public class ProductServlet extends HttpServlet {
             listProductsBySeller(request, response);
         }
     }
-    
+
     private void restoreProduct(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String productIdStr = request.getParameter("productId");
@@ -151,7 +149,6 @@ public class ProductServlet extends HttpServlet {
             int productId = Integer.parseInt(productIdStr);
             int sellerId = Integer.parseInt(sellerIdStr);
 
-            // Khôi phục sản phẩm
             productService.restoreProduct(productId);
             response.sendRedirect(request.getContextPath() + "/products?action=listProductsBySeller&sellerId=" + sellerId);
 
@@ -163,4 +160,5 @@ public class ProductServlet extends HttpServlet {
             listProductsBySeller(request, response);
         }
     }
+
 }
