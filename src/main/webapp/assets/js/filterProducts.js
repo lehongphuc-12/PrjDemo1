@@ -35,7 +35,6 @@ function filterProducts(ID="", search="", page=1, action="", filterType="") {
 
 $(document).ready(function () {
     console.log("FILTER READY");
-    filterProducts();
     attachEventBuyHandlers();
 });
 
