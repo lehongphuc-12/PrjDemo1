@@ -287,7 +287,10 @@
                             </c:choose>
                         </h4>
                         <div class="btn_info_store">
-                            <a href="#"><span class="material-icons-sharp">home</span> <p>Xem cửa hàng</p></a>
+                           
+                                    <a href="${pageContext.request.contextPath}/store?sellerID=${product.sellerID.userID}">
+                                        <span class="material-icons-sharp">home</span> <p>Xem cửa hàng</p>
+                                    </a>    
                         </div>
                     </div>
                 </div>

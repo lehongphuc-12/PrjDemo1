@@ -16,6 +16,15 @@
     <jsp:include page="/includes/header.jsp"></jsp:include>
     <!-- Nội dung chính -->
     <div class="container my-4">
+        <!--Thông báo khi stock sản phẩm ko đủ-->
+        <c:if test="${not empty outOfStockMessages}">
+            <div id="outOfStockMessages" class="out-of-stock-message">
+                <c:forEach var="message" items="${outOfStockMessages}">
+                    <p>${message}</p>
+                </c:forEach>
+            </div>
+        </c:if>
+        
         <!-- Thông báo -->
         <c:if test="${not empty errorMessage}">
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -69,14 +78,21 @@
                                                        data-unit-price="${discountedPrices[product.productID] != null ? discountedPrices[product.productID].toString() : cartItem.price.toString()}"
                                                        data-price="${itemTotals[product.productID].toString()}" 
                                                        value="${product.productID}" 
-                                                       onchange="updateTotal()" checked>
+                                                       onchange="updateTotal()" 
+                                                        <c:if test="${outOfStockStatus[product.productID]}">disabled="disabled"</c:if>
+                                                       checked>
                                             </div>
                                             <div class="cart-item-details">
                                                 <c:set var="productImages" value="${cartItemImages[product.productID]}" />
                                                 <c:set var="imageUrl" value="${not empty productImages and not empty productImages[0] ? productImages[0].imageURL : pageContext.request.contextPath + '/assets/images/detail1.png'}" />
                                                 <img src="${pageContext.request.getContextPath()}/assets/images/productImages/${imageUrl}" alt="${product.productName != null ? product.productName : 'Không có ảnh'}">
                                                 <div class="product-info">
-                                                    <h6>${product.productName != null ? product.productName : 'Không có tên'}</h6>
+                                                    <h6>
+                                                        ${product.productName != null ? product.productName : 'Không có tên'}
+                                                        <c:if test="${outOfStockStatus[product.productID]}">
+                                                            <span class="out-of-stock-label">(HẾT HÀNG)</span>
+                                                        </c:if>
+                                                    </h6>
                                                     <p>Phân loại: ${product.categoryID != null ? product.categoryID.categoryName : 'N/A'}</p>
                                                 </div>
                                             </div>

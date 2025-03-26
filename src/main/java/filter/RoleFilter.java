@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.User;
 
-//@WebFilter(filterName = "RoleFilter", urlPatterns = {"/*"})
+@WebFilter(filterName = "RoleFilter", urlPatterns = {"/*"})
 public class RoleFilter implements Filter {
 
     private static final boolean debug = true;
@@ -59,7 +59,9 @@ public class RoleFilter implements Filter {
             "/views/reset-password.jsp",
             "/reset-password",
             "/getProductTypes",
-            "/views/changePassword.jsp"
+            "/views/changePassword.jsp",
+            "/store",
+            "/views/store_page.jsp"
         ));
 
         guestPages = Collections.unmodifiableList(Arrays.asList(

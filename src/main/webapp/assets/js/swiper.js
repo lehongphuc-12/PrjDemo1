@@ -72,7 +72,7 @@ var swiperProductMain = new Swiper(".mySwiper2.product_detail_slide", {
 // Swiper 5: Store Product
 var swiperStore = new Swiper(".mySwiper.store_product", {
   cssMode: true,
-  loop: document.querySelectorAll('.mySwiper.store_product .swiper-slide').length > 5, // Kiểm tra trực tiếp số lượng sản phẩm
+  loop: true,
   navigation: {
     nextEl: ".mySwiper.store_product .swiper-button-next",
     prevEl: ".mySwiper.store_product .swiper-button-prev"
@@ -114,11 +114,11 @@ var swiperNewest = new Swiper(".newest_products .mySwiper", {
   },
   speed: 1000,
   slidesPerView: 1,
-  slidesPerGroup: 1,
+  slidesPerGroup: document.querySelectorAll('.newest_products .mySwiper .swiper-slide').length % 2 === 0 ? 2 : 3,
   breakpoints: {
-    576: { slidesPerView: 2 },
-    768: { slidesPerView: 3 },
-    992: { slidesPerView: 3 }
+    576: { slidesPerView: 3 },
+    768: { slidesPerView: 4 },
+    992: { slidesPerView: 5 }
   }
 });
 
@@ -140,5 +140,8 @@ window.addEventListener("scroll", debounce(() => {
     .querySelector("header")
     ?.classList.toggle("window-scroll", window.scrollY > 0);
 }, 100));
+
+
+
 
  

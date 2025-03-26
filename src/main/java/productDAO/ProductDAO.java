@@ -420,7 +420,7 @@ public class ProductDAO implements IProductDAO{
     
     public long countProductsBySearchDAO(String productName) {
         try (EntityManager em = JpaUtil.getEntityManager()) {
-            String jpql = "SELECT COUNT(p) FROM Product p WHERE p.productName LIKE :productNameProducts and p.status = true ";
+            String jpql = "SELECT COUNT(p) FROM Product p WHERE p.productName LIKE :productName and p.status = true ";
             TypedQuery<Long> query = em.createQuery(jpql, Long.class);
             query.setParameter("productName", "%"+productName+" %");
             return query.getSingleResult();

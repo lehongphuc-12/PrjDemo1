@@ -88,9 +88,13 @@ private void viewCart(HttpServletRequest request, HttpServletResponse response)
         // Lấy danh sách giỏ hàng
         List<Cart> allCartItems = cartService.getCartItemsByUser(user);
         cartItems = new ArrayList<>(allCartItems);
-        if (allCartItems.size() > cartItems.size()) {
-            request.setAttribute("warningMessage", "Một số sản phẩm trong giỏ hàng đã hết hạn (quá 30 ngày) và bị xóa.");
+        
+        List<String> outOfStockMessages = CartService.getOutOfStockMessages();
+        if (!outOfStockMessages.isEmpty()) {
+            request.setAttribute("outOfStockMessages", outOfStockMessages);
         }
+        CartService.clearOutOfStockMessages();
+        
 
         // Sử dụng lastAddedSellerId để sắp xếp
         Integer lastAddedSellerId = CartService.getLastAddedSellerId();
@@ -125,7 +129,13 @@ private void viewCart(HttpServletRequest request, HttpServletResponse response)
                 sellerNames.put(seller.getUserID(), seller.getFullName());
             }
         }
-
+        // Kiểm tra trạng thái "HẾT HÀNG" cho từng sản phẩm
+        Map<Integer, Boolean> outOfStockStatus = new HashMap<>();
+        for (Cart cartItem : cartItems) {
+            Product product = cartItem.getProductID();
+            boolean isOutOfStock = product.getQuantity() == null || product.getQuantity() <= 0;
+            outOfStockStatus.put(product.getProductID(), isOutOfStock);
+        }
         // Xử lý ảnh, giá giảm, và tổng tiền
         Map<Integer, List<ProductImage>> cartItemImages = new HashMap<>();
         Map<Integer, BigDecimal> discountedPrices = new HashMap<>();
@@ -177,16 +187,19 @@ private void viewCart(HttpServletRequest request, HttpServletResponse response)
         request.setAttribute("discountAmount", discountAmount);
         request.setAttribute("total", total);
         session.setAttribute("discountAmount", discountAmount);
-
-        LOGGER.log(Level.INFO, "Forwarding to /views/cart.jsp with cartItems size: {0}", cartItems.size());
+        request.setAttribute("outOfStockStatus", outOfStockStatus);
+        
+        LOGGER.info("Forwarding to /views/cart.jsp with cartItems size: " + cartItems.size());
         request.getRequestDispatcher("/views/cart.jsp").forward(request, response);
 
-    } catch (ServletException | IOException e) {
-        LOGGER.log(Level.SEVERE, "Error in viewCart: {0}", e.getMessage());
+    } catch (Exception e) {
+        LOGGER.severe("Error in viewCart: " + e.getMessage());
         request.setAttribute("errorMessage", "Lỗi khi tải giỏ hàng: " + e.getMessage());
         request.getRequestDispatcher("/views/cart.jsp").forward(request, response);
     }
 }
+
+
     private Map<Integer, List<Cart>> groupCartItemsBySellerID(List<Cart> cartItems) {
         return cartItems.stream()
                 .filter(cartItem -> cartItem != null && cartItem.getProductID() != null && cartItem.getProductID().getSellerID() != null)
@@ -267,6 +280,9 @@ private void viewCart(HttpServletRequest request, HttpServletResponse response)
         } catch (IOException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("Lỗi khi mua ngay: " + e.getMessage());
+        } catch (IllegalArgumentException i){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write(i.getMessage());
         }
     }
 

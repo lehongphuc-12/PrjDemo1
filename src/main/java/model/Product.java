@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package model;
 
 import jakarta.persistence.Basic;
@@ -32,10 +29,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-/**
- *
- * @author nguyenanh
- */
+
+
 @Entity
 @Table(name = "Product")
 @XmlRootElement
@@ -265,6 +260,9 @@ public class Product implements Serializable {
             avg += rv.getRating()*1.0;
         }   
         return avg/reviews.size()*1.0;
+    }
+    public int getTotalReview(){
+        return this.reviewCollection.size();
     }
     
     public int getTotalSold(){

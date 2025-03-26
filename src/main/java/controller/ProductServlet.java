@@ -22,6 +22,7 @@ public class ProductServlet extends HttpServlet {
     
     private ProductService productService;
     
+    @Override
     public void init(){
         productService = new ProductService();
     }

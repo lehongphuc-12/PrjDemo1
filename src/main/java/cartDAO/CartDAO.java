@@ -119,8 +119,7 @@ public class CartDAO implements ICartDAO {
 
     @Override
     public List<Cart> findCartByUser(User user) {
-        EntityManager em = getEntityManager();
-        try {
+        try (EntityManager em = getEntityManager()) {
             TypedQuery<Cart> query = em.createQuery(
                 "SELECT c FROM Cart c " +
                 "JOIN FETCH c.productID p " +
@@ -133,14 +132,11 @@ public class CartDAO implements ICartDAO {
             List<Cart> result = query.getResultList();
             System.out.println("Retrieved " + (result != null ? result.size() : 0) + " cart items for user " + (user != null ? user.getUserID() : "null"));
             return result != null ? result : Collections.emptyList();
-        } finally {
-            em.close();
         }
     }
     @Override
     public Discount findDiscountByProduct(int productId) {
-        EntityManager em = getEntityManager();
-        try {
+        try (EntityManager em = getEntityManager()) {
             TypedQuery<Discount> query = em.createQuery(
                 "SELECT d FROM Discount d WHERE d.productID.productID = :productId " +
                 "AND d.startDate <= :now AND d.endDate >= :now", Discount.class);
@@ -149,8 +145,6 @@ public class CartDAO implements ICartDAO {
             return query.getSingleResult();
         } catch (NoResultException e) {
             return null;
-        } finally {
-            em.close();
         }
     }
 

@@ -91,7 +91,7 @@ export function showAlert(title, message, type) {
                 alertContainer.fadeOut(); // Ẩn container nếu không còn alert nào
             }
         });
-    }, 1000);
+    }, 10000);
 }
 
 

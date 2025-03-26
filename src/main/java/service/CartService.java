@@ -5,6 +5,7 @@ import cartDAO.ICartDAO;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -20,17 +21,24 @@ public class CartService {
     private final ICartDAO cartDAO;
 
     private static final ThreadLocal<Integer> lastAddedSellerId = new ThreadLocal<>();
+    private static final ThreadLocal<List<String>> outOfStockMessagesHolder = new ThreadLocal<>();
     public CartService() {
         this.cartDAO = new CartDAO();
     }
 
     public void addToCart(User user, Product product, int quantity) {
+        if (quantity <= 0) throw new IllegalArgumentException("Sản phẩm đã hết , vui lòng lựa chọn mặt hàng khác!");
+        if (product.getQuantity() == null || product.getQuantity().compareTo(quantity) < 0) {
+            throw new IllegalArgumentException("Không đủ số lượng sản phẩm đang có, vui lòng kiểm tra giỏ hàng của bạn!");
+        }
+
         Cart existingCart = cartDAO.findCartByUserAndProduct(user, product.getProductID());
+        LocalDateTime now = LocalDateTime.now();
 
         if (existingCart != null) {
             int newQuantity = existingCart.getQuantity() + quantity;
             if (product.getQuantity().compareTo(newQuantity) < 0) {
-                throw new IllegalArgumentException("Not enough stock available after updating quantity");
+                throw new IllegalArgumentException("Không đủ số lượng sản phẩm đang có, vui lòng kiểm tra giỏ hàng của bạn!");
             }
             // Cập nhật số lượng và addedDate thay vì xóa và thêm lại
             existingCart.setQuantity(newQuantity);
@@ -58,8 +66,8 @@ public class CartService {
         if (quantity <= 0) throw new IllegalArgumentException("Quantity must be greater than 0");
         Cart cart = cartDAO.findCartByUserAndProduct(user, productId);
         if (cart == null) throw new IllegalArgumentException("Cart item not found for user " + user.getUserID() + " and product " + productId);
-        if (cart.getProductID().getQuantity() == null || cart.getProductID().getQuantity().compareTo(Integer.valueOf(quantity)) < 0) {
-            throw new IllegalArgumentException("Not enough stock available");
+        if (cart.getProductID().getQuantity() == null || cart.getProductID().getQuantity() < 0) {
+            throw new IllegalArgumentException("Không đủ số lượng sản phẩm đang có, vui lòng kiểm tra giỏ hàng của bạn!");
         }
 
         // Cập nhật số lượng
@@ -89,36 +97,73 @@ public class CartService {
     }
 
     public List<Cart> getCartItemsByUser(User user) {
-        if (user == null) throw new IllegalArgumentException("User cannot be null");
+       if (user == null) throw new IllegalArgumentException("User cannot be null");
         List<Cart> cartItems = cartDAO.findCartByUser(user);
-        
-        // Lọc các sản phẩm trong giỏ hàng quá 30 ngày
-        LocalDateTime now = LocalDateTime.now();
-        cartItems = cartItems.stream()
-                .filter(cart -> {
-                    if (cart.getAddedDate() == null) return true; // Giữ lại nếu không có ngày thêm
-                    LocalDateTime addedTime = cart.getAddedDate().toInstant()
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDateTime();
-                    return addedTime.plusDays(30).isAfter(now); // Giữ lại nếu chưa quá 30 ngày
-                })
-                .collect(Collectors.toList());
+        List<String> outOfStockMessages = new ArrayList<>();
 
-        // Xóa các sản phẩm quá hạn khỏi cơ sở dữ liệu
-        List<Integer> expiredCartIds = cartItems.stream()
+        // Lọc các sản phẩm trong giỏ hàng quá 2 phút
+        LocalDateTime now = LocalDateTime.now();
+        List<Cart> expiredItems = cartItems.stream()
                 .filter(cart -> cart.getAddedDate() != null && 
                         cart.getAddedDate().toInstant()
                                 .atZone(ZoneId.systemDefault())
                                 .toLocalDateTime()
                                 .plusDays(30)
                                 .isBefore(now))
-                .map(Cart::getCartID)
                 .collect(Collectors.toList());
-        if (!expiredCartIds.isEmpty()) {
-            expiredCartIds.forEach(cartDAO::removeCart);
+
+        // Thêm thông báo cho các sản phẩm quá hạn
+        if (!expiredItems.isEmpty()) {
+            for (Cart expiredItem : expiredItems) {
+                outOfStockMessages.add(expiredItem.getProductID().getProductName() + " - Đã bị xóa do quá hạn (quá 30 ngày).");
+                cartDAO.removeCart(expiredItem.getCartID()); // Xóa sản phẩm quá hạn
+            }
         }
 
+        // Lọc lại danh sách sau khi xóa các sản phẩm quá hạn
+        cartItems = cartItems.stream()
+                .filter(cart -> {
+                    if (cart.getAddedDate() == null) return true;
+                    LocalDateTime addedTime = cart.getAddedDate().toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDateTime();
+                    return addedTime.plusDays(30).isAfter(now);
+                })
+                .collect(Collectors.toList());
+        // Kiểm tra số lượng tồn kho và điều chỉnh hoặc xóa sản phẩm nếu cần
+
+        for (Cart cart : cartItems) {
+            Product product = cart.getProductID();
+            Integer stockQuantity = product.getQuantity(); // Số lượng tồn kho
+            int cartQuantity = cart.getQuantity(); // Số lượng trong giỏ hàng
+
+            // Kiểm tra nếu sản phẩm hết hàng hoặc không đủ số lượng
+            if (stockQuantity == null || stockQuantity <= 0) {
+                // Nếu tồn kho hết (stockQuantity <= 0), xóa sản phẩm khỏi giỏ hàng
+                outOfStockMessages.add(product.getProductName() + " - Đã hết hàng");
+                int newQuantity = stockQuantity;
+                cart.setQuantity(newQuantity);
+                cartDAO.updateCart(cart);
+                
+            } else if (stockQuantity.compareTo(cartQuantity) < 0) {
+                // Nếu tồn kho không đủ (stockQuantity < cartQuantity), điều chỉnh số lượng trong giỏ hàng
+                int newQuantity = stockQuantity; // Lấy số lượng tồn kho còn lại
+                cart.setQuantity(newQuantity); // Cập nhật số lượng trong giỏ hàng
+                cartDAO.updateCart(cart); // Cập nhật cơ sở dữ liệu
+                outOfStockMessages.add(product.getProductName() + " - Số lượng đã được điều chỉnh do tồn kho chỉ còn " + newQuantity);
+            }
+        }
+        
+        outOfStockMessagesHolder.set(outOfStockMessages);
         return cartItems != null ? cartItems : Collections.emptyList();
+    }
+    public static List<String> getOutOfStockMessages() {
+        List<String> messages = outOfStockMessagesHolder.get();
+        return messages != null ? messages : Collections.emptyList();
+    }
+
+    public static void clearOutOfStockMessages() {
+        outOfStockMessagesHolder.remove();
     }
 
     public BigDecimal calculateSubTotal(List<Cart> cartItems) {

@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @WebServlet("/checkout")
 public class CheckoutServlet extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(CheckoutServlet.class.getName());
-    private OrderService orderService;
     private ProductService productService;
     private CartService cartService;
     private PaymentMethodService paymentMethodService;
@@ -30,7 +29,6 @@ public class CheckoutServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        orderService = new OrderService();
         productService = new ProductService();
         cartService = new CartService();
         paymentMethodService = new PaymentMethodService();

@@ -5,17 +5,15 @@
     border: 2px solid var(--color-primary);
     border-radius: var(--border-radius);
     padding: 20px;
-    display: flex;
-}
-
-.seller_info > .row{
-    display: flex;
 }
 
 .seller_info_right .bottom{
     display: flex;
     margin-top: 16px;
     gap: 20px;
+}
+.seller_info_container{
+    padding:12px;
 }
 
 
@@ -84,6 +82,7 @@
 
   .newest_products .product.newest_product{
     display: flex;
+    flex-direction: row;
     height: 100px;
     align-items: center;
     padding: 8px;
@@ -96,26 +95,58 @@
 }
 .tab-content .newest_products .list_products .product .product_info{
   display: flex;
-  flex-direction: column;
+   flex-direction: column; 
   align-items: flex-start;
   justify-content: center;
-  gap: 10px;
+
   height: 100%;
   overflow: hidden;
-  padding: 12px;
+  padding:12px;
+  flex-basis:2;
 
   & .product_price .price, 
   & .product_price,
   & .product_name{
     margin: 0;
+    
   }
 }  
+.tab-content .newest_products .list_products .product .product_info .product_name p{
+     display: -webkit-box;           /* Sá»­ dá»¥ng flexbox vá»›i WebKit */
+    -webkit-line-clamp: 2;         /* Hiá»ƒn thá»‹ tá»‘i Ä‘a 2 dÃ²ng */
+    -webkit-box-orient: vertical;  /* Äá»‹nh hÆ°á»›ng ná»™i dung dá»c */
+    overflow: hidden;              /* áº¨n pháº§n ná»™i dung trÃ n */
+    text-overflow: ellipsis;
+}
 
+.page_numbers{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+}
+.page_numbers span{
+    display: inline-block;
+    padding: 8px;
+    border: 1px solid var(--color-primary);
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.page_numbers span:hover{
+    font-size: 1.2rem;
+}
 .newest_products .list_products .product_image{
-  height: 100%;
-  width: fit-content;
+  flex-basis: 1;
+  height: 100px;
+  width: 100px;
 }
 .newest_products .list_products .product_image img{
-  height: 100%;
-  width: auto;
+  height: 100px;
+  width: 100px;
 }
