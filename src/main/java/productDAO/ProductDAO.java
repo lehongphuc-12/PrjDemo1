@@ -635,8 +635,7 @@ public class ProductDAO implements IProductDAO{
     public static void main(String[] args) {
         String orderProducts =  "ORDER BY (0.7 * COALESCE(SIZE(p.orderDetailCollection), 0) + 0.3 * COALESCE(SIZE(p.productViewCollection), 0)) DESC";
         ProductDAO dao = new ProductDAO();
-        System.out.println(dao.getSimilarProducts(82));
-        System.out.println(dao.getProductsByCategoryIdDAO(15, 0, 0, orderProducts));
+        System.out.println(dao.findById(5).getDiscountCollection().size());
     }
     
 }

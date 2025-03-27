@@ -171,7 +171,7 @@
                 <div class="sec_product_category">
                      <!--Banner Category--> 
                     <div class="banner_product_category">
-                        <a href="#">
+                        <a href="javascript:void(0)">
                             <img src="${pageContext.request.getContextPath()}/assets/images/CategoryGroup${entry.key.groupID}.png" alt="" style="border-radius: 8px">
                         </a>
                         <div class="title_banner_product">

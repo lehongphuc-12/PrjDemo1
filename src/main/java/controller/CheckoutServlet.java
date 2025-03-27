@@ -165,15 +165,21 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             LOGGER.log(Level.INFO, "Checkout successful, redirecting to order confirmation for order: {0}", order.getOrderID());
             response.sendRedirect(request.getContextPath() + "/order-confirmation?orderId=" + order.getOrderID());
         }
-    } catch (IllegalStateException e) {
-        LOGGER.log(Level.SEVERE, "Checkout error: {0}", e.getMessage());
-        request.setAttribute("errorMessage", e.getMessage());
+    } catch (IllegalArgumentException e) {
+        LOGGER.log(Level.SEVERE, "Dữ liệu không hợp lệ: {0}", e.getMessage());
+        request.setAttribute("errorMessage", e.getMessage()); 
         prepareCheckoutPage(request, selectedItems);
         request.setAttribute("paymentMethods", paymentMethodService.getAllPaymentMethods());
         request.getRequestDispatcher("/views/checkout.jsp").forward(request, response);
-    } catch (IOException e) {
-        LOGGER.log(Level.SEVERE, "Unexpected error during checkout: {0}", e.getMessage());
-        request.setAttribute("errorMessage", "Đã xảy ra lỗi không mong muốn trong quá trình thanh toán. Vui lòng thử lại sau.");
+    } catch (IllegalStateException e) {
+        LOGGER.log(Level.SEVERE, "Lỗi thanh toán: {0}", e.getMessage());
+        request.setAttribute("errorMessage", e.getMessage()); 
+        prepareCheckoutPage(request, selectedItems);
+        request.setAttribute("paymentMethods", paymentMethodService.getAllPaymentMethods());
+        request.getRequestDispatcher("/views/checkout.jsp").forward(request, response);
+    } catch (Exception e) {
+        LOGGER.log(Level.SEVERE, "Lỗi không mong muốn: {0}", e.getMessage());
+        request.setAttribute("errorMessage", "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.");
         prepareCheckoutPage(request, selectedItems);
         request.setAttribute("paymentMethods", paymentMethodService.getAllPaymentMethods());
         request.getRequestDispatcher("/views/checkout.jsp").forward(request, response);

@@ -104,7 +104,7 @@
                                     </div>
                                     <div class="discount">
                                         <div class="discount_price text-deleted">
-                                            <del>
+                                            <del style="font-size: 20px">
                                                 <fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" />đ
                                             </del>
                                         </div>

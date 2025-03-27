@@ -16,6 +16,8 @@ CREATE TABLE [User] (
     PhoneNumber NVARCHAR(15) not null,
     RoleID INT NOT NULL,
     Address NVARCHAR(255),
+    Status bit DEFAULT 1,
+    shopName nvarchar(100),
     CreatedAt DATETIME DEFAULT GETDATE(),
     FOREIGN KEY (RoleID) REFERENCES [Role](RoleID)
 );
@@ -51,6 +53,7 @@ CREATE TABLE [Product] (
     CategoryID INT NOT NULL,
     CreatedDate DATETIME DEFAULT GETDATE(),
     CityID INT NOT NULL,
+    Status bit DEFAULT 1,
     FOREIGN KEY (CityID) REFERENCES [City](CityID),
     FOREIGN KEY (SellerID) REFERENCES [User](UserID),
     FOREIGN KEY (CategoryID) REFERENCES [Category](CategoryID)
@@ -164,11 +167,7 @@ CREATE TABLE SellerRegistrationRequest (
 );
 
 
-alter table [User]
-add  shopName nvarchar(100)
 
-alter table [Product]
-add  status bit DEFAULT 1
 
 select * from [OrderDetail]
 -- Bảng Role:
@@ -243,7 +242,7 @@ BEGIN
     PRINT 'First Two Words: ' + @FirstTwoWords;
     PRINT 'CategoryID: ' + CAST(@CategoryID AS NVARCHAR(10));
     
-    SELECT TOP 10 *
+    SELECT TOP 30 *
     FROM Product p
     WHERE p.ProductID != @ProductID and p.[status] =1
     AND (
@@ -396,16 +395,10 @@ VALUES
 
 
 UPDATE [User]
-SET createdAt = DATEADD(DAY, ABS(CHECKSUM(NEWID())) % 83, '2024-01-01');
+SET createdAt = DATEADD(DAY, ABS(CHECKSUM(NEWID())) % 83, '2025-01-01');
 
-UPDATE [User]
-SET createdAt = DATEADD(YEAR, 2025 - YEAR(createdAt), createdAt)
-WHERE createdAt IS NOT NULL;
 
-alter table [User]
-add [status] bit default 1
-update [User] 
-set status = 1
+
 
 select * from [User] where RoleID = 2
 
@@ -540,7 +533,7 @@ select * from [Review] where reviewId =
 insert into [Review](ProductID,UserID,Rating,Comment)
 values(4,120,2,N'ncl')
 
-select * from Product WHERE sellerID = 9
+select * from Product WHERE CategoryID=1
 
 update Product 
 set status = 1
@@ -550,9 +543,10 @@ select * from [USER] where RoleID = 1
 
 Select * from Discount
 
-alter table [User]
-add [status] bit default 1
-update [User] 
-set status = 1
 
 SELECT * from [User] where Email  LIKE 'lethiven@gmail.com'
+
+select * from cart
+
+delete from Cart 
+where CartID = 1073

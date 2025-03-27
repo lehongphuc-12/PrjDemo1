@@ -91,7 +91,9 @@ public class RoleFilter implements Filter {
             "/api/data",
             "/updateProduct",
             "/addProduct",
-            "/removeProduct"
+            "/removeProduct",
+            "/voucher",
+            "/confirmOrder"
         ));
 
         adminPages = Collections.unmodifiableList(Arrays.asList(

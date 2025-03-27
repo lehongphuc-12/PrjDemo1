@@ -79,8 +79,9 @@
                                                        data-price="${itemTotals[product.productID].toString()}" 
                                                        value="${product.productID}" 
                                                        onchange="updateTotal()" 
-                                                        <c:if test="${outOfStockStatus[product.productID]}">disabled="disabled"</c:if>
-                                                       checked>
+                                                       <c:if test="${outOfStockStatus[product.productID]}">disabled="disabled"</c:if>
+                                                       <c:if test="${outOfStockStatus[product.productID]}">checked</c:if>
+                                                       >
                                             </div>
                                             <div class="cart-item-details">
                                                 <c:set var="productImages" value="${cartItemImages[product.productID]}" />

@@ -249,7 +249,7 @@
     </div>
 </div>
 
-<table class="product-table">
+<<table class="product-table">
     <thead>
         <tr>
             <th>ProductID</th>
@@ -282,28 +282,15 @@
                         <td><fmt:formatDate value="${product.createdDate}" pattern="yyyy-MM-dd" /></td>
                         <td>${product.cityID.cityName}</td>
                         <td>
-                            <a  class="action-btn" onclick="loadSection('updateProduct&productId=${product.productID}')">
+                            <a class="action-btn" onclick="loadSection('updateProduct&productId=${product.productID}')">
                                 <i class="fas fa-pencil-alt"></i>
                             </a>
-                            <a  class="action-btn remove-btn" onclick="removeProduct(${product.productID});">
+                            <a class="action-btn remove-btn" onclick="removeProduct(${product.productID});">
                                 <i class="fas fa-trash"></i>
                             </a>
-                            <a href="#" class="action-btn" onclick="showVoucherForm(); return false;"><i class="fas fa-ticket-alt"></i></a>
-                            <div id="voucherFormContainer" class="voucher-form-container" style="display: none;">
-                                <div class="voucher-form">
-                                    <h3>Thêm Voucher</h3>
-                                    <div class="input-with-icon">
-                                        <input type="text" id="discountCode" placeholder="Mã giảm giá (VD: DISCOUNT10)">
-                                        <i class="fas fa-sync-alt random-icon" onclick="generateRandomVoucherCode()"></i>
-                                    </div>
-                                    <input type="number" id="discountPercent" placeholder="Phần trăm giảm (%)" min="0" max="100">
-                                    <input type="date" id="startDate" placeholder="Ngày bắt đầu">
-                                    <input type="date" id="endDate" placeholder="Ngày kết thúc">
-                                    <input type="hidden" id="productId" placeholder="ID sản phẩm" value="${product.productID}" >
-                                    <button onclick="addVoucherToProduct()">Gán Voucher</button>
-                                    <button onclick="hideVoucherForm()">Hủy</button>
-                                </div>
-                            </div>
+                            <a href="#" class="action-btn" onclick="showVoucherForm('${product.productID}'); return false;">
+                                <i class="fas fa-ticket-alt"></i>
+                            </a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -311,6 +298,23 @@
         </c:choose>
     </tbody>
 </table>
+
+<!-- Đưa form ra ngoài vòng lặp -->
+<div id="voucherFormContainer" class="voucher-form-container" style="display: none;">
+    <div class="voucher-form">
+        <h3>Thêm Voucher</h3>
+        <div class="input-with-icon">
+            <input type="text" id="discountCode" placeholder="Mã giảm giá (VD: DISCOUNT10)">
+            <i class="fas fa-sync-alt random-icon" onclick="generateRandomVoucherCode()"></i>
+        </div>
+        <input type="number" id="discountPercent" placeholder="Phần trăm giảm (%)" min="0" max="100">
+        <input type="date" id="startDate" placeholder="Ngày bắt đầu">
+        <input type="date" id="endDate" placeholder="Ngày kết thúc">
+        <input type="hidden" id="currentProductId">
+        <button onclick="addVoucherToProduct(document.getElementById('currentProductId').value)">Gán Voucher</button>
+        <button onclick="hideVoucherForm()">Hủy</button>
+    </div>
+</div>
 
 <div class="pagination" id="pagination">
     <c:if test="${totalPage > 1}">

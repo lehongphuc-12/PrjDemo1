@@ -1,7 +1,11 @@
 // Chọn hoặc bỏ chọn tất cả sản phẩm
 function toggleSelectAll(checkbox) {
     const itemCheckboxes = document.querySelectorAll('.item-checkbox');
-    itemCheckboxes.forEach(cb => cb.checked = checkbox.checked);
+    itemCheckboxes.forEach(cb => {
+        if (!cb.disabled) { // Chỉ thay đổi trạng thái của các checkbox không bị vô hiệu hóa
+            cb.checked = checkbox.checked;
+        }
+    });
 
     // Cập nhật trạng thái checkbox của shop
     const sellerIds = [...new Set(Array.from(itemCheckboxes).map(cb => cb.getAttribute('data-seller-id')))];
@@ -12,14 +16,14 @@ function toggleSelectAll(checkbox) {
 
 // Cập nhật trạng thái checkbox của shop
 function updateShopCheckbox(sellerId) {
-    const itemCheckboxes = document.querySelectorAll(`.item-checkbox[data-seller-id="${sellerId}"]`);
+    const itemCheckboxes = document.querySelectorAll(`.item-checkbox[data-seller-id="${sellerId}"]:not([disabled])`); // Chỉ lấy các checkbox không bị vô hiệu hóa
     let checkedCount = 0;
     itemCheckboxes.forEach(itemCheckbox => {
         if (itemCheckbox.checked) checkedCount++;
     });
     const shopCheckbox = document.querySelector(`.shop-checkbox[data-seller-id="${sellerId}"]`);
     if (shopCheckbox) {
-        if (checkedCount === itemCheckboxes.length) {
+        if (checkedCount === itemCheckboxes.length && itemCheckboxes.length > 0) {
             shopCheckbox.checked = true;
             shopCheckbox.indeterminate = false;
         } else if (checkedCount === 0) {
@@ -39,7 +43,9 @@ function setupShopCheckboxes() {
             const sellerId = this.getAttribute('data-seller-id');
             const itemCheckboxes = document.querySelectorAll(`.item-checkbox[data-seller-id="${sellerId}"]`);
             itemCheckboxes.forEach(itemCheckbox => {
-                itemCheckbox.checked = shopCheckbox.checked;
+                if (!itemCheckbox.disabled) { // Chỉ thay đổi trạng thái của các checkbox không bị vô hiệu hóa
+                    itemCheckbox.checked = shopCheckbox.checked;
+                }
             });
             updateTotal();
         });
@@ -150,7 +156,7 @@ function updateQuantity(productId, newQuantity) {
 
 // Cập nhật tổng tiền và số lượng
 function updateTotal() {
-    const selectedItems = document.querySelectorAll('.item-checkbox:checked');
+    const selectedItems = document.querySelectorAll('.item-checkbox:checked:not([disabled])'); // Chỉ lấy các checkbox được chọn và không bị vô hiệu hóa
     let selectedSubTotal = 0;
     let totalQuantity = 0;
 
@@ -171,12 +177,14 @@ function updateTotal() {
     document.querySelector('.total-quantity').textContent = totalQuantity;
     document.getElementById('selectedDiscount').innerText = selectedDiscount.toLocaleString('vi-VN') + ' đ';
     document.getElementById('selectedTotal').innerText = totalPrice.toLocaleString('vi-VN') + ' đ';
-    document.querySelector('.selected-count').textContent = selectedItems.length;
+    document.querySelectorAll('.selected-count').forEach(el => {
+        el.textContent = selectedItems.length;
+    });
 }
 
 // Xử lý nút "Mua Hàng"
 document.querySelector('.btn-purchase').addEventListener('click', function(e) {
-    const selectedItems = document.querySelectorAll('.item-checkbox:checked');
+    const selectedItems = document.querySelectorAll('.item-checkbox:checked:not([disabled])'); // Chỉ lấy các checkbox được chọn và không bị vô hiệu hóa
     if (selectedItems.length === 0) {
         alert('Vui lòng chọn ít nhất một sản phẩm để thanh toán.');
         e.preventDefault();

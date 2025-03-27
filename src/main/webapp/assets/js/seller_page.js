@@ -457,19 +457,6 @@ function reCreateProduct(productID) {
             })
             .catch(error => console.error("Lỗi:", error));
 }
-function showVoucherForm() {
-    document.getElementById('voucherFormContainer').style.display = 'block';
-}
-
-function hideVoucherForm() {
-    document.getElementById('voucherFormContainer').style.display = 'none';
-    // Reset form
-    document.getElementById('discountCode').value = '';
-    document.getElementById('discountPercent').value = '';
-    document.getElementById('startDate').value = '';
-    document.getElementById('endDate').value = '';
-    document.getElementById('productId').value = '';
-}
 function generateRandomVoucherCode() {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let randomCode = '';
@@ -479,18 +466,35 @@ function generateRandomVoucherCode() {
     }
     document.getElementById('discountCode').value = randomCode;
 }
-function addVoucherToProduct() {
+function showVoucherForm(productId) {
+    const voucherForm = document.getElementById('voucherFormContainer');
+    document.getElementById('currentProductId').value = productId; // Cập nhật productId
+    voucherForm.style.display = 'block';
+}
+
+function hideVoucherForm() {
+    document.getElementById('voucherFormContainer').style.display = 'none';
+    // Reset form
+    document.getElementById('discountCode').value = '';
+    document.getElementById('discountPercent').value = '';
+    document.getElementById('startDate').value = '';
+    document.getElementById('endDate').value = '';
+    document.getElementById('currentProductId').value = '';
+}
+
+function addVoucherToProduct(productId) {
     const code = document.getElementById('discountCode').value.trim();
     const discountPercent = document.getElementById('discountPercent').value;
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
-    const productId = document.getElementById('productId').value;
+
+    console.log("productId: " + productId); // Kiểm tra giá trị productId
 
     if (!code || !discountPercent || !startDate || !endDate || !productId) {
         alert("Vui lòng nhập đầy đủ thông tin!");
         return;
     }
-    console.log(discountPercent);
+
     const today = new Date().toISOString().split('T')[0];
     if (startDate < today) {
         alert("Ngày bắt đầu không thể là ngày trong quá khứ!");
@@ -512,42 +516,16 @@ function addVoucherToProduct() {
             "&startDate=" + encodeURIComponent(startDate) +
             "&endDate=" + encodeURIComponent(endDate) +
             "&productId=" + encodeURIComponent(productId);
+
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             document.getElementById("main-content").innerHTML = xhr.responseText;
             attachSearchListener();
-            alert("Add success!")
+            alert("Add success!");
         }
     };
     xhr.send(data);
 }
-function removeVoucher(code, discountID) {
-    if (!confirm(`Bạn có chắc muốn xóa voucher ${code}?`))
-        return;
-
-    const xhr = new XMLHttpRequest();
-    const url = contextPath + "/voucher?action=removeVoucher";
-
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-    const data = "discountID=" + encodeURIComponent(discountID); // Sửa cú pháp dữ liệu
-
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                document.getElementById("main-content").innerHTML = xhr.responseText;
-                alert("Xóa thành công voucher!");
-            } else {
-                console.error("Lỗi: ", xhr.status, xhr.responseText);
-                alert("Có lỗi xảy ra khi xóa voucher: " + xhr.responseText);
-            }
-        }
-    };
-    xhr.send(data);
-}
-
-
 
 function previewImage(input, previewId) {
     var preview = document.getElementById(previewId);
