@@ -10,7 +10,7 @@ package LoginGoogle;
  */
 public class ConstansGoogle {
     
-         public static String GOOGLE_CLIENT_ID = "341860101658-rg8odfj8pfkeqb2rmug1n5t26gmovba3.apps.googleusercontent.com";
+        public static String GOOGLE_CLIENT_ID = "341860101658-rg8odfj8pfkeqb2rmug1n5t26gmovba3.apps.googleusercontent.com";
 
 	public static String GOOGLE_CLIENT_SECRET = "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";
 
