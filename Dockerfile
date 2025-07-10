@@ -1,14 +1,13 @@
-# Dùng Tomcat 10.1 (vì bạn dùng Jakarta Servlet 6.0)
+# Stage 1: Build WAR bằng Maven
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
+
+# Stage 2: Copy WAR vào Tomcat 10.1
 FROM tomcat:10.1.24-jdk17-temurin
-
-# Xóa ứng dụng mặc định của Tomcat (ROOT)
 RUN rm -rf /usr/local/tomcat/webapps/ROOT
+COPY --from=builder /app/target/demo1_1-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
 
-# Copy file WAR vào thư mục ứng dụng Tomcat và đặt tên là ROOT.war
-COPY target/demo1_1-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
-
-# Mở port 8080 (Render hoặc local sẽ truy cập qua cổng này)
 EXPOSE 8080
-
-# Chạy Tomcat khi container khởi động
 CMD ["catalina.sh", "run"]
