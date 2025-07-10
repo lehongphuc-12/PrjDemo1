@@ -140,6 +140,7 @@ public class RoleFilter implements Filter {
             chain.doFilter(request, response);
         } else {
             httpResponse.sendRedirect(contextPath + "/views/access-denied.jsp");
+            return;
         }
     }
 
