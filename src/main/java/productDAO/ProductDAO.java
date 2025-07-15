@@ -572,24 +572,23 @@ public class ProductDAO implements IProductDAO{
             }
         }
 
-    public List<Product> getSimilarProducts(int productID) {
-    EntityManagerFactory emf = JpaUtil.getEntityManagerFactory(); // Lấy factory thay vì entity manager trực tiếp
-    EntityManager em = emf.createEntityManager(); // Luôn tạo EntityManager mới
+   public List<Product> getSimilarProducts(int productID) {
+    EntityManagerFactory emf = JpaUtil.getEntityManagerFactory();
+    EntityManager em = emf.createEntityManager();
     List<Product> resultList = new ArrayList<>();
 
     try {
-        em.getTransaction().begin(); // Bắt đầu transaction (nếu cần)
+        em.getTransaction().begin();
 
         StoredProcedureQuery query = em.createStoredProcedureQuery("GetSimilarProducts6", Product.class);
         query.registerStoredProcedureParameter("ProductID", Integer.class, jakarta.persistence.ParameterMode.IN);
         query.setParameter("ProductID", productID);
 
-        resultList = query.getResultList(); // Lấy danh sách sản phẩm
+        resultList = query.getResultList();
 
-        // Đảm bảo các collection được load trước khi đóng session
         if (resultList != null && !resultList.isEmpty()) {
             for (Product p : resultList) {
-                p = em.merge(p); // Đảm bảo đối tượng nằm trong persistence context
+                p = em.merge(p); // Bắt buộc để Hibernate.initialize hoạt động
                 Hibernate.initialize(p.getProductImageCollection());
                 Hibernate.initialize(p.getDiscountCollection());
                 Hibernate.initialize(p.getOrderDetailCollection());
@@ -598,21 +597,28 @@ public class ProductDAO implements IProductDAO{
             }
         }
 
-        em.getTransaction().commit(); // Commit transaction (nếu có)
+        em.getTransaction().commit();
 
     } catch (Exception e) {
+        System.err.println("Lỗi khi gọi stored procedure GetSimilarProducts6: " + e.getMessage());
         e.printStackTrace();
-        if (em.getTransaction().isActive()) {
-            em.getTransaction().rollback(); // Rollback nếu có lỗi
+        try {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+        } catch (Exception rollbackEx) {
+            System.err.println("Lỗi khi rollback: " + rollbackEx.getMessage());
+            rollbackEx.printStackTrace();
         }
     } finally {
         if (em.isOpen()) {
-            em.close(); // Đóng EntityManager
+            em.close();
         }
     }
 
     return resultList;
 }
+
 
 
 

@@ -1,5 +1,5 @@
-
-create database AGRICULTURE_SHOPPING;
+-- use AGRICULTURE_SHOPPING
+-- create database AGRICULTURE_SHOPPING;
 use AGRICULTURE_SHOPPING
 -- drop database demoPRJ;
 CREATE TABLE [Role] ( 
@@ -177,33 +177,35 @@ VALUES ('Admin'), ('Seller'), ('Customer');
 select * from [Role]
 
 -- Table [CategoryGroup]:
-INSERT INTO [CategoryGroup] ([GroupName]) VALUES (N'Rau củ quả	',N'Các loại rau, củ, quả tươi'); --1
-INSERT INTO [CategoryGroup] ([GroupName]) VALUES (N'Trái cây ',N'Các loại trái cây tươi'); --2
-INSERT INTO [CategoryGroup] ([GroupName]) VALUES (N'Đồ khô ',N'Các loại hạt, mứt, sấy khô'); --3
-INSERT INTO [CategoryGroup] ([GroupName]) VALUES (N'Đồ uống ',N'Nước ép, trà, cà phê'); --4
-INSERT INTO [CategoryGroup] ([GroupName]) VALUES (N'Đặc sản vùng miền ',N'Đặc sản từ các vùng miền'); --5
-INSERT INTO [CategoryGroup] ([GroupName]) VALUES (N'Ngũ cốc & Gạo',N'	Gạo, lúa mì, các loại ngũ cốc'); --6
-INSERT INTO [CategoryGroup] ([GroupName]) VALUES (N'Thịt & Hải sản	',N'Các loại thịt tươi, hải sản'); --7
+INSERT INTO [CategoryGroup] ([GroupName],[GroupDescription]) VALUES (N'Rau củ quả	',N'Các loại rau, củ, quả tươi'); --1
+INSERT INTO [CategoryGroup] ([GroupName],[GroupDescription]) VALUES (N'Trái cây ',N'Các loại trái cây tươi'); --2
+INSERT INTO [CategoryGroup] ([GroupName],[GroupDescription]) VALUES (N'Đồ khô ',N'Các loại hạt, mứt, sấy khô'); --3
+INSERT INTO [CategoryGroup] ([GroupName],[GroupDescription]) VALUES (N'Đồ uống ',N'Nước ép, trà, cà phê'); --4
+INSERT INTO [CategoryGroup] ([GroupName],[GroupDescription]) VALUES (N'Đặc sản vùng miền ',N'Đặc sản từ các vùng miền'); --5
+INSERT INTO [CategoryGroup] ([GroupName],[GroupDescription]) VALUES (N'Ngũ cốc & Gạo',N'	Gạo, lúa mì, các loại ngũ cốc'); --6
+INSERT INTO [CategoryGroup] ([GroupName],[GroupDescription]) VALUES (N'Thịt & Hải sản	',N'Các loại thịt tươi, hải sản'); --7
 
+select * from CategoryGroup
 
 -- Table [Category]:
-INSERT INTO [Category] ([CategoryName], [GroupID]) VALUES (N'Rau xanh', 1,N'Các loại rau xanh tươi');--1
-INSERT INTO [Category] ([CategoryName], [GroupID]) VALUES (N'Củ quả	', 1,N'Bắp cải, khoai tây, dưa leo...');--2
-INSERT INTO [Category] ([CategoryName], [GroupID]) VALUES (N'Nấm', 1,N'Nấm các loại');--3
-INSERT INTO [Category] ([CategoryName], [GroupID]) VALUES (N'Trái cây nội địa', 2,N'Các loại trái cây nội địa');--4
-INSERT INTO [Category] ([CategoryName], [GroupID]) VALUES (N'Trái cây nhập khẩu', 2,N'Các loại trái cây nhập khẩu');--5
-INSERT INTO [Category] ([CategoryName], [GroupID]) VALUES (N'Các loại hạt', 3,N'Hạt điều, hạt dẻ, hạnh nhân,...');--6
-INSERT INTO [Category] ([CategoryName], [GroupID]) VALUES (N'Trái cây sấy', 3,N'Các loại trái cây sấy');--7
-INSERT INTO [Category] ([CategoryName], [GroupID]) VALUES (N'Nước ép trái cây', 4,N'Các loại nước ép tươi mát');--8
-INSERT INTO [Category] ([CategoryName], [GroupID]) VALUES (N'Trà', 4,N'Trà khô, túi lọc');--9
-INSERT INTO [Category] ([CategoryName], [GroupID]) VALUES (N'Cà phê', 4,N'Cà phê pha phin');--10
-INSERT INTO [Category] ([CategoryName], [GroupID]) VALUES (N'Gạo', 6,N'Gạo dẻo thơm ngon');--11
-INSERT INTO [Category] ([CategoryName], [GroupID]) VALUES (N'Đặc sản mọi miền', 5,N'Các loại đặc sản vùng miền');--12
-INSERT INTO [Category] ([CategoryName], [GroupID]) VALUES (N'Ngũ cốc, yến mạch', ,N'Bổ sug dinh dưỡng');--13
-INSERT INTO [Category] ([CategoryName], [GroupID]) VALUES (N'Thịt heo', 7,N'Thịt ba chỉ, thịt nạc vai,...');--14
-INSERT INTO [Category] ([CategoryName], [GroupID]) VALUES (N'Thịt bò', 7,N'Bắp bò, nạm bò, sườn bò...');--15
-INSERT INTO [Category] ([CategoryName], [GroupID]) VALUES (N'Hải sản tươi sống', 7,N'Cá, tôm, cua, ghẹ,...');--16
+INSERT INTO [Category] ([CategoryName], [GroupID],[CategoryDescription]) VALUES (N'Rau xanh', 1,N'Các loại rau xanh tươi');--1
+INSERT INTO [Category] ([CategoryName], [GroupID],[CategoryDescription]) VALUES (N'Củ quả	', 1,N'Bắp cải, khoai tây, dưa leo...');--2
+INSERT INTO [Category] ([CategoryName], [GroupID],[CategoryDescription]) VALUES (N'Nấm', 1,N'Nấm các loại');--3
+INSERT INTO [Category] ([CategoryName], [GroupID],[CategoryDescription]) VALUES (N'Trái cây nội địa', 2,N'Các loại trái cây nội địa');--4
+INSERT INTO [Category] ([CategoryName], [GroupID],[CategoryDescription]) VALUES (N'Trái cây nhập khẩu', 2,N'Các loại trái cây nhập khẩu');--5
+INSERT INTO [Category] ([CategoryName], [GroupID],[CategoryDescription]) VALUES (N'Các loại hạt', 3,N'Hạt điều, hạt dẻ, hạnh nhân,...');--6
+INSERT INTO [Category] ([CategoryName], [GroupID],[CategoryDescription]) VALUES (N'Trái cây sấy', 3,N'Các loại trái cây sấy');--7
+INSERT INTO [Category] ([CategoryName], [GroupID],[CategoryDescription]) VALUES (N'Nước ép trái cây', 4,N'Các loại nước ép tươi mát');--8
+INSERT INTO [Category] ([CategoryName], [GroupID],[CategoryDescription]) VALUES (N'Trà', 4,N'Trà khô, túi lọc');--9
+INSERT INTO [Category] ([CategoryName], [GroupID],[CategoryDescription]) VALUES (N'Cà phê', 4,N'Cà phê pha phin');--10
+INSERT INTO [Category] ([CategoryName], [GroupID],[CategoryDescription]) VALUES (N'Gạo', 6,N'Gạo dẻo thơm ngon');--11
+INSERT INTO [Category] ([CategoryName], [GroupID],[CategoryDescription]) VALUES (N'Đặc sản mọi miền', 5,N'Các loại đặc sản vùng miền');--12
+INSERT INTO [Category] ([CategoryName], [GroupID],[CategoryDescription]) VALUES (N'Ngũ cốc, yến mạch',5 ,N'Bổ sug dinh dưỡng');--13
+INSERT INTO [Category] ([CategoryName], [GroupID],[CategoryDescription]) VALUES (N'Thịt heo', 7,N'Thịt ba chỉ, thịt nạc vai,...');--14
+INSERT INTO [Category] ([CategoryName], [GroupID],[CategoryDescription]) VALUES (N'Thịt bò', 7,N'Bắp bò, nạm bò, sườn bò...');--15
+INSERT INTO [Category] ([CategoryName], [GroupID],[CategoryDescription]) VALUES (N'Hải sản tươi sống', 7,N'Cá, tôm, cua, ghẹ,...');--16
 
+select * from Category
 
 
 
@@ -216,6 +218,9 @@ INSERT INTO [OrderStatus] (StatusName) VALUES
 (N'Đang giao'),      -- Shipping
 (N'Đã nhận'),        -- Delivered
 (N'Đã hủy');         -- Cancelled
+
+select * from OrderStatus
+
 
 -- DROP PROCEDURE IF EXISTS GetSimilarProducts6;
 
@@ -253,7 +258,7 @@ END;
 EXEC GetSimilarProducts6 @ProductID = 82;
 
 
-
+SELECT * from [User]
 
 -- delete from [User]
 --– Table Users:
@@ -475,6 +480,7 @@ INSERT INTO [PaymentMethod] (MethodName, Description) VALUES
 (N'Chuyển khoản VNPAY', N'Thanh toán qua chuyển khoản ngân hàng'),
 (N'Thanh toán khi nhận hàng', N'Thanh toán bằng tiền mặt khi nhận hàng');
 
+select * from PaymentMethod
 
 
 
