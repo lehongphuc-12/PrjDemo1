@@ -24,9 +24,9 @@
 
     <properties>
       <!-- JDBC connection (dùng biến môi trường cho Render) -->
-      <property name="jakarta.persistence.jdbc.url" value="${DB_URL}"/>
-      <property name="jakarta.persistence.jdbc.user" value="${DB_USER}"/>
-      <property name="jakarta.persistence.jdbc.password" value="${DB_PASS}"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=AGRICULTURE_SHOPPING;encrypt=true;trustServerCertificate=true;characterEncoding=UTF-8;useUnicode=true"/>
+      <property name="jakarta.persistence.jdbc.user" value="sa"/>
+      <property name="jakarta.persistence.jdbc.password" value="SA123456789"/>
       <property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
 
       <!-- Hibernate dialect cho SQL Server -->
