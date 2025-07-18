@@ -11,3 +11,5 @@ COPY --from=builder /app/target/demo1_1-1.0-SNAPSHOT.war /usr/local/tomcat/webap
 
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
+#acbajscbjsb
+
